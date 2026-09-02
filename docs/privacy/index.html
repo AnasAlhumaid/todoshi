@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Todoshi Privacy Policy — bilingual English and Arabic.">
+  <title>Privacy Policy - Todoshi</title>
+  <style>
+    :root {
+      --accent: #5248d9;
+      --accent-light: #7b73e8;
+      --accent-muted: rgba(82, 72, 217, 0.12);
+      --bg: #f5f4fb;
+      --surface: #ffffff;
+      --text: #1a1a2e;
+      --text-secondary: #5c5c72;
+      --border: rgba(26, 26, 46, 0.08);
+      --radius: 18px;
+      --max-width: 720px;
+      --shadow: 0 1px 3px rgba(26, 26, 46, 0.06);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --accent: #7b73e8;
+        --accent-light: #968ff0;
+        --accent-muted: rgba(123, 115, 232, 0.16);
+        --bg: #12111a;
+        --surface: #1c1b26;
+        --text: #eceaf5;
+        --text-secondary: #a8a5b8;
+        --border: rgba(236, 234, 245, 0.08);
+        --shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+      }
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      font-size: 16px;
+      line-height: 1.65;
+      color: var(--text);
+      background: var(--bg);
+    }
+
+    .lang-ar body,
+    html.lang-ar body {
+      font-family: -apple-system, BlinkMacSystemFont, "SF Arabic", "Geeza Pro", "Segoe UI", Tahoma, sans-serif;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 20px;
+      background: rgba(245, 244, 251, 0.92);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .topbar {
+        background: rgba(18, 17, 26, 0.92);
+      }
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .brand img {
+      width: 36px;
+      height: 36px;
+      border-radius: 9px;
+    }
+
+    .lang-switch {
+      display: flex;
+      gap: 4px;
+      padding: 3px;
+      background: var(--accent-muted);
+      border-radius: 10px;
+    }
+
+    .lang-switch button {
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      font: inherit;
+      font-size: 0.875rem;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .lang-switch button[aria-pressed="true"] {
+      background: var(--surface);
+      color: var(--accent);
+      box-shadow: var(--shadow);
+    }
+
+    .lang-switch button:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    main {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 28px 20px 64px;
+    }
+
+    .hero {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .hero img {
+      width: 80px;
+      height: 80px;
+      border-radius: 18px;
+      margin-bottom: 16px;
+    }
+
+    h1 {
+      font-size: clamp(1.5rem, 4vw, 2rem);
+      line-height: 1.25;
+      margin: 0 0 8px;
+      color: var(--text);
+    }
+
+    .effective {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      margin: 0;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px 24px;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .card h2 {
+      font-size: 1.1rem;
+      margin: 0 0 12px;
+      color: var(--accent);
+    }
+
+    .card p {
+      margin: 0 0 12px;
+      color: var(--text);
+    }
+
+    .card p:last-child,
+    .card ul:last-child {
+      margin-bottom: 0;
+    }
+
+    .card ul {
+      margin: 0 0 12px;
+      padding-inline-start: 1.25rem;
+    }
+
+    .card li {
+      margin-bottom: 6px;
+    }
+
+    .card a {
+      color: var(--accent);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+
+    .card a:hover {
+      color: var(--accent-light);
+    }
+
+    .contact-box {
+      background: var(--accent-muted);
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-top: 8px;
+    }
+
+    .contact-box a {
+      font-weight: 600;
+      word-break: break-all;
+    }
+
+    .note {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      border-inline-start: 3px solid var(--accent);
+      padding-inline-start: 12px;
+      margin-top: 12px;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      padding: 24px 20px 40px;
+      border-top: 1px solid var(--border);
+      max-width: var(--max-width);
+      margin: 0 auto;
+    }
+
+    [hidden] { display: none !important; }
+
+    html[dir="rtl"] .card ul {
+      padding-inline-start: 0;
+      padding-inline-end: 1.25rem;
+    }
+
+    html[dir="rtl"] .note {
+      border-inline-start: none;
+      border-inline-end: 3px solid var(--accent);
+      padding-inline-start: 0;
+      padding-inline-end: 12px;
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#top">
+      <img src="logo.png" width="36" height="36" alt="Todoshi">
+      <span>Todoshi</span>
+    </a>
+    <div class="lang-switch" role="group" aria-label="Language">
+      <button type="button" id="btn-en" aria-pressed="true" data-lang="en">English</button>
+      <button type="button" id="btn-ar" aria-pressed="false" data-lang="ar">العربية</button>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- English -->
+    <div id="content-en" lang="en" dir="ltr">
+      <div class="hero">
+        <img src="logo.png" width="80" height="80" alt="Todoshi logo">
+        <h1>Privacy Policy</h1>
+        <p class="effective">Effective date: September 2026</p>
+      </div>
+
+      <section class="card">
+        <h2>About Todoshi</h2>
+        <p>Todoshi is a task, project, checklist, and collaboration application for iOS. It helps you organize work with personal projects on your device and shared projects with other members.</p>
+        <p>Todoshi supports:</p>
+        <ul>
+          <li>Personal and local projects</li>
+          <li>Shared projects</li>
+          <li>Tasks and subtasks</li>
+          <li>Shared checklists</li>
+          <li>Comments</li>
+          <li>Task assignment</li>
+          <li>Member permissions</li>
+          <li>Calendar and reminders</li>
+          <li>Sign in with Apple</li>
+          <li>Sign in with Google</li>
+        </ul>
+      </section>
+
+      <section class="card">
+        <h2>Personal vs. Shared Projects</h2>
+        <p><strong>Personal projects</strong> are stored locally on your device using Apple’s on-device persistence technologies (including SwiftData). They are not uploaded to Todoshi’s collaboration backend unless you explicitly share or convert them through supported in-app sharing behavior.</p>
+        <p><strong>Shared projects</strong> use Google Firebase and Google Cloud services for collaboration. This may include:</p>
+        <ul>
+          <li>Project information</li>
+          <li>Tasks and subtasks</li>
+          <li>Checklist items</li>
+          <li>Member information</li>
+          <li>Task assignments</li>
+          <li>Permissions</li>
+          <li>Comments</li>
+          <li>Collaboration metadata</li>
+        </ul>
+      </section>
+
+      <section class="card">
+        <h2>Account Data</h2>
+        <p>If you choose to sign in, Todoshi may store:</p>
+        <ul>
+          <li>A Firebase account identifier</li>
+          <li>Your display name</li>
+          <li>An email address provided by your authentication provider</li>
+          <li>Your Todoshi ID</li>
+          <li>Authentication provider information required for sign-in</li>
+        </ul>
+        <p>If you use Sign in with Apple, you may choose <strong>Hide My Email</strong>. In that case Apple may provide a private relay email address. Todoshi does not attempt to discover your hidden personal email address.</p>
+      </section>
+
+      <section class="card">
+        <h2>Todoshi ID</h2>
+        <p>Todoshi generates a permanent unique account identifier called your <strong>Todoshi ID</strong> (for example: <code>TD-XXXX-XXXX-XXXXX</code>). It is used to identify your account consistently within Todoshi and is separate from your email, display name, or how a Firebase user ID may appear in backend systems.</p>
+      </section>
+
+      <section class="card">
+        <h2>Collaboration</h2>
+        <p>When you join or share a project, other authorized project members may see information required for collaboration, such as:</p>
+        <ul>
+          <li>Display name</li>
+          <li>Role</li>
+          <li>Assigned tasks</li>
+          <li>Comments</li>
+          <li>Completion attribution</li>
+          <li>Relevant task and project activity</li>
+        </ul>
+        <p>Project owners may see a member’s Todoshi ID where the app supports it. Project owners do not see other members’ private email addresses through collaboration features.</p>
+      </section>
+
+      <section class="card">
+        <h2>Comments and User Content</h2>
+        <p>Comments and other collaborative content in a shared project are visible to authorized members of that project according to permissions. Historical comment attribution may remain after a member leaves or is removed so that project history stays understandable.</p>
+      </section>
+
+      <section class="card">
+        <h2>Files and Attachments</h2>
+        <p>Task resources and attachments (such as links, text notes, and imported files) are managed in the app’s local storage on your device. Todoshi does not upload arbitrary file attachments to Firebase Storage for cloud synchronization. Some resources remain local depending on type and project mode. Do not assume that every binary attachment is synchronized to the cloud.</p>
+      </section>
+
+      <section class="card">
+        <h2>Notifications</h2>
+        <p>Todoshi may schedule <strong>local notifications</strong> on your device for reminders, due dates, and optional daily or task-related summaries where you enable them. You can disable notifications for Todoshi in iOS Settings. Todoshi does not send remote push notifications for collaboration activity in the current release.</p>
+      </section>
+
+      <section class="card">
+        <h2>Third-Party Services</h2>
+        <p>Todoshi uses the following third-party services to operate sign-in and shared-project collaboration:</p>
+        <ul>
+          <li><strong>Google Firebase</strong> — Authentication and Cloud Firestore (<a href="https://firebase.google.com/support/privacy" rel="noopener noreferrer" target="_blank">Firebase Privacy</a>)</li>
+          <li><strong>Google Sign-In</strong> (<a href="https://policies.google.com/privacy" rel="noopener noreferrer" target="_blank">Google Privacy Policy</a>)</li>
+          <li><strong>Sign in with Apple</strong> (<a href="https://www.apple.com/legal/privacy/" rel="noopener noreferrer" target="_blank">Apple Privacy Policy</a>)</li>
+        </ul>
+        <p>These providers process data according to their own policies when you use their authentication or cloud services.</p>
+      </section>
+
+      <section class="card">
+        <h2>Analytics and Advertising</h2>
+        <p>Todoshi does not use third-party advertising SDKs. The production app does not include third-party analytics or behavioral tracking SDKs. Todoshi does not sell your personal data.</p>
+      </section>
+
+      <section class="card">
+        <h2>Data Sharing</h2>
+        <p>Todoshi does not sell personal data. Data may be processed by service providers required to operate authentication and shared-project collaboration (such as Google Firebase). Content you create in a shared project is shared only with authorized project members according to project membership and permissions.</p>
+      </section>
+
+      <section class="card">
+        <h2>Data Retention</h2>
+        <p>Local personal-project data remains on your device until you remove it or delete the app, subject to iOS behavior. Cloud collaboration data may remain while needed for an active shared project and your account. Historical collaboration attribution may be retained where necessary to preserve understandable project history. Todoshi does not promise fixed retention periods beyond what is needed to provide the service.</p>
+      </section>
+
+      <section class="card">
+        <h2>Account and Data Deletion</h2>
+        <p>You can sign out of Todoshi in the app. <strong>In-app account deletion is not currently available.</strong> To request deletion of your cloud account data or collaboration profile, contact Todoshi support using the details below. We will process verified requests in line with applicable requirements.</p>
+        <p class="note">Apple App Store guidelines may require an in-app account deletion option for apps that support account creation. This feature is planned but not yet shipped.</p>
+      </section>
+
+      <section class="card">
+        <h2>Children</h2>
+        <p>Todoshi is not specifically directed at children under 13. We do not knowingly collect personal information from children under 13 through a dedicated children’s experience.</p>
+      </section>
+
+      <section class="card">
+        <h2>Security</h2>
+        <p>Todoshi uses platform and cloud-provider security controls intended to help protect user data. No method of transmission or storage is completely secure, and we cannot guarantee absolute security.</p>
+      </section>
+
+      <section class="card">
+        <h2>Your Rights</h2>
+        <p>You may contact Todoshi support regarding access to your data, correction, deletion, or other privacy questions. We will respond to reasonable requests consistent with applicable law and our technical capabilities.</p>
+      </section>
+
+      <section class="card">
+        <h2>Contact</h2>
+        <p>For privacy, account, or data-deletion requests:</p>
+        <div class="contact-box">
+          <p style="margin:0"><a href="https://github.com/AnasAlhumaid/todoshi/issues/new">Open a support request on GitHub</a></p>
+        </div>
+        <p class="note">A dedicated support email address will be published before App Store release. Until then, please use the link above for privacy and account requests.</p>
+      </section>
+    </div>
+
+    <!-- Arabic -->
+    <div id="content-ar" lang="ar" dir="rtl" hidden>
+      <div class="hero">
+        <img src="logo.png" width="80" height="80" alt="شعار Todoshi">
+        <h1>سياسة الخصوصية</h1>
+        <p class="effective">تاريخ السريان: سبتمبر 2026</p>
+      </div>
+
+      <section class="card">
+        <h2>نبذة عن Todoshi</h2>
+        <p>Todoshi تطبيق للمهام والمشاريع وقوائم التحقق والتعاون على iOS. يساعدك على تنظيم عملك عبر مشاريع شخصية على جهازك ومشاريع مشتركة مع أعضاء آخرين.</p>
+        <p>يدعم Todoshi:</p>
+        <ul>
+          <li>المشاريع الشخصية والمحلية</li>
+          <li>المشاريع المشتركة</li>
+          <li>المهام والمهام الفرعية</li>
+          <li>قوائم التحقق المشتركة</li>
+          <li>التعليقات</li>
+          <li>تعيين المهام</li>
+          <li>صلاحيات الأعضاء</li>
+          <li>التقويم والتذكيرات</li>
+          <li>تسجيل الدخول عبر Apple</li>
+          <li>تسجيل الدخول عبر Google</li>
+        </ul>
+      </section>
+
+      <section class="card">
+        <h2>المشاريع الشخصية مقابل المشتركة</h2>
+        <p><strong>المشاريع الشخصية</strong> تُخزَّن محلياً على جهازك باستخدام تقنيات Apple للتخزين على الجهاز (بما في ذلك SwiftData). لا تُرفع إلى خادم التعاون في Todoshi إلا إذا شاركتها أو حوّلتها صراحةً عبر سلوك المشاركة المدعوم داخل التطبيق.</p>
+        <p><strong>المشاريع المشتركة</strong> تستخدم Google Firebase وخدمات Google Cloud للتعاون. قد يشمل ذلك:</p>
+        <ul>
+          <li>معلومات المشروع</li>
+          <li>المهام والمهام الفرعية</li>
+          <li>عناصر قوائم التحقق</li>
+          <li>معلومات الأعضاء</li>
+          <li>تعيينات المهام</li>
+          <li>الصلاحيات</li>
+          <li>التعليقات</li>
+          <li>بيانات التعاون الوصفية</li>
+        </ul>
+      </section>
+
+      <section class="card">
+        <h2>بيانات الحساب</h2>
+        <p>إذا اخترت تسجيل الدخول، قد يخزن Todoshi:</p>
+        <ul>
+          <li>معرّف حساب Firebase</li>
+          <li>اسم العرض</li>
+          <li>عنوان البريد الإلكتروني الذي يوفره مزود المصادقة</li>
+          <li>معرّف Todoshi الخاص بك</li>
+          <li>معلومات مزود المصادقة اللازمة لتسجيل الدخول</li>
+        </ul>
+        <p>عند استخدام تسجيل الدخول عبر Apple، يمكنك اختيار <strong>إخفاء بريدي الإلكتروني</strong>. في هذه الحالة قد توفر Apple عنوان بريد ترحيل خاص. لا يحاول Todoshi اكتشاف بريدك الشخصي المخفي.</p>
+      </section>
+
+      <section class="card">
+        <h2>معرّف Todoshi</h2>
+        <p>ينشئ Todoshi معرّفاً دائماً وفريداً لحسابك يُسمى <strong>معرّف Todoshi</strong> (مثال: <code>TD-XXXX-XXXX-XXXXX</code>). يُستخدم لتمييز حسابك بشكل ثابت داخل Todoshi، وهو منفصل عن بريدك الإلكتروني واسم العرض أو طريقة ظهور معرّف مستخدم Firebase في أنظمة الخلفية.</p>
+      </section>
+
+      <section class="card">
+        <h2>التعاون</h2>
+        <p>عند الانضمام إلى مشروع أو مشاركته، قد يرى الأعضاء المخوّلون معلومات لازمة للتعاون، مثل:</p>
+        <ul>
+          <li>اسم العرض</li>
+          <li>الدور</li>
+          <li>المهام المعيّنة</li>
+          <li>التعليقات</li>
+          <li>إسناد الإكمال</li>
+          <li>نشاط المهام والمشروع ذي الصلة</li>
+        </ul>
+        <p>قد يرى مالكو المشروع معرّف Todoshi للعضو حيث يدعم التطبيق ذلك. لا يرى مالكو المشروع عناوين البريد الإلكتروني الخاصة للأعضاء عبر ميزات التعاون.</p>
+      </section>
+
+      <section class="card">
+        <h2>التعليقات والمحتوى</h2>
+        <p>التعليقات والمحتوى التعاوني في المشروع المشترك مرئية للأعضاء المخوّلين وفق الصلاحيات. قد يبقى إسناد التعليقات التاريخي بعد مغادرة العضو أو إزالته للحفاظ على سياق تاريخ المشروع.</p>
+      </section>
+
+      <section class="card">
+        <h2>الملفات والمرفقات</h2>
+        <p>موارد المهام والمرفقات (مثل الروابط والملاحظات النصية والملفات المستوردة) تُدار في التخزين المحلي للتطبيق على جهازك. لا يرفع Todoshi مرفقات ملفات عشوائية إلى Firebase Storage للمزامنة السحابية. تبقى بعض الموارد محلية حسب النوع ووضع المشروع. لا تفترض أن كل مرفق ثنائي يُزامَن إلى السحابة.</p>
+      </section>
+
+      <section class="card">
+        <h2>الإشعارات</h2>
+        <p>قد يجدول Todoshi <strong>إشعارات محلية</strong> على جهازك للتذكيرات وتواريخ الاستحقاق والملخصات اليومية أو المتعلقة بالمهام عند تفعيلها. يمكنك تعطيل إشعارات Todoshi من إعدادات iOS. لا يرسل Todoshi إشعارات دفع بعيدة لنشاط التعاون في الإصدار الحالي.</p>
+      </section>
+
+      <section class="card">
+        <h2>خدمات الطرف الثالث</h2>
+        <p>يستخدم Todoshi الخدمات التالية لتشغيل تسجيل الدخول والتعاون في المشاريع المشتركة:</p>
+        <ul>
+          <li><strong>Google Firebase</strong> — المصادقة وCloud Firestore (<a href="https://firebase.google.com/support/privacy" rel="noopener noreferrer" target="_blank">خصوصية Firebase</a>)</li>
+          <li><strong>تسجيل الدخول عبر Google</strong> (<a href="https://policies.google.com/privacy" rel="noopener noreferrer" target="_blank">سياسة خصوصية Google</a>)</li>
+          <li><strong>تسجيل الدخول عبر Apple</strong> (<a href="https://www.apple.com/legal/privacy/" rel="noopener noreferrer" target="_blank">سياسة خصوصية Apple</a>)</li>
+        </ul>
+        <p>تعالج هذه الجهات البيانات وفق سياساتها عند استخدامك لخدمات المصادقة أو السحابة الخاصة بها.</p>
+      </section>
+
+      <section class="card">
+        <h2>التحليلات والإعلانات</h2>
+        <p>لا يستخدم Todoshi حزم إعلانات من أطراف ثالثة. التطبيق الإنتاجي لا يتضمن حزم تحليلات أو تتبع سلوكي من أطراف ثالثة. لا يبيع Todoshi بياناتك الشخصية.</p>
+      </section>
+
+      <section class="card">
+        <h2>مشاركة البيانات</h2>
+        <p>لا يبيع Todoshi البيانات الشخصية. قد تُعالَج البيانات لدى مزودي خدمات لازمين لتشغيل المصادقة والتعاون (مثل Google Firebase). المحتوى الذي تنشئه في مشروع مشترك يُشارك فقط مع الأعضاء المخوّلين وفق العضوية والصلاحيات.</p>
+      </section>
+
+      <section class="card">
+        <h2>الاحتفاظ بالبيانات</h2>
+        <p>تبقى بيانات المشاريع الشخصية المحلية على جهازك حتى تزيلها أو تحذف التطبيق، وفق سلوك iOS. قد تبقى بيانات التعاون السحابية ما دامت لازمة لمشروع مشترك نشط ولحسابك. قد يُحتفَظ بإسناد التعاون التاريخي عند الحاجة للحفاظ على سياق المشروع. لا يعد Todoshi بفترات احتفاظ ثابتة تتجاوز ما يلزم لتقديم الخدمة.</p>
+      </section>
+
+      <section class="card">
+        <h2>حذف الحساب والبيانات</h2>
+        <p>يمكنك تسجيل الخروج من Todoshi داخل التطبيق. <strong>حذف الحساب من داخل التطبيق غير متاح حالياً.</strong> لطلب حذف بيانات حسابك السحابية أو ملف التعاون، تواصل مع دعم Todoshi عبر التفاصيل أدناه. سنعالج الطلبات الموثّقة وفق المتطلبات المعمول بها.</p>
+        <p class="note">قد تتطلب إرشادات App Store خيار حذف حساب داخل التطبيق للتطبيقات التي تدعم إنشاء الحسابات. هذه الميزة مخططة ولم تُطلَق بعد.</p>
+      </section>
+
+      <section class="card">
+        <h2>الأطفال</h2>
+        <p>لا يستهدف Todoshi تحديداً الأطفال دون 13 عاماً. لا نجمع عن قصد معلومات شخصية من الأطفال دون 13 عبر تجربة مخصصة للأطفال.</p>
+      </section>
+
+      <section class="card">
+        <h2>الأمان</h2>
+        <p>يستخدم Todoshi ضوابط أمان المنصة ومزود السحابة المخصصة لحماية بيانات المستخدم. لا توجد طريقة نقل أو تخزين آمنة بالكامل، ولا يمكننا ضمان أمان مطلق.</p>
+      </section>
+
+      <section class="card">
+        <h2>حقوقك</h2>
+        <p>يمكنك التواصل مع دعم Todoshi بخصوص الوصول إلى بياناتك أو تصحيحها أو حذفها أو أي أسئلة خصوصية أخرى. سنرد على الطلبات المعقولة بما يتوافق مع القانون المعمول به وقدراتنا التقنية.</p>
+      </section>
+
+      <section class="card">
+        <h2>التواصل</h2>
+        <p>لطلبات الخصوصية أو الحساب أو حذف البيانات:</p>
+        <div class="contact-box">
+          <p style="margin:0"><a href="https://github.com/AnasAlhumaid/todoshi/issues/new">فتح طلب دعم على GitHub</a></p>
+        </div>
+        <p class="note">سيُنشر عنوان بريد دعم مخصص قبل إطلاق App Store. حتى ذلك الحين، يرجى استخدام الرابط أعلاه لطلبات الخصوصية والحساب.</p>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <p id="footer-en">© Todoshi · Privacy Policy · September 2026</p>
+    <p id="footer-ar" hidden>© Todoshi · سياسة الخصوصية · سبتمبر 2026</p>
+  </footer>
+
+  <script>
+    (function () {
+      var STORAGE_KEY = 'todoshi-privacy-lang';
+      var btnEn = document.getElementById('btn-en');
+      var btnAr = document.getElementById('btn-ar');
+      var contentEn = document.getElementById('content-en');
+      var contentAr = document.getElementById('content-ar');
+      var footerEn = document.getElementById('footer-en');
+      var footerAr = document.getElementById('footer-ar');
+
+      function setLang(lang) {
+        var isAr = lang === 'ar';
+        document.documentElement.lang = isAr ? 'ar' : 'en';
+        document.documentElement.dir = isAr ? 'rtl' : 'ltr';
+        document.title = isAr ? 'سياسة الخصوصية - Todoshi' : 'Privacy Policy - Todoshi';
+
+        contentEn.hidden = isAr;
+        contentAr.hidden = !isAr;
+        footerEn.hidden = isAr;
+        footerAr.hidden = !isAr;
+
+        btnEn.setAttribute('aria-pressed', isAr ? 'false' : 'true');
+        btnAr.setAttribute('aria-pressed', isAr ? 'true' : 'false');
+
+        try { localStorage.setItem(STORAGE_KEY, lang); } catch (e) {}
+      }
+
+      btnEn.addEventListener('click', function () { setLang('en'); });
+      btnAr.addEventListener('click', function () { setLang('ar'); });
+
+      var initial = 'en';
+      try {
+        var saved = localStorage.getItem(STORAGE_KEY);
+        if (saved === 'ar' || saved === 'en') initial = saved;
+      } catch (e) {}
+      if (navigator.language && navigator.language.indexOf('ar') === 0 && !localStorage.getItem(STORAGE_KEY)) {
+        initial = 'ar';
+      }
+      setLang(initial);
+    })();
+  </script>
+</body>
+</html>
