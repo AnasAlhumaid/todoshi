@@ -91,6 +91,27 @@
       border-radius: 9px;
     }
 
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .nav-link {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .nav-link:hover {
+      color: var(--accent-light);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+
     .lang-switch {
       display: flex;
       gap: 4px;
@@ -228,6 +249,17 @@
       margin: 0 auto;
     }
 
+    footer a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+
     [hidden] { display: none !important; }
 
     html[dir="rtl"] .card ul {
@@ -249,9 +281,12 @@
       <img src="logo.png" width="36" height="36" alt="Todoshi">
       <span>Todoshi</span>
     </a>
-    <div class="lang-switch" role="group" aria-label="Language">
-      <button type="button" id="btn-en" aria-pressed="true" data-lang="en">English</button>
-      <button type="button" id="btn-ar" aria-pressed="false" data-lang="ar">العربية</button>
+    <div class="topbar-actions">
+      <a class="nav-link" id="nav-support" href="../support/">Support</a>
+      <div class="lang-switch" role="group" aria-label="Language">
+        <button type="button" id="btn-en" aria-pressed="true" data-lang="en">English</button>
+        <button type="button" id="btn-ar" aria-pressed="false" data-lang="ar">العربية</button>
+      </div>
     </div>
   </header>
 
@@ -373,8 +408,10 @@
 
       <section class="card">
         <h2>Account and Data Deletion</h2>
-        <p>You can sign out of Todoshi in the app. <strong>In-app account deletion is not currently available.</strong> To request deletion of your cloud account data or collaboration profile, contact Todoshi support using the details below. We will process verified requests in line with applicable requirements.</p>
-        <p class="note">Apple App Store guidelines may require an in-app account deletion option for apps that support account creation. This feature is planned but not yet shipped.</p>
+        <p>You can permanently delete your Todoshi account from <strong>Settings → Profile → Delete Account</strong>.</p>
+        <p>Account deletion removes your Todoshi account, associated cloud collaboration personal data (including authored comments and identity records), and clears local app data on this device. Shared projects you own are permanently deleted for all members after an explicit in-app warning. Projects where you are only a member remain available to other members after your membership is removed.</p>
+        <p>Deletion may take a short time to finish while Todoshi cleans up cloud data and revokes authentication. You can also sign out without deleting your account.</p>
+        <p class="note">If deletion cannot be completed due to a network or authentication error, try again when you are online. Contact support if you need help with a deletion request.</p>
       </section>
 
       <section class="card">
@@ -394,11 +431,11 @@
 
       <section class="card">
         <h2>Contact</h2>
-        <p>For privacy, account, or data-deletion requests:</p>
+        <p>For privacy questions or data requests, contact:</p>
         <div class="contact-box">
-          <p style="margin:0"><a href="https://github.com/AnasAlhumaid/todoshi/issues/new">Open a support request on GitHub</a></p>
+          <p style="margin:0"><a href="mailto:anas.h.alhumaid@gmail.com">anas.h.alhumaid@gmail.com</a></p>
         </div>
-        <p class="note">A dedicated support email address will be published before App Store release. Until then, please use the link above for privacy and account requests.</p>
+        <p class="note">You can also visit our <a href="../support/">Support</a> page.</p>
       </section>
     </div>
 
@@ -519,8 +556,10 @@
 
       <section class="card">
         <h2>حذف الحساب والبيانات</h2>
-        <p>يمكنك تسجيل الخروج من Todoshi داخل التطبيق. <strong>حذف الحساب من داخل التطبيق غير متاح حالياً.</strong> لطلب حذف بيانات حسابك السحابية أو ملف التعاون، تواصل مع دعم Todoshi عبر التفاصيل أدناه. سنعالج الطلبات الموثّقة وفق المتطلبات المعمول بها.</p>
-        <p class="note">قد تتطلب إرشادات App Store خيار حذف حساب داخل التطبيق للتطبيقات التي تدعم إنشاء الحسابات. هذه الميزة مخططة ولم تُطلَق بعد.</p>
+        <p>يمكنك حذف حساب Todoshi نهائيًا من <strong>الإعدادات ← الملف الشخصي ← حذف الحساب</strong>.</p>
+        <p>يؤدي حذف الحساب إلى إزالة حساب Todoshi وبيانات التعاون السحابية الشخصية المرتبطة به (بما في ذلك التعليقات التي كتبتها وسجلات الهوية)، ومسح البيانات المحلية على هذا الجهاز. تُحذف المشاريع المشتركة التي تملكها نهائيًا لجميع الأعضاء بعد تحذير صريح داخل التطبيق. أما المشاريع التي تكون فيها عضوًا فقط فتبقى متاحة للأعضاء الآخرين بعد إزالة عضويتك.</p>
+        <p>قد يستغرق الحذف وقتًا قصيرًا أثناء تنظيف بيانات السحابة وإلغاء المصادقة. يمكنك أيضًا تسجيل الخروج دون حذف الحساب.</p>
+        <p class="note">إذا تعذر إكمال الحذف بسبب خطأ في الشبكة أو المصادقة، حاول مرة أخرى عند الاتصال. تواصل مع الدعم إذا احتجت مساعدة بشأن طلب الحذف.</p>
       </section>
 
       <section class="card">
@@ -540,29 +579,31 @@
 
       <section class="card">
         <h2>التواصل</h2>
-        <p>لطلبات الخصوصية أو الحساب أو حذف البيانات:</p>
+        <p>للاستفسارات المتعلقة بالخصوصية أو طلبات البيانات، تواصل معنا عبر:</p>
         <div class="contact-box">
-          <p style="margin:0"><a href="https://github.com/AnasAlhumaid/todoshi/issues/new">فتح طلب دعم على GitHub</a></p>
+          <p style="margin:0"><a href="mailto:anas.h.alhumaid@gmail.com">anas.h.alhumaid@gmail.com</a></p>
         </div>
-        <p class="note">سيُنشر عنوان بريد دعم مخصص قبل إطلاق App Store. حتى ذلك الحين، يرجى استخدام الرابط أعلاه لطلبات الخصوصية والحساب.</p>
+        <p class="note">يمكنك أيضاً زيارة صفحة <a href="../support/">الدعم</a>.</p>
       </section>
     </div>
   </main>
 
   <footer>
-    <p id="footer-en">© Todoshi · Privacy Policy · September 2026</p>
-    <p id="footer-ar" hidden>© Todoshi · سياسة الخصوصية · سبتمبر 2026</p>
+    <p id="footer-en">© Todoshi · Privacy Policy · <a href="../support/">Support</a> · September 2026</p>
+    <p id="footer-ar" hidden>© Todoshi · سياسة الخصوصية · <a href="../support/">الدعم</a> · سبتمبر 2026</p>
   </footer>
 
   <script>
     (function () {
-      var STORAGE_KEY = 'todoshi-privacy-lang';
+      var STORAGE_KEY = 'todoshi-docs-lang';
+      var LEGACY_KEY = 'todoshi-privacy-lang';
       var btnEn = document.getElementById('btn-en');
       var btnAr = document.getElementById('btn-ar');
       var contentEn = document.getElementById('content-en');
       var contentAr = document.getElementById('content-ar');
       var footerEn = document.getElementById('footer-en');
       var footerAr = document.getElementById('footer-ar');
+      var navSupport = document.getElementById('nav-support');
 
       function setLang(lang) {
         var isAr = lang === 'ar';
@@ -574,11 +615,15 @@
         contentAr.hidden = !isAr;
         footerEn.hidden = isAr;
         footerAr.hidden = !isAr;
+        navSupport.textContent = isAr ? 'الدعم' : 'Support';
 
         btnEn.setAttribute('aria-pressed', isAr ? 'false' : 'true');
         btnAr.setAttribute('aria-pressed', isAr ? 'true' : 'false');
 
-        try { localStorage.setItem(STORAGE_KEY, lang); } catch (e) {}
+        try {
+          localStorage.setItem(STORAGE_KEY, lang);
+          localStorage.setItem(LEGACY_KEY, lang);
+        } catch (e) {}
       }
 
       btnEn.addEventListener('click', function () { setLang('en'); });
@@ -586,12 +631,14 @@
 
       var initial = 'en';
       try {
-        var saved = localStorage.getItem(STORAGE_KEY);
+        var saved = localStorage.getItem(STORAGE_KEY) || localStorage.getItem(LEGACY_KEY);
         if (saved === 'ar' || saved === 'en') initial = saved;
       } catch (e) {}
-      if (navigator.language && navigator.language.indexOf('ar') === 0 && !localStorage.getItem(STORAGE_KEY)) {
-        initial = 'ar';
-      }
+      try {
+        if (navigator.language && navigator.language.indexOf('ar') === 0 && !localStorage.getItem(STORAGE_KEY) && !localStorage.getItem(LEGACY_KEY)) {
+          initial = 'ar';
+        }
+      } catch (e) {}
       setLang(initial);
     })();
   </script>

@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Todoshi Support — bilingual English and Arabic.">
+  <title>Support - Todoshi</title>
+  <style>
+    :root {
+      --accent: #5248d9;
+      --accent-light: #7b73e8;
+      --accent-muted: rgba(82, 72, 217, 0.12);
+      --bg: #f5f4fb;
+      --surface: #ffffff;
+      --text: #1a1a2e;
+      --text-secondary: #5c5c72;
+      --border: rgba(26, 26, 46, 0.08);
+      --radius: 18px;
+      --max-width: 720px;
+      --shadow: 0 1px 3px rgba(26, 26, 46, 0.06);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --accent: #7b73e8;
+        --accent-light: #968ff0;
+        --accent-muted: rgba(123, 115, 232, 0.16);
+        --bg: #12111a;
+        --surface: #1c1b26;
+        --text: #eceaf5;
+        --text-secondary: #a8a5b8;
+        --border: rgba(236, 234, 245, 0.08);
+        --shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+      }
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      font-size: 16px;
+      line-height: 1.65;
+      color: var(--text);
+      background: var(--bg);
+    }
+
+    .lang-ar body,
+    html.lang-ar body {
+      font-family: -apple-system, BlinkMacSystemFont, "SF Arabic", "Geeza Pro", "Segoe UI", Tahoma, sans-serif;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 20px;
+      background: rgba(245, 244, 251, 0.92);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .topbar {
+        background: rgba(18, 17, 26, 0.92);
+      }
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .brand img {
+      width: 36px;
+      height: 36px;
+      border-radius: 9px;
+    }
+
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .nav-link {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .nav-link:hover {
+      color: var(--accent-light);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+
+    .lang-switch {
+      display: flex;
+      gap: 4px;
+      padding: 3px;
+      background: var(--accent-muted);
+      border-radius: 10px;
+    }
+
+    .lang-switch button {
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      font: inherit;
+      font-size: 0.875rem;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .lang-switch button[aria-pressed="true"] {
+      background: var(--surface);
+      color: var(--accent);
+      box-shadow: var(--shadow);
+    }
+
+    .lang-switch button:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    main {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 28px 20px 64px;
+    }
+
+    .hero {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .hero img {
+      width: 80px;
+      height: 80px;
+      border-radius: 18px;
+      margin-bottom: 16px;
+    }
+
+    h1 {
+      font-size: clamp(1.5rem, 4vw, 2rem);
+      line-height: 1.25;
+      margin: 0 0 8px;
+      color: var(--text);
+    }
+
+    .lead {
+      margin: 0 auto;
+      max-width: 36em;
+      color: var(--text-secondary);
+      font-size: 1.05rem;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px 24px;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .card h2 {
+      font-size: 1.1rem;
+      margin: 0 0 12px;
+      color: var(--accent);
+    }
+
+    .card p {
+      margin: 0 0 12px;
+      color: var(--text);
+    }
+
+    .card p:last-child,
+    .card ul:last-child {
+      margin-bottom: 0;
+    }
+
+    .card ul {
+      margin: 0 0 12px;
+      padding-inline-start: 1.25rem;
+    }
+
+    .card li {
+      margin-bottom: 6px;
+    }
+
+    .card a {
+      color: var(--accent);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+
+    .card a:hover {
+      color: var(--accent-light);
+    }
+
+    .contact-card {
+      text-align: center;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px 24px;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .contact-card .label {
+      margin: 0 0 8px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .contact-card .email {
+      display: block;
+      margin: 0 0 18px;
+      font-size: clamp(1rem, 3.5vw, 1.25rem);
+      font-weight: 700;
+      color: var(--accent);
+      text-decoration: none;
+      word-break: break-all;
+    }
+
+    .contact-card .email:hover {
+      color: var(--accent-light);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .mailto-btn {
+      display: inline-block;
+      border: none;
+      border-radius: 12px;
+      padding: 12px 22px;
+      font: inherit;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #fff;
+      background: var(--accent);
+      text-decoration: none;
+      cursor: pointer;
+      box-shadow: var(--shadow);
+    }
+
+    .mailto-btn:hover {
+      background: var(--accent-light);
+    }
+
+    .mailto-btn:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+    }
+
+    .path {
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    footer {
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      padding: 24px 20px 40px;
+      border-top: 1px solid var(--border);
+      max-width: var(--max-width);
+      margin: 0 auto;
+    }
+
+    footer a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+
+    [hidden] { display: none !important; }
+
+    html[dir="rtl"] .card ul {
+      padding-inline-start: 0;
+      padding-inline-end: 1.25rem;
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#top">
+      <img src="../privacy/logo.png" width="36" height="36" alt="Todoshi">
+      <span>Todoshi</span>
+    </a>
+    <div class="topbar-actions">
+      <a class="nav-link" id="nav-privacy" href="../privacy/">Privacy Policy</a>
+      <div class="lang-switch" role="group" aria-label="Language">
+        <button type="button" id="btn-en" aria-pressed="true" data-lang="en">English</button>
+        <button type="button" id="btn-ar" aria-pressed="false" data-lang="ar">العربية</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- English -->
+    <div id="content-en" lang="en" dir="ltr">
+      <div class="hero">
+        <img src="../privacy/logo.png" width="80" height="80" alt="Todoshi logo">
+        <h1>Todoshi Support</h1>
+        <p class="lead">We're here to help. If you experience an issue or have a question about Todoshi, contact us by email.</p>
+      </div>
+
+      <section class="contact-card" aria-labelledby="support-email-en">
+        <p class="label" id="support-email-en">Support Email</p>
+        <a class="email" href="mailto:anas.h.alhumaid@gmail.com">anas.h.alhumaid@gmail.com</a>
+        <a class="mailto-btn" href="mailto:anas.h.alhumaid@gmail.com">Send Email</a>
+      </section>
+
+      <section class="card">
+        <h2>You can contact us about</h2>
+        <ul>
+          <li>Sign-in issues</li>
+          <li>Shared projects and tasks</li>
+          <li>Sync and collaboration</li>
+          <li>Account and profile</li>
+          <li>Account/data deletion</li>
+          <li>Technical issues or feedback</li>
+        </ul>
+      </section>
+
+      <section class="card">
+        <h2>Delete Account</h2>
+        <p>You can permanently delete your Todoshi account from:</p>
+        <p class="path">Settings → Profile → Delete Account</p>
+        <p>If you have trouble completing deletion, contact us by email.</p>
+      </section>
+
+      <section class="card">
+        <h2>Privacy</h2>
+        <p>Read how Todoshi handles your data in our <a href="../privacy/">Privacy Policy</a>.</p>
+      </section>
+    </div>
+
+    <!-- Arabic -->
+    <div id="content-ar" lang="ar" dir="rtl" hidden>
+      <div class="hero">
+        <img src="../privacy/logo.png" width="80" height="80" alt="شعار Todoshi">
+        <h1>دعم Todoshi</h1>
+        <p class="lead">نحن هنا لمساعدتك. إذا واجهتك مشكلة أو كان لديك استفسار حول التطبيق، تواصل معنا عبر البريد الإلكتروني.</p>
+      </div>
+
+      <section class="contact-card" aria-labelledby="support-email-ar">
+        <p class="label" id="support-email-ar">البريد الإلكتروني للدعم</p>
+        <a class="email" href="mailto:anas.h.alhumaid@gmail.com">anas.h.alhumaid@gmail.com</a>
+        <a class="mailto-btn" href="mailto:anas.h.alhumaid@gmail.com">إرسال بريد</a>
+      </section>
+
+      <section class="card">
+        <h2>يمكنك التواصل معنا بخصوص</h2>
+        <ul>
+          <li>مشاكل تسجيل الدخول</li>
+          <li>المشاريع والمهام المشتركة</li>
+          <li>المزامنة والتعاون</li>
+          <li>الحساب والملف الشخصي</li>
+          <li>حذف الحساب والبيانات</li>
+          <li>المشاكل التقنية أو الاقتراحات</li>
+        </ul>
+      </section>
+
+      <section class="card">
+        <h2>حذف الحساب</h2>
+        <p>يمكنك حذف حسابك من داخل تطبيق Todoshi عبر:</p>
+        <p class="path">الإعدادات → الملف الشخصي → حذف الحساب</p>
+        <p>إذا واجهتك مشكلة أثناء الحذف، تواصل معنا عبر البريد الإلكتروني.</p>
+      </section>
+
+      <section class="card">
+        <h2>الخصوصية</h2>
+        <p>اطّلع على كيفية تعامل Todoshi مع بياناتك في <a href="../privacy/">سياسة الخصوصية</a>.</p>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <p id="footer-en">© Todoshi · <a href="../privacy/">Privacy Policy</a> · Support</p>
+    <p id="footer-ar" hidden>© Todoshi · <a href="../privacy/">سياسة الخصوصية</a> · الدعم</p>
+  </footer>
+
+  <script>
+    (function () {
+      var STORAGE_KEY = 'todoshi-docs-lang';
+      var LEGACY_KEY = 'todoshi-privacy-lang';
+      var btnEn = document.getElementById('btn-en');
+      var btnAr = document.getElementById('btn-ar');
+      var contentEn = document.getElementById('content-en');
+      var contentAr = document.getElementById('content-ar');
+      var footerEn = document.getElementById('footer-en');
+      var footerAr = document.getElementById('footer-ar');
+      var navPrivacy = document.getElementById('nav-privacy');
+
+      function setLang(lang) {
+        var isAr = lang === 'ar';
+        document.documentElement.lang = isAr ? 'ar' : 'en';
+        document.documentElement.dir = isAr ? 'rtl' : 'ltr';
+        document.title = isAr ? 'الدعم - Todoshi' : 'Support - Todoshi';
+
+        contentEn.hidden = isAr;
+        contentAr.hidden = !isAr;
+        footerEn.hidden = isAr;
+        footerAr.hidden = !isAr;
+        navPrivacy.textContent = isAr ? 'سياسة الخصوصية' : 'Privacy Policy';
+
+        btnEn.setAttribute('aria-pressed', isAr ? 'false' : 'true');
+        btnAr.setAttribute('aria-pressed', isAr ? 'true' : 'false');
+
+        try {
+          localStorage.setItem(STORAGE_KEY, lang);
+          localStorage.setItem(LEGACY_KEY, lang);
+        } catch (e) {}
+      }
+
+      btnEn.addEventListener('click', function () { setLang('en'); });
+      btnAr.addEventListener('click', function () { setLang('ar'); });
+
+      var initial = 'en';
+      try {
+        var saved = localStorage.getItem(STORAGE_KEY) || localStorage.getItem(LEGACY_KEY);
+        if (saved === 'ar' || saved === 'en') initial = saved;
+      } catch (e) {}
+      try {
+        if (navigator.language && navigator.language.indexOf('ar') === 0 && !localStorage.getItem(STORAGE_KEY) && !localStorage.getItem(LEGACY_KEY)) {
+          initial = 'ar';
+        }
+      } catch (e) {}
+      setLang(initial);
+    })();
+  </script>
+</body>
+</html>
