@@ -1,6 +1,6 @@
 import SwiftUI
 import SwiftData
-import NexusCore
+import TodoshiCore
 import UIKit
 
 struct KanbanColumnView: View {
@@ -19,34 +19,34 @@ struct KanbanColumnView: View {
     private let columnWidth: CGFloat = 280
 
     var body: some View {
-        VStack(alignment: .leading, spacing: NexusSpacing.sm) {
+        VStack(alignment: .leading, spacing: TodoshiSpacing.sm) {
             header
             cardsArea
         }
-        .padding(.vertical, NexusSpacing.xs)
-        .padding(.horizontal, NexusSpacing.xs)
+        .padding(.vertical, TodoshiSpacing.xs)
+        .padding(.horizontal, TodoshiSpacing.xs)
         .frame(width: columnWidth, height: columnHeight, alignment: .top)
         .background {
             if dragState.highlightedStatus == status {
-                RoundedRectangle(cornerRadius: NexusRadius.md, style: .continuous)
+                RoundedRectangle(cornerRadius: TodoshiRadius.md, style: .continuous)
                     .fill(Color.accentColor.opacity(0.06))
             }
         }
         .overlay {
-            RoundedRectangle(cornerRadius: NexusRadius.md, style: .continuous)
+            RoundedRectangle(cornerRadius: TodoshiRadius.md, style: .continuous)
                 .strokeBorder(
                     dragState.highlightedStatus == status ? Color.accentColor.opacity(0.45) : Color.clear,
                     lineWidth: 1.5
                 )
         }
         .accessibilityElement(children: .contain)
-        .accessibilityLabel(NexusL10n.format("kanban.statusCount", status.displayName, tasks.count))
+        .accessibilityLabel(TodoshiL10n.format("kanban.statusCount", status.displayName, tasks.count))
     }
 
     private var header: some View {
-        HStack(spacing: NexusSpacing.xs) {
+        HStack(spacing: TodoshiSpacing.xs) {
             Text(status.displayName)
-                .font(NexusTypography.section)
+                .font(TodoshiTypography.section)
             Text("\(tasks.count)")
                 .font(.caption.monospacedDigit())
                 .foregroundStyle(.secondary)
@@ -56,19 +56,19 @@ struct KanbanColumnView: View {
                     .font(.body.weight(.semibold))
                     .frame(minWidth: 32, minHeight: 32)
             }
-            .accessibilityLabel(NexusL10n.format("a11y.addTaskTo", status.displayName))
+            .accessibilityLabel(TodoshiL10n.format("a11y.addTaskTo", status.displayName))
         }
     }
 
     private var cardsArea: some View {
         ScrollView {
-            LazyVStack(spacing: NexusSpacing.sm) {
+            LazyVStack(spacing: TodoshiSpacing.sm) {
                 ForEach(tasks, id: \.id) { task in
                     card(for: task)
                 }
                 endDropZone
             }
-            .padding(.bottom, NexusSpacing.sm)
+            .padding(.bottom, TodoshiSpacing.sm)
         }
         .scrollIndicators(.hidden)
         .dropDestination(for: String.self) { items, _ in
@@ -113,7 +113,7 @@ struct KanbanColumnView: View {
     }
 
     private func cardContentPreview(_ task: TaskItem) -> some View {
-        VStack(alignment: .leading, spacing: NexusSpacing.xs) {
+        VStack(alignment: .leading, spacing: TodoshiSpacing.xs) {
             Text(task.title)
                 .font(.subheadline.weight(.semibold))
                 .lineLimit(3)
@@ -121,10 +121,10 @@ struct KanbanColumnView: View {
                 PriorityBadge(priority: task.priority)
             }
         }
-        .padding(NexusSpacing.sm)
+        .padding(TodoshiSpacing.sm)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background {
-            RoundedRectangle(cornerRadius: NexusRadius.md, style: .continuous)
+            RoundedRectangle(cornerRadius: TodoshiRadius.md, style: .continuous)
                 .fill(Color(.secondarySystemGroupedBackground))
         }
         .shadow(color: .black.opacity(0.08), radius: 4, y: 1)
@@ -133,8 +133,8 @@ struct KanbanColumnView: View {
     private var endDropZone: some View {
         Group {
             if tasks.isEmpty {
-                Text(NexusL10n.tr("kanban.dropHere"))
-                    .font(NexusTypography.metadata)
+                Text(TodoshiL10n.tr("kanban.dropHere"))
+                    .font(TodoshiTypography.metadata)
                     .foregroundStyle(.secondary)
                     .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
             } else {
@@ -148,8 +148,8 @@ struct KanbanColumnView: View {
             }
             .accessibilityLabel(
                 tasks.isEmpty
-                    ? NexusL10n.format("kanban.emptyDrop", status.displayName)
-                    : NexusL10n.format("kanban.endOf", status.displayName)
+                    ? TodoshiL10n.format("kanban.emptyDrop", status.displayName)
+                    : TodoshiL10n.format("kanban.endOf", status.displayName)
             )
     }
 

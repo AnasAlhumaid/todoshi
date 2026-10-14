@@ -1,12 +1,14 @@
 import SwiftUI
 import SwiftData
 import UIKit
-import NexusCore
+import TodoshiCore
 
 /// Immediate-persistence checklist section for Task Detail.
 struct TaskDetailChecklistSection: View {
     let taskID: UUID
     let items: [ChecklistItem]
+    var isEditable: Bool = true
+    var onPermissionDenied: (() -> Void)? = nil
     var onError: (String) -> Void
 
     @Environment(\.modelContext) private var modelContext
@@ -31,7 +33,7 @@ struct TaskDetailChecklistSection: View {
         Section {
             ChecklistProgressHeader(progress: progress)
 
-            if orderedItems.isEmpty, newTitle.isEmpty {
+            if orderedItems.isEmpty, newTitle.isEmpty, isEditable {
                 Text(ChecklistStrings.noItems)
                     .foregroundStyle(.secondary)
                     .font(.subheadline)
@@ -41,45 +43,57 @@ struct TaskDetailChecklistSection: View {
                 checklistRow(item)
             }
             .onMove { source, destination in
+                guard isEditable else {
+                    onPermissionDenied?()
+                    return
+                }
                 reorder(from: source, to: destination)
             }
 
-            HStack(spacing: NexusSpacing.sm) {
-                Image(systemName: "circle")
-                    .foregroundStyle(.tertiary)
-                    .frame(minWidth: 28)
-                    .accessibilityHidden(true)
-                TextField(ChecklistStrings.addItem, text: $newTitle)
-                    .focused($isNewItemFocused)
-                    .submitLabel(.done)
-                    .onSubmit { addItem() }
-                if !newTitle.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                    Button(ChecklistStrings.addItem) { addItem() }
-                        .fontWeight(.semibold)
+            if isEditable {
+                HStack(spacing: TodoshiSpacing.sm) {
+                    Image(systemName: "circle")
+                        .foregroundStyle(.tertiary)
+                        .frame(minWidth: 28)
+                        .accessibilityHidden(true)
+                    TextField(ChecklistStrings.addItem, text: $newTitle)
+                        .focused($isNewItemFocused)
+                        .submitLabel(.done)
+                        .onSubmit { addItem() }
+                    if !newTitle.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                        Button(ChecklistStrings.addItem) { addItem() }
+                            .fontWeight(.semibold)
+                    }
+                }
+                .accessibilityElement(children: .contain)
+            } else {
+                Button {
+                    onPermissionDenied?()
+                } label: {
+                    Label(ChecklistStrings.addItem, systemImage: "plus.circle")
                 }
             }
-            .accessibilityElement(children: .contain)
         } header: {
             HStack {
                 Text(ChecklistStrings.checklist)
                 Spacer()
-                if orderedItems.count > 1 {
-                    Button(isReordering ? NexusL10n.tr("common.done") : NexusL10n.tr("checklist.reorder")) {
+                if isEditable, orderedItems.count > 1 {
+                    Button(isReordering ? TodoshiL10n.tr("common.done") : TodoshiL10n.tr("checklist.reorder")) {
                         isReordering.toggle()
                     }
                     .font(.caption.weight(.semibold))
-                    .accessibilityLabel(isReordering ? NexusL10n.tr("checklist.doneReorder") : NexusL10n.tr("checklist.reorder"))
+                    .accessibilityLabel(isReordering ? TodoshiL10n.tr("checklist.doneReorder") : TodoshiL10n.tr("checklist.reorder"))
                 }
             }
         }
-        .environment(\.editMode, .constant(isReordering ? .active : .inactive))
+        .environment(\.editMode, .constant(isEditable && isReordering ? .active : .inactive))
         .alert(ChecklistStrings.editItem, isPresented: Binding(
             get: { editingItemID != nil },
             set: { if !$0 { editingItemID = nil } }
         )) {
             TextField(ChecklistStrings.editItem, text: $editingTitle)
-            Button(NexusL10n.tr("common.save")) { commitEdit() }
-            Button(NexusL10n.tr("common.cancel"), role: .cancel) { editingItemID = nil }
+            Button(TodoshiL10n.tr("common.save")) { commitEdit() }
+            Button(TodoshiL10n.tr("common.cancel"), role: .cancel) { editingItemID = nil }
         }
     }
 
@@ -88,9 +102,13 @@ struct TaskDetailChecklistSection: View {
         let index = (orderedItems.firstIndex(where: { $0.id == item.id }) ?? 0) + 1
         let total = orderedItems.count
 
-        HStack(spacing: NexusSpacing.sm) {
+        HStack(spacing: TodoshiSpacing.sm) {
             Button {
-                toggle(item)
+                if isEditable {
+                    toggle(item)
+                } else {
+                    onPermissionDenied?()
+                }
             } label: {
                 Image(systemName: item.isCompleted ? "checkmark.circle.fill" : "circle")
                     .foregroundStyle(item.isCompleted ? Color.accentColor : .secondary)
@@ -109,8 +127,12 @@ struct TaskDetailChecklistSection: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .contentShape(Rectangle())
                 .onTapGesture {
-                    editingTitle = item.title
-                    editingItemID = item.id
+                    if isEditable {
+                        editingTitle = item.title
+                        editingItemID = item.id
+                    } else {
+                        onPermissionDenied?()
+                    }
                 }
         }
         .accessibilityElement(children: .combine)
@@ -118,23 +140,33 @@ struct TaskDetailChecklistSection: View {
             "\(item.title), checklist item, \(item.isCompleted ? "completed" : "incomplete"), \(index) of \(total)"
         )
         .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-            Button(role: .destructive) {
-                delete(item)
-            } label: {
-                Label(ChecklistStrings.deleteItem, systemImage: "trash")
+            if isEditable {
+                Button(role: .destructive) {
+                    delete(item)
+                } label: {
+                    Label(ChecklistStrings.deleteItem, systemImage: "trash")
+                }
+                Button(ChecklistStrings.editItem) {
+                    editingTitle = item.title
+                    editingItemID = item.id
+                }
+                .tint(.accentColor)
             }
-            Button(ChecklistStrings.editItem) {
-                editingTitle = item.title
-                editingItemID = item.id
-            }
-            .tint(.accentColor)
         }
         .accessibilityAction(named: ChecklistStrings.editItem) {
-            editingTitle = item.title
-            editingItemID = item.id
+            if isEditable {
+                editingTitle = item.title
+                editingItemID = item.id
+            } else {
+                onPermissionDenied?()
+            }
         }
         .accessibilityAction(named: ChecklistStrings.deleteItem) {
-            delete(item)
+            if isEditable {
+                delete(item)
+            } else {
+                onPermissionDenied?()
+            }
         }
     }
 

@@ -1,26 +1,26 @@
 import SwiftUI
-import NexusCore
+import TodoshiCore
 
 struct SearchProjectResultRow: View {
     let project: SearchableProject
 
     var body: some View {
-        HStack(spacing: NexusSpacing.sm) {
+        HStack(spacing: TodoshiSpacing.sm) {
             Image(systemName: project.icon)
                 .font(.body)
-                .foregroundStyle(NexusColor.from(hex: project.colorHex))
-                .frame(width: NexusIconSize.glyph, height: NexusIconSize.glyph)
+                .foregroundStyle(TodoshiColor.from(hex: project.colorHex))
+                .frame(width: TodoshiIconSize.glyph, height: TodoshiIconSize.glyph)
                 .accessibilityHidden(true)
 
             VStack(alignment: .leading, spacing: 2) {
-                HStack(spacing: NexusSpacing.xs) {
+                HStack(spacing: TodoshiSpacing.xs) {
                     Text(project.name)
                         .font(.body.weight(.semibold))
                         .foregroundStyle(.primary)
                         .lineLimit(1)
                     if project.isArchived {
-                        Text(NexusL10n.tr("common.archived"))
-                            .font(NexusTypography.metadata)
+                        Text(TodoshiL10n.tr("common.archived"))
+                            .font(TodoshiTypography.metadata)
                             .foregroundStyle(.secondary)
                     }
                 }
@@ -37,7 +37,7 @@ struct SearchProjectResultRow: View {
             Text("\(project.openRootCount)")
                 .font(.subheadline.monospacedDigit())
                 .foregroundStyle(.secondary)
-                .accessibilityLabel(NexusL10n.format("search.openTasksA11y", project.openRootCount))
+                .accessibilityLabel(TodoshiL10n.format("search.openTasksA11y", project.openRootCount))
         }
         .padding(.vertical, 2)
         .accessibilityElement(children: .combine)
@@ -46,7 +46,7 @@ struct SearchProjectResultRow: View {
 
     private var accessibilityLabel: String {
         var parts = [project.name]
-        if project.isArchived { parts.append(NexusL10n.tr("common.archived")) }
+        if project.isArchived { parts.append(TodoshiL10n.tr("common.archived")) }
         if !project.projectDescription.isEmpty { parts.append(project.projectDescription) }
         parts.append("\(project.openRootCount) open tasks")
         return parts.joined(separator: ", ")
@@ -57,7 +57,7 @@ struct SearchTaskResultRow: View {
     let task: SearchableTask
 
     var body: some View {
-        NexusTaskRow(
+        TodoshiTaskRow(
             title: task.title,
             isCompleted: task.status == .done,
             context: task.projectName,
@@ -76,13 +76,13 @@ struct SearchTaskResultRow: View {
     private var accessibilityLabel: String {
         var parts = [task.title, task.projectName, task.status.displayName]
         if task.priority != .none {
-            parts.append(NexusL10n.format("search.priorityA11y", task.priority.displayName))
+            parts.append(TodoshiL10n.format("search.priorityA11y", task.priority.displayName))
         }
         if task.projectIsArchived {
-            parts.append(NexusL10n.tr("search.archivedProject"))
+            parts.append(TodoshiL10n.tr("search.archivedProject"))
         }
         if TaskPredicates.isOverdue(task.dueDate, status: task.status) {
-            parts.append(NexusL10n.tr("common.overdue"))
+            parts.append(TodoshiL10n.tr("common.overdue"))
         }
         if !task.labelNames.isEmpty {
             parts.append(task.labelNames.joined(separator: ", "))

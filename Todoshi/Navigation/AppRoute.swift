@@ -1,8 +1,9 @@
 import Foundation
-import NexusCore
+import TodoshiCore
 
 public enum AppTab: String, Hashable, CaseIterable, Identifiable, Sendable {
     case dashboard
+    case projects
     case calendar
     case search
     case settings
@@ -11,25 +12,28 @@ public enum AppTab: String, Hashable, CaseIterable, Identifiable, Sendable {
 
     public var title: String {
         switch self {
-        case .dashboard: return NexusL10n.tr("tab.dashboard")
-        case .calendar: return NexusL10n.tr("tab.calendar")
-        case .search: return NexusL10n.tr("tab.search")
-        case .settings: return NexusL10n.tr("tab.settings")
+        case .dashboard: return TodoshiL10n.tr("tab.dashboard")
+        case .projects: return TodoshiL10n.tr("tab.projects")
+        case .calendar: return TodoshiL10n.tr("tab.calendar")
+        case .search: return TodoshiL10n.tr("tab.search")
+        case .settings: return TodoshiL10n.tr("tab.settings")
         }
     }
 
     public func title(locale: Locale) -> String {
         switch self {
-        case .dashboard: return NexusL10n.tr("tab.dashboard", locale: locale)
-        case .calendar: return NexusL10n.tr("tab.calendar", locale: locale)
-        case .search: return NexusL10n.tr("tab.search", locale: locale)
-        case .settings: return NexusL10n.tr("tab.settings", locale: locale)
+        case .dashboard: return TodoshiL10n.tr("tab.dashboard", locale: locale)
+        case .projects: return TodoshiL10n.tr("tab.projects", locale: locale)
+        case .calendar: return TodoshiL10n.tr("tab.calendar", locale: locale)
+        case .search: return TodoshiL10n.tr("tab.search", locale: locale)
+        case .settings: return TodoshiL10n.tr("tab.settings", locale: locale)
         }
     }
 
     public var systemImage: String {
         switch self {
         case .dashboard: return "house.fill"
+        case .projects: return "square.stack.fill"
         case .calendar: return "calendar"
         case .search: return "magnifyingglass"
         case .settings: return "gearshape.fill"
@@ -52,4 +56,6 @@ public enum AppRoute: Hashable, Sendable {
     case unscheduled
     /// Dedicated route for widget project override picker (usually presented as a sheet).
     case widgetProjectPicker(baseProjectID: UUID?)
+    case projectMembers(UUID)
+    case allProjects
 }

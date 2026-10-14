@@ -1,8 +1,8 @@
 import Foundation
 import WidgetKit
-import NexusCore
+import TodoshiCore
 
-struct NexusWidgetEntry: TimelineEntry {
+struct TodoshiWidgetEntry: TimelineEntry {
     let date: Date
     let snapshot: WidgetTaskSnapshot
     let state: WidgetLoadState
@@ -19,6 +19,7 @@ struct ProjectWidgetInteraction: Hashable, Sendable {
     let projectName: String
     let projectIcon: String
     let projectColorHex: String
+    let projectType: ProjectType
     /// Hamburger selector available when a base is configured and active projects exist.
     let allowsProjectSelection: Bool
     let allowsQuickAdd: Bool
@@ -35,49 +36,49 @@ enum WidgetLoadState: Hashable, Sendable {
 }
 
 enum WidgetStrings {
-    static var today: String { NexusL10n.tr("widget.today") }
-    static var highPriority: String { NexusL10n.tr("widget.highPriority") }
-    static var quickAdd: String { NexusL10n.tr("widget.quickAdd") }
-    static var nothingToday: String { NexusL10n.tr("widget.nothingToday") }
-    static var noHighPriority: String { NexusL10n.tr("widget.noHighPriority") }
-    static var noOpenTasks: String { NexusL10n.tr("widget.noOpenTasks") }
-    static var noOpenTasksHint: String { NexusL10n.tr("widget.noOpenTasksHint") }
-    static var noActiveProjects: String { NexusL10n.tr("widget.noActiveProjects") }
-    static var noActiveProjectsHint: String { NexusL10n.tr("widget.noActiveProjectsHint") }
-    static var openNexus: String { NexusL10n.tr("widget.openNexus") }
-    static var chooseProject: String { NexusL10n.tr("widget.chooseProject") }
-    static var chooseProjectHint: String { NexusL10n.tr("widget.chooseProjectHint") }
-    static var projectUnavailable: String { NexusL10n.tr("widget.projectUnavailable") }
-    static var fullEditor: String { NexusL10n.tr("widget.fullEditor") }
-    static var previousProject: String { NexusL10n.tr("widget.previousProject") }
-    static var nextProject: String { NexusL10n.tr("widget.nextProject") }
-    static var selectProject: String { NexusL10n.tr("widget.selectProject") }
-    static var openProject: String { NexusL10n.tr("widget.openProject") }
-    static var addTask: String { NexusL10n.tr("widget.addTask") }
-    static var openTasks: String { NexusL10n.tr("widget.openTasks") }
+    static var today: String { TodoshiL10n.tr("widget.today") }
+    static var highPriority: String { TodoshiL10n.tr("widget.highPriority") }
+    static var quickAdd: String { TodoshiL10n.tr("widget.quickAdd") }
+    static var nothingToday: String { TodoshiL10n.tr("widget.nothingToday") }
+    static var noHighPriority: String { TodoshiL10n.tr("widget.noHighPriority") }
+    static var noOpenTasks: String { TodoshiL10n.tr("widget.noOpenTasks") }
+    static var noOpenTasksHint: String { TodoshiL10n.tr("widget.noOpenTasksHint") }
+    static var noActiveProjects: String { TodoshiL10n.tr("widget.noActiveProjects") }
+    static var noActiveProjectsHint: String { TodoshiL10n.tr("widget.noActiveProjectsHint") }
+    static var openTodoshi: String { TodoshiL10n.tr("widget.openTodoshi") }
+    static var chooseProject: String { TodoshiL10n.tr("widget.chooseProject") }
+    static var chooseProjectHint: String { TodoshiL10n.tr("widget.chooseProjectHint") }
+    static var projectUnavailable: String { TodoshiL10n.tr("widget.projectUnavailable") }
+    static var fullEditor: String { TodoshiL10n.tr("widget.fullEditor") }
+    static var previousProject: String { TodoshiL10n.tr("widget.previousProject") }
+    static var nextProject: String { TodoshiL10n.tr("widget.nextProject") }
+    static var selectProject: String { TodoshiL10n.tr("widget.selectProject") }
+    static var openProject: String { TodoshiL10n.tr("widget.openProject") }
+    static var addTask: String { TodoshiL10n.tr("widget.addTask") }
+    static var openTasks: String { TodoshiL10n.tr("widget.openTasks") }
 
     static func remaining(_ count: Int) -> String {
-        NexusL10n.format("widget.remaining", count)
+        TodoshiL10n.format("widget.remaining", count)
     }
 
     static func openTasksCount(_ count: Int) -> String {
-        NexusL10n.plural("widget.openTasksCount", count: count)
+        TodoshiL10n.plural("widget.openTasksCount", count: count)
     }
 
     static func currentProject(_ name: String) -> String {
-        NexusL10n.format("widget.currentProject", name)
+        TodoshiL10n.format("widget.currentProject", name)
     }
 
     static func addTaskTo(_ name: String) -> String {
-        NexusL10n.format("widget.addTaskTo", name)
+        TodoshiL10n.format("widget.addTaskTo", name)
     }
 
     static func openCountA11y(title: String, count: Int) -> String {
-        NexusL10n.format("widget.a11yOpenCount", title, count)
+        TodoshiL10n.format("widget.a11yOpenCount", title, count)
     }
 
     static func tasksCount(_ count: Int) -> String {
-        NexusL10n.format("widget.a11yTasks", count)
+        TodoshiL10n.format("widget.a11yTasks", count)
     }
 }
 
@@ -88,8 +89,8 @@ enum WidgetPreviewData {
             generatedAt: now,
             title: WidgetStrings.today,
             tasks: [
-                sample(id: UUID(), title: "Fix login layout", projectID: pid, name: "Nexus", priority: .high, due: now),
-                sample(id: UUID(), title: "Review App Store build", projectID: pid, name: "Nexus", priority: .medium, due: now),
+                sample(id: UUID(), title: "Fix login layout", projectID: pid, name: "Todoshi", priority: .high, due: now),
+                sample(id: UUID(), title: "Review App Store build", projectID: pid, name: "Todoshi", priority: .medium, due: now),
                 sample(id: UUID(), title: "Update API documentation", projectID: pid, name: "Core", priority: .low, due: now)
             ],
             totalCount: 3
@@ -100,10 +101,10 @@ enum WidgetPreviewData {
         let pid = UUID()
         return WidgetTaskSnapshot(
             generatedAt: now,
-            title: "Nexus",
+            title: "Todoshi",
             tasks: [
-                sample(id: UUID(), title: "Ship project widget", projectID: pid, name: "Nexus", priority: .high, due: nil, status: .inProgress),
-                sample(id: UUID(), title: "Polish empty states", projectID: pid, name: "Nexus", priority: .medium, due: now, status: .todo)
+                sample(id: UUID(), title: "Ship project widget", projectID: pid, name: "Todoshi", priority: .high, due: nil, status: .inProgress),
+                sample(id: UUID(), title: "Polish empty states", projectID: pid, name: "Todoshi", priority: .medium, due: now, status: .todo)
             ],
             totalCount: 2,
             projectID: pid,
@@ -136,7 +137,7 @@ enum WidgetPreviewData {
     }
 }
 
-enum NexusWidgetTimeline {
+enum TodoshiWidgetTimeline {
     static func nextDate(from snapshot: WidgetTaskSnapshot, now: Date = .now) -> Date {
         WidgetTimelinePolicy.nextRefreshDate(
             after: now,
@@ -144,7 +145,7 @@ enum NexusWidgetTimeline {
         )
     }
 
-    static func timeline(for entry: NexusWidgetEntry, now: Date = .now) -> Timeline<NexusWidgetEntry> {
+    static func timeline(for entry: TodoshiWidgetEntry, now: Date = .now) -> Timeline<TodoshiWidgetEntry> {
         let next = nextDate(from: entry.snapshot, now: now)
         return Timeline(entries: [entry], policy: .after(next))
     }

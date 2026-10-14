@@ -1,5 +1,5 @@
 import SwiftUI
-import NexusCore
+import TodoshiCore
 
 /// Compact checklist progress for rows and Kanban cards (`☑ 3/5`).
 struct ChecklistProgressBadge: View {
@@ -29,7 +29,7 @@ struct ChecklistProgressHeader: View {
     var body: some View {
         if progress.hasProgress {
             Text(progress.accessibilityLabel)
-                .font(NexusTypography.metadata)
+                .font(TodoshiTypography.metadata)
                 .foregroundStyle(.secondary)
                 .accessibilityLabel(progress.accessibilityLabel)
         }

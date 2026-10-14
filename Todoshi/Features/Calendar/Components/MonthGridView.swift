@@ -1,5 +1,5 @@
 import SwiftUI
-import NexusCore
+import TodoshiCore
 
 struct MonthDayCell: View {
     let cell: CalendarMonthCell
@@ -65,16 +65,16 @@ struct MonthDayCell: View {
 
     private var accessibilityLabel: String {
         guard let date = cell.date, let summary = cell.summary else {
-            return NexusL10n.tr("calendar.a11yEmpty")
+            return TodoshiL10n.tr("calendar.a11yEmpty")
         }
         let dateText = date.formatted(.dateTime.weekday(.wide).month(.wide).day().year())
         var parts = [dateText]
         if isToday { parts.append(CalendarStrings.today.lowercased()) }
-        if isSelected { parts.append(NexusL10n.tr("calendar.a11ySelected")) }
+        if isSelected { parts.append(TodoshiL10n.tr("calendar.a11ySelected")) }
         parts.append(CalendarStrings.openTasks(summary.openCount))
         parts.append(CalendarStrings.completedTasks(summary.completedCount))
         if summary.overdueOpenCount > 0 {
-            parts.append(NexusL10n.tr("calendar.a11yOverdueTasks"))
+            parts.append(TodoshiL10n.tr("calendar.a11yOverdueTasks"))
         }
         return parts.joined(separator: ", ")
     }

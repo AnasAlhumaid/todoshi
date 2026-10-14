@@ -12,6 +12,6 @@ struct PlaceholderTabView: View {
             Text(message)
                 .multilineTextAlignment(.center)
         }
-        .padding(NexusSpacing.md)
+        .padding(TodoshiSpacing.md)
     }
 }

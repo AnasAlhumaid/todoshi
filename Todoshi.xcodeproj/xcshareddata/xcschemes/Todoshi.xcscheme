@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "A10000000000000000000002"
-               BuildableName = "Nexus.app"
-               BlueprintName = "Nexus"
-               ReferencedContainer = "container:Nexus.xcodeproj">
+               BuildableName = "Todoshi.app"
+               BlueprintName = "Todoshi"
+               ReferencedContainer = "container:Todoshi.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -44,9 +44,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "A10000000000000000000002"
-            BuildableName = "Nexus.app"
-            BlueprintName = "Nexus"
-            ReferencedContainer = "container:Nexus.xcodeproj">
+            BuildableName = "Todoshi.app"
+            BlueprintName = "Todoshi"
+            ReferencedContainer = "container:Todoshi.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -61,9 +61,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "A10000000000000000000002"
-            BuildableName = "Nexus.app"
-            BlueprintName = "Nexus"
-            ReferencedContainer = "container:Nexus.xcodeproj">
+            BuildableName = "Todoshi.app"
+            BlueprintName = "Todoshi"
+            ReferencedContainer = "container:Todoshi.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

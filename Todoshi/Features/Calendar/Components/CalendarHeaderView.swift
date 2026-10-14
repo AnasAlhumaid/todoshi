@@ -1,5 +1,5 @@
 import SwiftUI
-import NexusCore
+import TodoshiCore
 
 struct CalendarHeaderView: View {
     let mode: CalendarMode

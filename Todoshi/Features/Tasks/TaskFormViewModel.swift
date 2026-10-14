@@ -1,7 +1,7 @@
 import Foundation
 import Observation
 import SwiftData
-import NexusCore
+import TodoshiCore
 
 @Observable
 @MainActor
@@ -21,19 +21,28 @@ final class TaskFormViewModel {
 
     var isEditing: Bool { taskID != nil }
     var isCreatingSubtask: Bool { !isEditing && draft.parentTaskID != nil }
+    var projectType: ProjectType = .tasks
+    /// Shared-project completion actor (Phase 8.1). Nil for personal projects.
+    var completionActor: TaskCompletionActor?
     var canSave: Bool {
         draft.isValid && draft.reminderValidationIssue() == nil && draft.checklistDraftsAreValid && draft.resourceDraftsAreValid
     }
 
-    /// Recurrence is root-task only (not Quick Add, not subtasks).
+    var allowedStatuses: [TaskStatus] {
+        ProjectTypeCapabilities.allowedStatuses(for: projectType)
+    }
+
+    var isChecklistProject: Bool { projectType == .checklist }
+
+    /// Recurrence is root-task only (not Quick Add, not subtasks). Hidden for Checklist projects.
     var showsRecurrenceControls: Bool {
-        draft.parentTaskID == nil
+        draft.parentTaskID == nil && ProjectTypeCapabilities.supportsWorkflowStatuses(projectType)
     }
     var navigationTitle: String {
         if isEditing {
-            return NexusL10n.tr("task.edit")
+            return TodoshiL10n.tr("task.edit")
         }
-        return isCreatingSubtask ? SubtaskStrings.newSubtaskTitle : NexusL10n.tr("task.new")
+        return isCreatingSubtask ? SubtaskStrings.newSubtaskTitle : TodoshiL10n.tr("task.new")
     }
 
     /// Focus target after adding a draft checklist row.
@@ -53,6 +62,9 @@ final class TaskFormViewModel {
             .sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }
     }
 
+    /// Board column a new task was started from; applied when its status still fits the column.
+    private let initialColumnID: UUID?
+
     init(
         context: ModelContext,
         projectID: UUID,
@@ -60,13 +72,17 @@ final class TaskFormViewModel {
         initialStatus: TaskStatus = .todo,
         parentTaskID: UUID? = nil,
         initialDueDate: Date? = nil,
+        initialColumnID: UUID? = nil,
         fileStore: TaskResourceFileStore = .shared
     ) {
+        self.initialColumnID = initialColumnID
         self.context = context
         self.projectID = projectID
         self.taskID = taskID
         self.fileStore = fileStore
         self.resourceOwnerID = taskID ?? UUID()
+        let resolvedType = (try? ProjectRepository(context: context).fetchProject(id: projectID))?.projectType ?? .tasks
+        self.projectType = resolvedType
         if let taskID,
            let task = try? TaskRepository(context: context).fetchTask(id: taskID) {
             self.draft = TaskDraft(task: task)
@@ -74,8 +90,14 @@ final class TaskFormViewModel {
                 self.parentTitle = parent.title
             }
         } else {
-            var draft = TaskDraft(status: initialStatus)
+            let clampedStatus = ProjectTypeCapabilities.allowsStatus(initialStatus, for: resolvedType)
+                ? initialStatus
+                : ProjectTypeCapabilities.defaultStatus(for: resolvedType)
+            var draft = TaskDraft(status: clampedStatus)
             draft.parentTaskID = parentTaskID
+            if resolvedType == .checklist {
+                draft.priority = .none
+            }
             if let initialDueDate {
                 draft.hasDueDate = true
                 draft.dueDate = initialDueDate
@@ -90,6 +112,17 @@ final class TaskFormViewModel {
     }
 
     /// Remove staged imported files when the form is cancelled.
+    func resolveCompletionActor(uid: String?, displayName: String?) {
+        guard let uid,
+              let project = try? ProjectRepository(context: context).fetchProject(id: projectID),
+              project.isShared
+        else {
+            completionActor = nil
+            return
+        }
+        completionActor = TaskCompletionActor(uid: uid, displayName: displayName)
+    }
+
     func discardStagedResourceFiles() {
         let paths = TaskResourceDraftCleanup.stagedRelativePaths(in: draft.resources)
         for path in paths {
@@ -233,7 +266,7 @@ final class TaskFormViewModel {
             let savedTaskID: UUID
             if let taskID {
                 guard let task = try tasks.fetchTask(id: taskID) else {
-                    errorMessage = NexusL10n.tr("task.notFound")
+                    errorMessage = TodoshiL10n.tr("task.notFound")
                     return false
                 }
                 try tasks.update(
@@ -247,7 +280,8 @@ final class TaskFormViewModel {
                     notes: draft.notes,
                     labelIDs: draft.labelIDs,
                     recurrenceRule: showsRecurrenceControls ? draft.resolvedRecurrenceRule : nil,
-                    updateRecurrence: showsRecurrenceControls
+                    updateRecurrence: showsRecurrenceControls,
+                    completionActor: completionActor
                 )
                 savedTaskID = task.id
             } else if let parentTaskID = draft.parentTaskID {
@@ -269,11 +303,11 @@ final class TaskFormViewModel {
                 savedTaskID = created.id
             } else {
                 guard let project = try projects.fetchProject(id: projectID) else {
-                    errorMessage = NexusL10n.tr("project.notFound")
+                    errorMessage = TodoshiL10n.tr("project.notFound")
                     return false
                 }
                 guard project.status == .active else {
-                    errorMessage = NexusL10n.tr("task.activeProjectRequired")
+                    errorMessage = TodoshiL10n.tr("task.activeProjectRequired")
                     return false
                 }
                 let created = try tasks.create(
@@ -286,8 +320,15 @@ final class TaskFormViewModel {
                     reminderDate: draft.resolvedReminderDate,
                     notes: draft.notes,
                     labelIDs: draft.labelIDs,
-                    recurrenceRule: draft.resolvedRecurrenceRule
+                    recurrenceRule: draft.resolvedRecurrenceRule,
+                    completionActor: completionActor
                 )
+                if let initialColumnID,
+                   let column = ProjectColumnsPolicy.columns(for: project).first(where: { $0.id == initialColumnID }),
+                   column.kind == ProjectColumnKind.kind(for: created.status) {
+                    created.columnIDRaw = column.id.uuidString
+                    try context.save()
+                }
                 savedTaskID = created.id
             }
 
@@ -313,7 +354,7 @@ final class TaskFormViewModel {
             }
             return true
         } catch RepositoryValidationError.emptyName {
-            errorMessage = NexusL10n.tr("task.titleRequired")
+            errorMessage = TodoshiL10n.tr("task.titleRequired")
             return false
         } catch RepositoryValidationError.checklistTitleTooLong {
             errorMessage = ChecklistStrings.titleTooLong
@@ -340,7 +381,7 @@ final class TaskFormViewModel {
         case .parentIsAlreadySubtask, .nestedHierarchyNotAllowed: return SubtaskStrings.cannotAddNested
         case .projectMismatch: return SubtaskStrings.sameProjectRequired
         case .selfParenting, .cycleDetected: return SubtaskStrings.invalidParent
-        case .missingChild: return NexusL10n.tr("task.notFound")
+        case .missingChild: return TodoshiL10n.tr("task.notFound")
         }
     }
 }

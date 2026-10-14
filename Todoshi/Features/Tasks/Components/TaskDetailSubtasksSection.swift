@@ -1,11 +1,13 @@
 import SwiftUI
 import SwiftData
 import UIKit
-import NexusCore
+import TodoshiCore
 
 /// Immediate subtask list for root Task Detail (full children are TaskItems).
 struct TaskDetailSubtasksSection: View {
     let parent: TaskItem
+    var isEditable: Bool = true
+    var onPermissionDenied: (() -> Void)? = nil
     var onError: (String) -> Void
     var onAddSubtask: (UUID, UUID) -> Void
 
@@ -33,13 +35,20 @@ struct TaskDetailSubtasksSection: View {
                     subtaskRow(child)
                 }
                 .onMove { source, destination in
+                    guard isEditable else {
+                        onPermissionDenied?()
+                        return
+                    }
                     reorder(from: source, to: destination)
                 }
             }
 
             Button {
-                guard let projectID = parent.project?.id else { return }
-                onAddSubtask(parent.id, projectID)
+                if isEditable, let projectID = parent.project?.id {
+                    onAddSubtask(parent.id, projectID)
+                } else {
+                    onPermissionDenied?()
+                }
             } label: {
                 Label(SubtaskStrings.addSubtask, systemImage: "plus.circle")
             }
@@ -48,16 +57,16 @@ struct TaskDetailSubtasksSection: View {
             HStack {
                 Text(SubtaskStrings.subtasks)
                 Spacer()
-                if ordered.count > 1 {
-                    Button(isReordering ? NexusL10n.tr("common.done") : NexusL10n.tr("subtask.reorder")) {
+                if isEditable, ordered.count > 1 {
+                    Button(isReordering ? TodoshiL10n.tr("common.done") : TodoshiL10n.tr("subtask.reorder")) {
                         isReordering.toggle()
                     }
                     .font(.caption.weight(.semibold))
-                    .accessibilityLabel(isReordering ? NexusL10n.tr("subtask.doneReorder") : NexusL10n.tr("subtask.reorder"))
+                    .accessibilityLabel(isReordering ? TodoshiL10n.tr("subtask.doneReorder") : TodoshiL10n.tr("subtask.reorder"))
                 }
             }
         }
-        .environment(\.editMode, .constant(isReordering ? .active : .inactive))
+        .environment(\.editMode, .constant(isEditable && isReordering ? .active : .inactive))
     }
 
     @ViewBuilder
@@ -67,9 +76,13 @@ struct TaskDetailSubtasksSection: View {
         let checklist = ChecklistProgress.from(completedFlags: (child.checklist ?? []).map(\.isCompleted))
 
         NavigationLink(value: AppRoute.task(child.id)) {
-            HStack(alignment: .top, spacing: NexusSpacing.sm) {
+            HStack(alignment: .top, spacing: TodoshiSpacing.sm) {
                 Button {
-                    toggleCompletion(child)
+                    if isEditable {
+                        toggleCompletion(child)
+                    } else {
+                        onPermissionDenied?()
+                    }
                 } label: {
                     Image(systemName: child.status == .done ? "checkmark.circle.fill" : "circle")
                         .foregroundStyle(child.status == .done ? Color.accentColor : .secondary)
@@ -79,7 +92,7 @@ struct TaskDetailSubtasksSection: View {
                 }
                 .buttonStyle(.plain)
                 .accessibilityLabel(
-                    child.status == .done ? NexusL10n.tr("checklist.markIncomplete") : NexusL10n.tr("checklist.markComplete")
+                    child.status == .done ? TodoshiL10n.tr("checklist.markIncomplete") : TodoshiL10n.tr("checklist.markComplete")
                 )
 
                 VStack(alignment: .leading, spacing: 4) {
@@ -89,7 +102,7 @@ struct TaskDetailSubtasksSection: View {
                         .foregroundStyle(child.status == .done ? .secondary : .primary)
                         .multilineTextAlignment(.leading)
 
-                    HStack(spacing: NexusSpacing.sm) {
+                    HStack(spacing: TodoshiSpacing.sm) {
                         Text(child.status.displayName)
                             .font(.caption)
                             .foregroundStyle(.secondary)
@@ -101,7 +114,7 @@ struct TaskDetailSubtasksSection: View {
                             Image(systemName: "bell.fill")
                                 .font(.caption2)
                                 .foregroundStyle(.secondary)
-                                .accessibilityLabel(NexusL10n.tr("task.hasReminder"))
+                                .accessibilityLabel(TodoshiL10n.tr("task.hasReminder"))
                         }
                         ChecklistProgressBadge(progress: checklist)
                     }
@@ -163,6 +176,7 @@ struct TaskDetailSubtasksSection: View {
 struct TaskDetailParentContextSection: View {
     let parent: TaskItem
     let projectName: String?
+    var canPromote: Bool = true
     var onPromote: () -> Void
 
     var body: some View {
@@ -183,8 +197,10 @@ struct TaskDetailParentContextSection: View {
             }
             .accessibilityLabel("\(SubtaskStrings.subtaskOf) \(parent.title)")
 
-            Button(SubtaskStrings.promoteToRoot, action: onPromote)
-                .accessibilityLabel(SubtaskStrings.promoteToRoot)
+            if canPromote {
+                Button(SubtaskStrings.promoteToRoot, action: onPromote)
+                    .accessibilityLabel(SubtaskStrings.promoteToRoot)
+            }
         } header: {
             Text(SubtaskStrings.parentTask)
         }

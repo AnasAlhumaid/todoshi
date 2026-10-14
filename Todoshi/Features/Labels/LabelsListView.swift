@@ -1,6 +1,6 @@
 import SwiftUI
 import SwiftData
-import NexusCore
+import TodoshiCore
 
 struct LabelsListView: View {
     @Environment(\.modelContext) private var modelContext
@@ -24,7 +24,7 @@ struct LabelsListView: View {
                 ContentUnavailableView {
                     Label(LabelStrings.noLabels, systemImage: "tag")
                 } description: {
-                    Text(NexusL10n.tr("label.emptyHint"))
+                    Text(TodoshiL10n.tr("label.emptyHint"))
                 } actions: {
                     Button(LabelStrings.createLabel) {
                         isCreating = true
@@ -41,9 +41,9 @@ struct LabelsListView: View {
                 Section {
                     ForEach(sorted, id: \.id) { label in
                         NavigationLink(value: AppRoute.labelTasks(label.id)) {
-                            HStack(spacing: NexusSpacing.sm) {
+                            HStack(spacing: TodoshiSpacing.sm) {
                                 Circle()
-                                    .fill(NexusColor.from(hex: label.colorHex))
+                                    .fill(TodoshiColor.from(hex: label.colorHex))
                                     .frame(width: 14, height: 14)
                                     .accessibilityHidden(true)
                                 VStack(alignment: .leading, spacing: 2) {
@@ -111,30 +111,30 @@ struct LabelsListView: View {
                 Button(LabelStrings.deleteLabel, role: .destructive) {
                     delete(label)
                 }
-                Button(NexusL10n.tr("common.cancel"), role: .cancel) { pendingDelete = nil }
+                Button(TodoshiL10n.tr("common.cancel"), role: .cancel) { pendingDelete = nil }
             }
         } message: {
             if let label = pendingDelete {
                 Text(deleteMessage(for: label))
             }
         }
-        .alert(NexusL10n.tr("label.unableDelete"), isPresented: Binding(
+        .alert(TodoshiL10n.tr("label.unableDelete"), isPresented: Binding(
             get: { deleteError != nil },
             set: { if !$0 { deleteError = nil } }
         )) {
-            Button(NexusL10n.tr("common.ok"), role: .cancel) { deleteError = nil }
+            Button(TodoshiL10n.tr("common.ok"), role: .cancel) { deleteError = nil }
         } message: {
             Text(deleteError ?? "")
         }
     }
 
     private func taskCountText(for label: LabelTag) -> String {
-        NexusL10n.plural("count.tasks", count: (label.tasks ?? []).count)
+        TodoshiL10n.plural("count.tasks", count: (label.tasks ?? []).count)
     }
 
     private func accessibilityLabel(for label: LabelTag) -> String {
         let color = LabelColorCatalog.name(for: label.colorHex)
-        return NexusL10n.format("label.a11yAssigned", label.name, color, (label.tasks ?? []).count)
+        return TodoshiL10n.format("label.a11yAssigned", label.name, color, (label.tasks ?? []).count)
     }
 
     private func deleteMessage(for label: LabelTag) -> String {

@@ -2,7 +2,7 @@ import SwiftUI
 import SwiftData
 import UniformTypeIdentifiers
 import UIKit
-import NexusCore
+import TodoshiCore
 
 /// Form draft resources section (mutations persist only on Save).
 struct TaskFormResourcesSection: View {
@@ -83,7 +83,7 @@ struct TaskFormResourcesSection: View {
                     showImporter = true
                 }
             } label: {
-                Label(NexusL10n.tr("resource.add"), systemImage: "plus.circle")
+                Label(TodoshiL10n.tr("resource.add"), systemImage: "plus.circle")
             }
         } header: {
             Text(TaskResourceStrings.resources)
@@ -151,6 +151,8 @@ private struct EditorPresentation: Identifiable {
 struct TaskDetailResourcesSection: View {
     let taskID: UUID
     let resources: [TaskResource]
+    var isEditable: Bool = true
+    var onPermissionDenied: (() -> Void)? = nil
     var onError: (String) -> Void
 
     @Environment(\.modelContext) private var modelContext
@@ -187,47 +189,56 @@ struct TaskDetailResourcesSection: View {
                         onCopy: { copy(resource) },
                         onOpen: { open(resource) },
                         onShare: { share(resource) },
-                        onDelete: { confirmDelete = resource },
-                        onEdit: {
+                        onDelete: isEditable ? { confirmDelete = resource } : nil,
+                        onEdit: isEditable ? {
                             editingResource = resource
                             editorKind = resource.kind
-                        }
+                        } : nil
                     )
                 }
                 .onMove { source, destination in
+                    guard isEditable else { return }
                     reorder(from: source, to: destination)
                 }
             }
 
-            Menu {
-                Button(TaskResourceStrings.addLink) { editorKind = .link; editingResource = nil }
-                Button(TaskResourceStrings.addCodeSnippet) { editorKind = .codeSnippet; editingResource = nil }
-                Button(TaskResourceStrings.addCommand) { editorKind = .terminalCommand; editingResource = nil }
-                Button(TaskResourceStrings.addText) { editorKind = .text; editingResource = nil }
-                Button(TaskResourceStrings.addImage) {
-                    preferredKind = .image
-                    importerTypes = [.image]
-                    showImporter = true
+            if isEditable {
+                Menu {
+                    Button(TaskResourceStrings.addLink) { editorKind = .link; editingResource = nil }
+                    Button(TaskResourceStrings.addCodeSnippet) { editorKind = .codeSnippet; editingResource = nil }
+                    Button(TaskResourceStrings.addCommand) { editorKind = .terminalCommand; editingResource = nil }
+                    Button(TaskResourceStrings.addText) { editorKind = .text; editingResource = nil }
+                    Button(TaskResourceStrings.addImage) {
+                        preferredKind = .image
+                        importerTypes = [.image]
+                        showImporter = true
+                    }
+                    Button(TaskResourceStrings.addPDF) {
+                        preferredKind = .pdf
+                        importerTypes = [.pdf]
+                        showImporter = true
+                    }
+                    Button(TaskResourceStrings.addFile) {
+                        preferredKind = nil
+                        importerTypes = [.item]
+                        showImporter = true
+                    }
+                } label: {
+                    Label(TodoshiL10n.tr("resource.add"), systemImage: "plus.circle")
                 }
-                Button(TaskResourceStrings.addPDF) {
-                    preferredKind = .pdf
-                    importerTypes = [.pdf]
-                    showImporter = true
+            } else {
+                Button {
+                    onPermissionDenied?()
+                } label: {
+                    Label(TodoshiL10n.tr("resource.add"), systemImage: "plus.circle")
                 }
-                Button(TaskResourceStrings.addFile) {
-                    preferredKind = nil
-                    importerTypes = [.item]
-                    showImporter = true
-                }
-            } label: {
-                Label(NexusL10n.tr("resource.add"), systemImage: "plus.circle")
             }
         } header: {
             HStack {
                 Text(TaskResourceStrings.resources)
                 Spacer()
-                if ordered.count > 1 {
-                    Button(isReordering ? NexusL10n.tr("common.done") : NexusL10n.tr("checklist.reorder")) {
+                if isEditable, ordered.count > 1 {
+                    Button(isReordering ? TodoshiL10n.tr("common.done") : TodoshiL10n.tr("checklist.reorder")) {
                         isReordering.toggle()
                     }
                     .font(.caption.weight(.semibold))
@@ -236,7 +247,7 @@ struct TaskDetailResourcesSection: View {
         } footer: {
             Text(TaskResourceStrings.storedLocally)
         }
-        .environment(\.editMode, .constant(isReordering ? .active : .inactive))
+        .environment(\.editMode, .constant(isEditable && isReordering ? .active : .inactive))
         .sheet(item: Binding(
             get: {
                 editorKind.map { EditorPresentation(
@@ -297,7 +308,7 @@ struct TaskDetailResourcesSection: View {
                     delete(confirmDelete)
                 }
             }
-            Button(NexusL10n.tr("common.cancel"), role: .cancel) {}
+            Button(TodoshiL10n.tr("common.cancel"), role: .cancel) {}
         }
     }
 

@@ -1,6 +1,6 @@
 import SwiftUI
 
-enum NexusSpacing {
+enum TodoshiSpacing {
     static let xxs: CGFloat = 4
     static let xs: CGFloat = 8
     static let sm: CGFloat = 12
@@ -9,13 +9,15 @@ enum NexusSpacing {
     static let xl: CGFloat = 32
 }
 
-enum NexusRadius {
+enum TodoshiRadius {
     static let sm: CGFloat = 8
     static let md: CGFloat = 12
     static let lg: CGFloat = 16
+    /// Primary card corner radius.
+    static let card: CGFloat = 18
 }
 
-enum NexusTypography {
+enum TodoshiTypography {
     /// Large navigation / greeting.
     static let screenTitle = Font.largeTitle.weight(.bold)
     static let title = Font.title2.weight(.semibold)
@@ -27,7 +29,7 @@ enum NexusTypography {
     static let caption = Font.caption
 }
 
-enum NexusIconSize {
+enum TodoshiIconSize {
     static let glyph: CGFloat = 22
     static let row: CGFloat = 28
     static let hit: CGFloat = 44

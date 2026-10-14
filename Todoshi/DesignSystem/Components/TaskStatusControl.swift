@@ -1,5 +1,5 @@
 import SwiftUI
-import NexusCore
+import TodoshiCore
 
 enum TaskStatusControlStyle {
     /// Full status label for boards outside the matching section context.
@@ -21,13 +21,12 @@ struct TaskStatusControl: View {
             statusMenuItems
         } label: {
             controlLabel
-                .frame(minHeight: NexusIconSize.hit, alignment: .leading)
                 .contentShape(Rectangle())
         }
         .menuStyle(.button)
         .buttonStyle(.plain)
         .accessibilityLabel(accessibilityLabelText)
-        .accessibilityHint(NexusL10n.tr("task.statusControl.hint"))
+        .accessibilityHint(TodoshiL10n.tr("task.statusControl.hint"))
     }
 
     @ViewBuilder
@@ -38,26 +37,27 @@ struct TaskStatusControl: View {
         case .sectionCompact:
             labeledControl(showFullStatus: false)
         case .homeIndicator:
-            HStack(spacing: NexusSpacing.xxs) {
+            HStack(spacing: 3) {
                 Circle()
-                    .fill(NexusStatusColor.indicator(for: currentStatus))
-                    .frame(width: 10, height: 10)
+                    .fill(TodoshiStatusColor.indicator(for: currentStatus))
+                    .frame(width: 8, height: 8)
                 Image(systemName: "chevron.up.chevron.down")
                     .font(.caption2.weight(.semibold))
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(.tertiary)
             }
-            .padding(.horizontal, NexusSpacing.xxs)
+            .frame(width: 36, height: 36)
+            .contentShape(Rectangle())
         }
     }
 
     private func labeledControl(showFullStatus: Bool) -> some View {
-        HStack(spacing: NexusSpacing.xxs) {
+        HStack(spacing: TodoshiSpacing.xxs) {
             Circle()
-                .fill(NexusStatusColor.indicator(for: currentStatus))
+                .fill(TodoshiStatusColor.indicator(for: currentStatus))
                 .frame(width: 8, height: 8)
 
-            Text(showFullStatus ? currentStatus.displayName : NexusL10n.tr("task.changeStatus"))
-                .font(NexusTypography.metadata)
+            Text(showFullStatus ? currentStatus.displayName : TodoshiL10n.tr("task.changeStatus"))
+                .font(TodoshiTypography.metadata)
                 .foregroundStyle(.secondary)
                 .lineLimit(1)
 
@@ -84,7 +84,7 @@ struct TaskStatusControl: View {
     }
 
     private var accessibilityLabelText: String {
-        NexusL10n.format("task.statusControl.a11y", currentStatus.displayName)
+        TodoshiL10n.format("task.statusControl.a11y", currentStatus.displayName)
     }
 
     static func style(for taskStatus: TaskStatus, sectionStatus: TaskStatus?) -> TaskStatusControlStyle {

@@ -1,5 +1,5 @@
 import SwiftUI
-import NexusCore
+import TodoshiCore
 
 struct DayAgendaView: View {
     let agenda: CalendarDayAgenda
@@ -15,7 +15,7 @@ struct DayAgendaView: View {
             CalendarEmptyState(
                 systemImage: "calendar.badge.exclamationmark",
                 title: CalendarStrings.noTasksThisDay,
-                message: NexusL10n.tr("calendar.dayEmptyMessage"),
+                message: TodoshiL10n.tr("calendar.dayEmptyMessage"),
                 actionTitle: CalendarStrings.addTask,
                 action: onAddTask
             )

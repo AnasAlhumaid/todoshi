@@ -1,6 +1,6 @@
 import SwiftUI
 import SwiftData
-import NexusCore
+import TodoshiCore
 
 struct NotificationSettingsView: View {
     @Environment(\.modelContext) private var modelContext
@@ -9,7 +9,7 @@ struct NotificationSettingsView: View {
     var body: some View {
         List {
             Section {
-                LabeledContent(NexusL10n.tr("notification.status"), value: viewModel.authorizationLabel)
+                LabeledContent(TodoshiL10n.tr("notification.status"), value: viewModel.authorizationLabel)
                 if viewModel.canRequestAuthorization {
                     Button(NotificationStrings.enableTitle) {
                         viewModel.showPermissionExplainer = true
@@ -30,7 +30,7 @@ struct NotificationSettingsView: View {
             }
 
             Section(NotificationStrings.dailySummary) {
-                Toggle(NexusL10n.tr("notification.enableDaily"), isOn: $viewModel.preferences.isEnabled)
+                Toggle(TodoshiL10n.tr("notification.enableDaily"), isOn: $viewModel.preferences.isEnabled)
                     .disabled(!viewModel.isAuthorized)
                     .onChange(of: viewModel.preferences.isEnabled) { _, _ in
                         Task { await viewModel.savePreferences(context: modelContext) }
@@ -52,7 +52,7 @@ struct NotificationSettingsView: View {
                 }
             }
 
-            Section(NexusL10n.tr("notification.reminders")) {
+            Section(TodoshiL10n.tr("notification.reminders")) {
                 LabeledContent(NotificationStrings.pendingCount) {
                     Text("\(viewModel.pendingReminderCount)")
                         .monospacedDigit()
@@ -70,7 +70,7 @@ struct NotificationSettingsView: View {
                 }
             }
         }
-        .navigationTitle(NexusL10n.tr("settings.notifications"))
+        .navigationTitle(TodoshiL10n.tr("settings.notifications"))
         .task {
             await viewModel.refreshStatus()
         }

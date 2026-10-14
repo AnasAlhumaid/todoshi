@@ -1,5 +1,5 @@
 import SwiftUI
-import NexusCore
+import TodoshiCore
 
 /// Compact subtask progress for root rows and Kanban (`branch 2/4`).
 struct SubtaskProgressBadge: View {
@@ -28,7 +28,7 @@ struct SubtaskProgressHeader: View {
     var body: some View {
         if progress.hasProgress {
             Text(progress.accessibilityLabel)
-                .font(NexusTypography.metadata)
+                .font(TodoshiTypography.metadata)
                 .foregroundStyle(.secondary)
         }
     }

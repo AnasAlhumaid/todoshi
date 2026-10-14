@@ -1,24 +1,24 @@
 import SwiftUI
-import NexusCore
+import TodoshiCore
 
 struct ProductivitySummaryView: View {
     let metrics: ProductivityMetrics.Snapshot
 
     var body: some View {
-        HStack(spacing: NexusSpacing.xs) {
-            compactMetric(metrics.completedToday, NexusL10n.tr("metrics.doneToday"))
+        HStack(spacing: TodoshiSpacing.xs) {
+            compactMetric(metrics.completedToday, TodoshiL10n.tr("metrics.doneToday"))
             dot
-            compactMetric(metrics.openRootTasks, NexusL10n.tr("metrics.open"))
+            compactMetric(metrics.openRootTasks, TodoshiL10n.tr("metrics.open"))
             if metrics.overdueRootTasks > 0 {
                 dot
-                compactMetric(metrics.overdueRootTasks, NexusL10n.tr("metrics.overdue"), emphasize: true)
+                compactMetric(metrics.overdueRootTasks, TodoshiL10n.tr("metrics.overdue"), emphasize: true)
             }
             Spacer(minLength: 0)
         }
-        .font(NexusTypography.metadata)
+        .font(TodoshiTypography.metadata)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(
-            NexusL10n.format(
+            TodoshiL10n.format(
                 "metrics.productivityA11y",
                 metrics.completedToday,
                 metrics.completedThisWeek,

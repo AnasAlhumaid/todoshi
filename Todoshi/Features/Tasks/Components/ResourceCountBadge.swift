@@ -1,5 +1,5 @@
 import SwiftUI
-import NexusCore
+import TodoshiCore
 
 struct ResourceCountBadge: View {
     let count: Int
@@ -15,7 +15,7 @@ struct ResourceCountBadge: View {
                     .foregroundStyle(.secondary)
             }
             .accessibilityElement(children: .ignore)
-            .accessibilityLabel(NexusL10n.format("resource.countA11y", count))
+            .accessibilityLabel(TodoshiL10n.format("resource.countA11y", count))
         }
     }
 }

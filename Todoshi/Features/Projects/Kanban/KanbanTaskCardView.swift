@@ -1,5 +1,5 @@
 import SwiftUI
-import NexusCore
+import TodoshiCore
 
 struct KanbanTaskCardView: View {
     let task: TaskItem
@@ -36,9 +36,9 @@ struct KanbanTaskCardView: View {
     @ViewBuilder
     private var contextMenuContent: some View {
         NavigationLink(value: AppRoute.task(task.id)) {
-            Text(NexusL10n.tr("kanban.openTask"))
+            Text(TodoshiL10n.tr("kanban.openTask"))
         }
-        Menu(NexusL10n.tr("task.moveToStatus")) {
+        Menu(TodoshiL10n.tr("task.moveToStatus")) {
             ForEach(TaskStatus.allCases, id: \.self) { status in
                 Button(status.displayName) {
                     onMoveToStatus(status)
@@ -46,13 +46,13 @@ struct KanbanTaskCardView: View {
                 .disabled(status == task.status)
             }
         }
-        Button(NexusL10n.tr("common.edit"), action: onEdit)
-        Button(NexusL10n.tr("common.delete"), role: .destructive, action: onDelete)
+        Button(TodoshiL10n.tr("common.edit"), action: onEdit)
+        Button(TodoshiL10n.tr("common.delete"), role: .destructive, action: onDelete)
     }
 
     private var cardContent: some View {
-        VStack(alignment: .leading, spacing: NexusSpacing.xxs) {
-            HStack(alignment: .top, spacing: NexusSpacing.xs) {
+        VStack(alignment: .leading, spacing: TodoshiSpacing.xxs) {
+            HStack(alignment: .top, spacing: TodoshiSpacing.xs) {
                 Text(task.title)
                     .font(.subheadline.weight(.medium))
                     .foregroundStyle(.primary)
@@ -61,7 +61,7 @@ struct KanbanTaskCardView: View {
                 Spacer(minLength: 4)
             }
 
-            NexusMetadataLine(
+            TodoshiMetadataLine(
                 priority: task.priority,
                 dueDate: task.dueDate,
                 status: task.status,
@@ -77,15 +77,15 @@ struct KanbanTaskCardView: View {
                 LabelChipsFlow(labels: labelTuples, maxVisible: 2, compact: true)
             }
         }
-        .padding(NexusSpacing.sm)
+        .padding(TodoshiSpacing.sm)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background {
-            RoundedRectangle(cornerRadius: NexusRadius.md, style: .continuous)
+            RoundedRectangle(cornerRadius: TodoshiRadius.md, style: .continuous)
                 .fill(Color(.secondarySystemGroupedBackground))
         }
         .overlay {
             if isInsertionTarget {
-                RoundedRectangle(cornerRadius: NexusRadius.md, style: .continuous)
+                RoundedRectangle(cornerRadius: TodoshiRadius.md, style: .continuous)
                     .strokeBorder(Color.accentColor.opacity(0.85), lineWidth: 2)
             }
         }
@@ -112,10 +112,10 @@ struct KanbanTaskCardView: View {
             parts.append("Priority \(task.priority.displayName)")
         }
         if TaskPredicates.isOverdue(task.dueDate, status: task.status) {
-            parts.append(NexusL10n.tr("common.overdue"))
+            parts.append(TodoshiL10n.tr("common.overdue"))
         }
         if task.status == .done {
-            parts.append(NexusL10n.tr("a11y.completed"))
+            parts.append(TodoshiL10n.tr("a11y.completed"))
         }
         let names = (task.labels ?? []).map(\.name).sorted()
         if !names.isEmpty {
@@ -144,24 +144,24 @@ private struct KanbanTaskCardAccessibility: ViewModifier {
         content
             .accessibilityElement(children: .combine)
             .accessibilityLabel(label)
-            .accessibilityHint(NexusL10n.tr("kanban.opensDetails"))
-            .accessibilityAction(named: NexusL10n.tr("common.edit"), onEdit)
-            .accessibilityAction(named: NexusL10n.tr("common.delete"), onDelete)
-            .accessibilityAction(named: NexusL10n.tr("kanban.moveEarlier"), onMoveEarlier)
-            .accessibilityAction(named: NexusL10n.tr("kanban.moveLater"), onMoveLater)
-            .accessibilityAction(named: Text(NexusL10n.format("kanban.moveTo", TaskStatus.backlog.displayName))) {
+            .accessibilityHint(TodoshiL10n.tr("kanban.opensDetails"))
+            .accessibilityAction(named: TodoshiL10n.tr("common.edit"), onEdit)
+            .accessibilityAction(named: TodoshiL10n.tr("common.delete"), onDelete)
+            .accessibilityAction(named: TodoshiL10n.tr("kanban.moveEarlier"), onMoveEarlier)
+            .accessibilityAction(named: TodoshiL10n.tr("kanban.moveLater"), onMoveLater)
+            .accessibilityAction(named: Text(TodoshiL10n.format("kanban.moveTo", TaskStatus.backlog.displayName))) {
                 onMoveToStatus(.backlog)
             }
-            .accessibilityAction(named: Text(NexusL10n.format("kanban.moveTo", TaskStatus.todo.displayName))) {
+            .accessibilityAction(named: Text(TodoshiL10n.format("kanban.moveTo", TaskStatus.todo.displayName))) {
                 onMoveToStatus(.todo)
             }
-            .accessibilityAction(named: Text(NexusL10n.format("kanban.moveTo", TaskStatus.inProgress.displayName))) {
+            .accessibilityAction(named: Text(TodoshiL10n.format("kanban.moveTo", TaskStatus.inProgress.displayName))) {
                 onMoveToStatus(.inProgress)
             }
-            .accessibilityAction(named: Text(NexusL10n.format("kanban.moveTo", TaskStatus.review.displayName))) {
+            .accessibilityAction(named: Text(TodoshiL10n.format("kanban.moveTo", TaskStatus.review.displayName))) {
                 onMoveToStatus(.review)
             }
-            .accessibilityAction(named: Text(NexusL10n.format("kanban.moveTo", TaskStatus.done.displayName))) {
+            .accessibilityAction(named: Text(TodoshiL10n.format("kanban.moveTo", TaskStatus.done.displayName))) {
                 onMoveToStatus(.done)
             }
     }

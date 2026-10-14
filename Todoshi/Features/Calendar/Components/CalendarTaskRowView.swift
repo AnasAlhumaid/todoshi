@@ -1,12 +1,12 @@
 import SwiftUI
-import NexusCore
+import TodoshiCore
 
 struct CalendarTaskRowView: View {
     let task: CalendarTaskItem
     var showTime: Bool = true
 
     var body: some View {
-        NexusTaskRow(
+        TodoshiTaskRow(
             title: task.title,
             isCompleted: task.status == .done,
             context: task.projectName,
@@ -29,7 +29,7 @@ struct CalendarUnscheduledRowView: View {
     let task: CalendarTaskSource
 
     var body: some View {
-        NexusTaskRow(
+        TodoshiTaskRow(
             title: task.title,
             context: task.projectName,
             projectIcon: task.projectIcon,

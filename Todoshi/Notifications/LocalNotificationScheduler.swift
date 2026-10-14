@@ -1,8 +1,8 @@
 import Foundation
 import UserNotifications
-import NexusCore
+import TodoshiCore
 
-/// Thin wrapper around `UNUserNotificationCenter` for Nexus-owned local notifications.
+/// Thin wrapper around `UNUserNotificationCenter` for Todoshi-owned local notifications.
 @MainActor
 final class LocalNotificationScheduler {
     private let center: UNUserNotificationCenter
@@ -29,10 +29,10 @@ final class LocalNotificationScheduler {
         content.body = body(for: request)
         content.sound = .default
         content.userInfo = [
-            NotificationUserInfoKey.deepLink: NexusDeepLink.task(request.taskID).url.absoluteString,
+            NotificationUserInfoKey.deepLink: TodoshiDeepLink.task(request.taskID).url.absoluteString,
             NotificationUserInfoKey.taskID: request.taskID.uuidString
         ]
-        content.categoryIdentifier = "NEXUS_TASK_REMINDER"
+        content.categoryIdentifier = NotificationCategoryIdentifier.taskReminder
 
         let components = Calendar.autoupdatingCurrent.dateComponents(
             [.year, .month, .day, .hour, .minute],
@@ -49,12 +49,12 @@ final class LocalNotificationScheduler {
 
     func cancelTaskReminder(taskID: UUID) {
         center.removePendingNotificationRequests(
-            withIdentifiers: [NotificationIdentifier.taskReminder(taskID: taskID)]
+            withIdentifiers: NotificationIdentifier.taskReminderCancellationIDs(taskID: taskID)
         )
     }
 
     func cancelTaskReminders(taskIDs: [UUID]) {
-        let ids = taskIDs.map { NotificationIdentifier.taskReminder(taskID: $0) }
+        let ids = taskIDs.flatMap { NotificationIdentifier.taskReminderCancellationIDs(taskID: $0) }
         guard !ids.isEmpty else { return }
         center.removePendingNotificationRequests(withIdentifiers: ids)
     }
@@ -85,7 +85,7 @@ final class LocalNotificationScheduler {
         content.userInfo = [
             NotificationUserInfoKey.deepLink: request.content.deepLinkURL.absoluteString
         ]
-        content.categoryIdentifier = "NEXUS_DAILY_SUMMARY"
+        content.categoryIdentifier = NotificationCategoryIdentifier.dailySummary
 
         let components = Calendar.autoupdatingCurrent.dateComponents(
             [.year, .month, .day, .hour, .minute],
@@ -101,13 +101,24 @@ final class LocalNotificationScheduler {
     }
 
     func cancelDailySummary() {
-        center.removePendingNotificationRequests(withIdentifiers: [NotificationIdentifier.dailySummary])
+        center.removePendingNotificationRequests(withIdentifiers: [
+            NotificationIdentifier.dailySummary,
+            NotificationIdentifier.legacyDailySummary
+        ])
     }
 
     private func body(for request: TaskReminderRequest) -> String {
         if let due = request.dueDate {
-            let formatted = due.formatted(date: .abbreviated, time: .omitted)
-            return "\(request.projectName) · Due \(formatted)"
+            let formatted = due.formatted(
+                .dateTime.year().month(.abbreviated).day()
+                    .locale(AppLanguageStore.resolvedLocale)
+            )
+            return TodoshiL10n.format(
+                "notification.reminderDue",
+                locale: AppLanguageStore.resolvedLocale,
+                request.projectName,
+                formatted
+            )
         }
         return request.projectName
     }

@@ -1,6 +1,6 @@
 import SwiftUI
 import QuickLook
-import NexusCore
+import TodoshiCore
 
 struct TaskResourceEditorView: View {
     let kind: TaskResourceKind
@@ -32,12 +32,12 @@ struct TaskResourceEditorView: View {
                 }
             case .codeSnippet:
                 Section {
-                    Picker(NexusL10n.tr("resource.language"), selection: $language) {
+                    Picker(TodoshiL10n.tr("resource.language"), selection: $language) {
                         ForEach(TaskResourceValidation.curatedLanguages(), id: \.self) { lang in
                             Text(lang).tag(lang)
                         }
                     }
-                    TextField(NexusL10n.tr("resource.codeField"), text: $bodyText, axis: .vertical)
+                    TextField(TodoshiL10n.tr("resource.codeField"), text: $bodyText, axis: .vertical)
                         .font(.body.monospaced())
                         .lineLimit(8...24)
                         // Code stays LTR for readability in Arabic/RTL UI.
@@ -47,7 +47,7 @@ struct TaskResourceEditorView: View {
                 }
             case .terminalCommand:
                 Section {
-                    TextField(NexusL10n.tr("resource.commandField"), text: $bodyText, axis: .vertical)
+                    TextField(TodoshiL10n.tr("resource.commandField"), text: $bodyText, axis: .vertical)
                         .font(.body.monospaced())
                         .lineLimit(4...16)
                         .environment(\.layoutDirection, .leftToRight)
@@ -56,7 +56,7 @@ struct TaskResourceEditorView: View {
                 }
             case .text:
                 Section {
-                    TextField(NexusL10n.tr("resource.textField"), text: $bodyText, axis: .vertical)
+                    TextField(TodoshiL10n.tr("resource.textField"), text: $bodyText, axis: .vertical)
                         .lineLimit(4...16)
                 }
             default:
@@ -75,10 +75,10 @@ struct TaskResourceEditorView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {
-                Button(NexusL10n.tr("common.cancel"), action: onCancel)
+                Button(TodoshiL10n.tr("common.cancel"), action: onCancel)
             }
             ToolbarItem(placement: .confirmationAction) {
-                Button(NexusL10n.tr("common.save")) { commit() }
+                Button(TodoshiL10n.tr("common.save")) { commit() }
                     .fontWeight(.semibold)
             }
         }
@@ -125,8 +125,8 @@ struct TaskResourceRowView: View {
     var onCopy: () -> Void
     var onOpen: () -> Void
     var onShare: () -> Void
-    var onDelete: () -> Void
-    var onEdit: () -> Void
+    var onDelete: (() -> Void)?
+    var onEdit: (() -> Void)?
 
     private var available: Bool {
         guard let path = resource.relativeFilePath else { return true }
@@ -135,17 +135,17 @@ struct TaskResourceRowView: View {
 
     private var editActionTitle: String {
         switch resource.kind {
-        case .codeSnippet: return NexusL10n.tr("resource.editCode")
-        case .terminalCommand: return NexusL10n.tr("resource.editCommand")
-        case .text: return NexusL10n.tr("resource.editText")
-        case .link: return NexusL10n.tr("resource.editLink")
-        default: return NexusL10n.tr("common.edit")
+        case .codeSnippet: return TodoshiL10n.tr("resource.editCode")
+        case .terminalCommand: return TodoshiL10n.tr("resource.editCommand")
+        case .text: return TodoshiL10n.tr("resource.editText")
+        case .link: return TodoshiL10n.tr("resource.editLink")
+        default: return TodoshiL10n.tr("common.edit")
         }
     }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
-            HStack(spacing: NexusSpacing.sm) {
+            HStack(spacing: TodoshiSpacing.sm) {
                 Image(systemName: resource.kind.systemImage)
                     .foregroundStyle(.secondary)
                     .accessibilityHidden(true)
@@ -160,7 +160,7 @@ struct TaskResourceRowView: View {
             }
             if let preview = contentPreview, resource.kind != .codeSnippet, resource.kind != .terminalCommand {
                 Text(preview)
-                    .font(NexusTypography.metadata)
+                    .font(TodoshiTypography.metadata)
                     .foregroundStyle(.secondary)
                     .lineLimit(1)
             }
@@ -173,8 +173,10 @@ struct TaskResourceRowView: View {
         .accessibilityElement(children: .combine)
         .accessibilityLabel(accessibilityLabel)
         .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-            Button(role: .destructive, action: onDelete) {
-                Label(TaskResourceStrings.deleteResource, systemImage: "trash")
+            if let onDelete {
+                Button(role: .destructive, action: onDelete) {
+                    Label(TaskResourceStrings.deleteResource, systemImage: "trash")
+                }
             }
         }
         .contextMenu {
@@ -190,9 +192,13 @@ struct TaskResourceRowView: View {
             }
             if resource.kind.isTextBacked || resource.kind == .link {
                 Button(TaskResourceStrings.share, action: onShare)
-                Button(editActionTitle, action: onEdit)
+                if let onEdit {
+                    Button(editActionTitle, action: onEdit)
+                }
             }
-            Button(TaskResourceStrings.deleteResource, role: .destructive, action: onDelete)
+            if let onDelete {
+                Button(TaskResourceStrings.deleteResource, role: .destructive, action: onDelete)
+            }
         }
     }
 

@@ -2,7 +2,7 @@ import AppIntents
 import Foundation
 import SwiftData
 import WidgetKit
-import NexusCore
+import TodoshiCore
 
 // MARK: - Project selection (system App Intent picker)
 
@@ -15,7 +15,7 @@ struct SelectWidgetProjectIntent: AppIntent {
     static var openAppWhenRun: Bool = false
 
     @Parameter(title: "widget.project")
-    var project: NexusProjectEntity?
+    var project: TodoshiProjectEntity?
 
     /// Edit Widget configuration project — override key. Not shown in the primary summary.
     @Parameter(title: "intent.baseConfigProject")
@@ -41,19 +41,19 @@ struct SelectWidgetProjectIntent: AppIntent {
     @MainActor
     func perform() async throws -> some IntentResult & ProvidesDialog {
         guard WidgetQuickAddService.createsFallbackStoreOnSharedFailure == false else {
-            return .result(dialog: IntentDialog(stringLiteral: NexusL10n.tr("intent.unableChangeProject")))
+            return .result(dialog: IntentDialog(stringLiteral: TodoshiL10n.tr("intent.unableChangeProject")))
         }
         guard let baseID = UUID(uuidString: baseProjectID) else {
-            return .result(dialog: IntentDialog(stringLiteral: NexusL10n.tr("intent.unableChangeProject")))
+            return .result(dialog: IntentDialog(stringLiteral: TodoshiL10n.tr("intent.unableChangeProject")))
         }
 
-        let selected: NexusProjectEntity
+        let selected: TodoshiProjectEntity
         if let project {
             selected = project
         } else {
             // System entity picker (Active projects from EntityQuery.suggestedEntities).
             selected = try await $project.requestValue(
-                IntentDialog(stringLiteral: NexusL10n.tr("intent.selectProject.prompt"))
+                IntentDialog(stringLiteral: TodoshiL10n.tr("intent.selectProject.prompt"))
             )
         }
 
@@ -73,12 +73,12 @@ struct SelectWidgetProjectIntent: AppIntent {
                 for kind in WidgetReloadClassifier.kinds(for: .widgetProjectSelectionChanged) {
                     WidgetCenter.shared.reloadTimelines(ofKind: kind)
                 }
-                return .result(dialog: IntentDialog(stringLiteral: NexusL10n.tr("intent.projectSelected")))
+                return .result(dialog: IntentDialog(stringLiteral: TodoshiL10n.tr("intent.projectSelected")))
             case .invalidBase, .projectUnavailable:
-                return .result(dialog: IntentDialog(stringLiteral: NexusL10n.tr("intent.projectUnavailable")))
+                return .result(dialog: IntentDialog(stringLiteral: TodoshiL10n.tr("intent.projectUnavailable")))
             }
         } catch {
-            return .result(dialog: IntentDialog(stringLiteral: NexusL10n.tr("intent.unableChangeProject")))
+            return .result(dialog: IntentDialog(stringLiteral: TodoshiL10n.tr("intent.unableChangeProject")))
         }
     }
 }
@@ -194,10 +194,10 @@ struct AddTaskToSelectedProjectIntent: AppIntent {
     @MainActor
     func perform() async throws -> some IntentResult & ProvidesDialog {
         guard WidgetQuickAddService.createsFallbackStoreOnSharedFailure == false else {
-            return .result(dialog: IntentDialog(stringLiteral: NexusL10n.tr("intent.cannotWithoutStore")))
+            return .result(dialog: IntentDialog(stringLiteral: TodoshiL10n.tr("intent.cannotWithoutStore")))
         }
         guard let pid = UUID(uuidString: projectID) else {
-            return .result(dialog: IntentDialog(stringLiteral: NexusL10n.tr("intent.projectUnavailable")))
+            return .result(dialog: IntentDialog(stringLiteral: TodoshiL10n.tr("intent.projectUnavailable")))
         }
 
         do {
@@ -211,20 +211,20 @@ struct AddTaskToSelectedProjectIntent: AppIntent {
             for kind in WidgetReloadClassifier.kinds(for: .widgetTaskCreated) {
                 WidgetCenter.shared.reloadTimelines(ofKind: kind)
             }
-            return .result(dialog: IntentDialog(stringLiteral: NexusL10n.tr("intent.taskAdded")))
+            return .result(dialog: IntentDialog(stringLiteral: TodoshiL10n.tr("intent.taskAdded")))
         } catch WidgetQuickAddService.Error.emptyTitle {
-            return .result(dialog: IntentDialog(stringLiteral: NexusL10n.tr("intent.enterTitle")))
+            return .result(dialog: IntentDialog(stringLiteral: TodoshiL10n.tr("intent.enterTitle")))
         } catch WidgetQuickAddService.Error.projectUnavailable {
-            return .result(dialog: IntentDialog(stringLiteral: NexusL10n.tr("intent.projectUnavailable")))
+            return .result(dialog: IntentDialog(stringLiteral: TodoshiL10n.tr("intent.projectUnavailable")))
         } catch {
-            return .result(dialog: IntentDialog(stringLiteral: NexusL10n.tr("intent.openSetup")))
+            return .result(dialog: IntentDialog(stringLiteral: TodoshiL10n.tr("intent.openSetup")))
         }
     }
 }
 
 // MARK: - App Shortcuts
 
-struct NexusWidgetShortcuts: AppShortcutsProvider {
+struct TodoshiWidgetShortcuts: AppShortcutsProvider {
     static var appShortcuts: [AppShortcut] {
         AppShortcut(
             intent: AddTaskToSelectedProjectIntent(),

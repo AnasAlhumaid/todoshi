@@ -1,33 +1,33 @@
 import WidgetKit
 import SwiftUI
-import NexusCore
+import TodoshiCore
 
 struct HighPriorityProvider: TimelineProvider {
-    func placeholder(in context: Context) -> NexusWidgetEntry {
-        NexusWidgetEntry(date: .now, snapshot: WidgetPreviewData.today(), state: .content)
+    func placeholder(in context: Context) -> TodoshiWidgetEntry {
+        TodoshiWidgetEntry(date: .now, snapshot: WidgetPreviewData.today(), state: .content)
     }
 
-    func getSnapshot(in context: Context, completion: @escaping (NexusWidgetEntry) -> Void) {
+    func getSnapshot(in context: Context, completion: @escaping (TodoshiWidgetEntry) -> Void) {
         Task { @MainActor in
             completion(Self.loadEntry(now: .now, limit: 3))
         }
     }
 
-    func getTimeline(in context: Context, completion: @escaping (Timeline<NexusWidgetEntry>) -> Void) {
+    func getTimeline(in context: Context, completion: @escaping (Timeline<TodoshiWidgetEntry>) -> Void) {
         Task { @MainActor in
             let entry = Self.loadEntry(now: .now, limit: 6)
-            completion(NexusWidgetTimeline.timeline(for: entry))
+            completion(TodoshiWidgetTimeline.timeline(for: entry))
         }
     }
 
     @MainActor
-    private static func loadEntry(now: Date, limit: Int) -> NexusWidgetEntry {
+    private static func loadEntry(now: Date, limit: Int) -> TodoshiWidgetEntry {
         do {
             let snapshot = try WidgetSnapshotLoader.loadHighPrioritySnapshot(referenceDate: now, limit: limit)
             let state: WidgetLoadState = snapshot.totalCount == 0 ? .empty : .content
-            return NexusWidgetEntry(date: now, snapshot: snapshot, state: state)
+            return TodoshiWidgetEntry(date: now, snapshot: snapshot, state: state)
         } catch {
-            return NexusWidgetEntry(
+            return TodoshiWidgetEntry(
                 date: now,
                 snapshot: .unavailable(title: WidgetStrings.highPriority, generatedAt: now),
                 state: .storeUnavailable
@@ -38,23 +38,26 @@ struct HighPriorityProvider: TimelineProvider {
 
 struct HighPriorityWidgetView: View {
     @Environment(\.widgetFamily) private var family
-    var entry: NexusWidgetEntry
+    var entry: TodoshiWidgetEntry
 
     var body: some View {
         Group {
             switch entry.state {
             case .storeUnavailable:
-                WidgetEmptyView(title: WidgetStrings.highPriority, message: WidgetStrings.openNexus)
+                WidgetEmptyView(title: WidgetStrings.highPriority, message: WidgetStrings.openTodoshi)
             case .empty:
                 WidgetEmptyView(title: WidgetStrings.highPriority, message: WidgetStrings.noHighPriority)
             default:
                 content
             }
         }
+        .fontDesign(.rounded)
+        // Follow the in-app language direction, which can differ from the system's.
+        .environment(\.layoutDirection, AppLanguageStore.isRightToLeft ? .rightToLeft : .leftToRight)
         .containerBackground(for: .widget) {
-            Color(.systemBackground)
+            WidgetTheme.canvas
         }
-        .widgetURL(NexusDeepLink.dashboard.url)
+        .widgetURL(TodoshiDeepLink.dashboard.url)
     }
 
     @ViewBuilder
@@ -64,7 +67,7 @@ struct HighPriorityWidgetView: View {
         WidgetListChrome(
             title: WidgetStrings.highPriority,
             count: entry.snapshot.totalCount,
-            headerLink: NexusDeepLink.dashboard.url
+            headerLink: TodoshiDeepLink.dashboard.url
         ) {
             VStack(alignment: .leading, spacing: 6) {
                 ForEach(shown) { task in
@@ -77,19 +80,19 @@ struct HighPriorityWidgetView: View {
                 }
             }
         }
-        .accessibilityLabel(NexusL10n.format("widget.a11yHighPriority", entry.snapshot.totalCount))
+        .accessibilityLabel(TodoshiL10n.format("widget.a11yHighPriority", entry.snapshot.totalCount))
     }
 }
 
 struct HighPriorityWidget: Widget {
-    let kind = NexusWidgetKind.highPriority
+    let kind = TodoshiWidgetKind.highPriority
 
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: HighPriorityProvider()) { entry in
             HighPriorityWidgetView(entry: entry)
         }
-        .configurationDisplayName(NexusL10n.tr("widget.highPriority"))
-        .description(NexusL10n.tr("widget.highPriorityDesc"))
+        .configurationDisplayName(TodoshiL10n.tr("widget.highPriority"))
+        .description(TodoshiL10n.tr("widget.highPriorityDesc"))
         .supportedFamilies([.systemSmall, .systemMedium, .systemLarge])
     }
 }

@@ -1,46 +1,80 @@
 import SwiftUI
-import NexusCore
+import TodoshiCore
+
+/// Widget palette mirroring the app's TodoshiBrand tokens (the extension has no shared asset catalog).
+enum WidgetTheme {
+    static let accent = adaptive(
+        light: UIColor(red: 0.322, green: 0.282, blue: 0.851, alpha: 1),
+        dark: UIColor(red: 0.482, green: 0.451, blue: 0.910, alpha: 1)
+    )
+    static let canvas = adaptive(
+        light: UIColor(red: 0.965, green: 0.961, blue: 0.984, alpha: 1),
+        dark: UIColor(red: 0.07, green: 0.07, blue: 0.09, alpha: 1)
+    )
+    static let card = adaptive(
+        light: .white,
+        dark: UIColor(red: 0.13, green: 0.13, blue: 0.16, alpha: 1)
+    )
+
+    private static func adaptive(light: UIColor, dark: UIColor) -> Color {
+        Color(uiColor: UIColor { $0.userInterfaceStyle == .dark ? dark : light })
+    }
+}
+
+/// Count capsule used in widget headers.
+struct WidgetCountPill: View {
+    let count: Int
+    var tint: Color = WidgetTheme.accent
+
+    var body: some View {
+        Text(count, format: .number)
+            .font(.caption.weight(.bold).monospacedDigit())
+            .foregroundStyle(tint)
+            .padding(.horizontal, 7)
+            .padding(.vertical, 2)
+            .background(tint.opacity(0.14), in: Capsule())
+    }
+}
 
 struct WidgetTaskRowView: View {
     let task: WidgetTaskItem
     var showProject: Bool = true
 
     var body: some View {
-        Link(destination: NexusDeepLink.task(task.id).url) {
-            HStack(alignment: .top, spacing: 8) {
-                if showProject {
-                    Image(systemName: task.projectIcon)
-                        .font(.caption)
-                        .foregroundStyle(Color(hex: task.projectColorHex))
-                        .frame(width: 14)
-                        .accessibilityHidden(true)
-                }
-                VStack(alignment: .leading, spacing: 2) {
+        Link(destination: TodoshiDeepLink.task(task.id).url) {
+            HStack(alignment: .center, spacing: 8) {
+                Circle()
+                    .strokeBorder(task.isOverdue ? Color.red : Color.secondary.opacity(0.45), lineWidth: 1.5)
+                    .frame(width: 14, height: 14)
+                    .accessibilityHidden(true)
+                VStack(alignment: .leading, spacing: 1) {
                     Text(task.title)
-                        .font(.caption.weight(.medium))
+                        .font(.footnote.weight(.semibold))
                         .foregroundStyle(.primary)
-                        .lineLimit(2)
+                        .lineLimit(1)
                         .privacySensitive()
                     HStack(spacing: 4) {
-                        if showProject {
+                        if task.isOverdue {
+                            Text(TodoshiL10n.tr("common.overdue"))
+                                .foregroundStyle(.red)
+                        } else if showProject {
                             Text(task.projectName)
-                                .font(.caption2)
                                 .foregroundStyle(.secondary)
                                 .lineLimit(1)
-                        }
-                        if task.isOverdue {
-                            Text(NexusL10n.tr("common.overdue"))
-                                .font(.caption2)
-                                .foregroundStyle(.red)
                         } else if let due = task.dueDate {
                             Text(due, style: .time)
-                                .font(.caption2)
                                 .foregroundStyle(.secondary)
-                                .lineLimit(1)
                         }
                     }
+                    .font(.caption2)
                 }
                 Spacer(minLength: 0)
+                if showProject {
+                    Circle()
+                        .fill(Color(hex: task.projectColorHex))
+                        .frame(width: 7, height: 7)
+                        .accessibilityHidden(true)
+                }
             }
         }
         .accessibilityLabel(accessibilityLabel)
@@ -52,7 +86,7 @@ struct WidgetTaskRowView: View {
         if task.priority == .urgent || task.priority == .high {
             parts.append(task.priority.displayName)
         }
-        if task.isOverdue { parts.append(NexusL10n.tr("common.overdue")) }
+        if task.isOverdue { parts.append(TodoshiL10n.tr("common.overdue")) }
         return parts.joined(separator: ", ")
     }
 }
@@ -73,17 +107,23 @@ extension Color {
 struct WidgetEmptyView: View {
     let title: String
     let message: String
-    var deepLink: URL = NexusDeepLink.dashboard.url
+    var deepLink: URL = TodoshiDeepLink.dashboard.url
 
     var body: some View {
         Link(destination: deepLink) {
             VStack(alignment: .leading, spacing: 6) {
                 Text(title)
-                    .font(.headline)
-                Text(message)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .font(.headline.weight(.bold))
+                    .foregroundStyle(WidgetTheme.accent)
                 Spacer(minLength: 0)
+                Image(systemName: "checkmark.circle.fill")
+                    .font(.title2)
+                    .foregroundStyle(WidgetTheme.accent.opacity(0.35))
+                    .accessibilityHidden(true)
+                Text(message)
+                    .font(.subheadline.weight(.medium))
+                    .foregroundStyle(.secondary)
+                    .lineLimit(3)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         }
@@ -92,9 +132,12 @@ struct WidgetEmptyView: View {
 
 struct WidgetQuickAddBadge: View {
     var body: some View {
-        Link(destination: NexusDeepLink.quickAdd.url) {
+        Link(destination: TodoshiDeepLink.quickAdd().url) {
             Image(systemName: "plus")
-                .font(.body.weight(.semibold))
+                .font(.system(size: 14, weight: .bold))
+                .foregroundStyle(.white)
+                .frame(width: 28, height: 28)
+                .background(WidgetTheme.accent, in: Circle())
                 .accessibilityLabel(WidgetStrings.quickAdd)
         }
     }
@@ -110,13 +153,13 @@ struct WidgetListChrome<Content: View>: View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
                 Link(destination: headerLink) {
-                    VStack(alignment: .leading, spacing: 2) {
+                    HStack(spacing: 6) {
                         Text(title)
-                            .font(.headline)
+                            .font(.headline.weight(.bold))
                             .foregroundStyle(.primary)
-                        Text("\(count)")
-                            .font(.caption.monospacedDigit())
-                            .foregroundStyle(.secondary)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.8)
+                        WidgetCountPill(count: count)
                             .accessibilityLabel(WidgetStrings.tasksCount(count))
                     }
                 }
@@ -126,6 +169,5 @@ struct WidgetListChrome<Content: View>: View {
             content()
             Spacer(minLength: 0)
         }
-        .padding(16)
     }
 }

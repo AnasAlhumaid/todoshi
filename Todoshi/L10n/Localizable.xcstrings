@@ -2844,13 +2844,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "تعذر على Nexus فتح مخزن البيانات المشترك. تأكد من ضبط مجموعات التطبيقات لهذا الإصدار ثم أعد فتح التطبيق."
+            "value": "تعذر على Todoshi فتح مخزن البيانات المشترك. تأكد من ضبط مجموعات التطبيقات لهذا الإصدار ثم أعد فتح التطبيق."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nexus could not open its shared data store. Check that App Groups are configured for this build, then reopen the app."
+            "value": "Todoshi could not open its shared data store. Check that App Groups are configured for this build, then reopen the app."
           }
         }
       }
@@ -2861,13 +2861,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "تعذر على Nexus فتح مخزن البيانات المحلي. أعد تثبيت التطبيق أو تواصل مع الدعم إن استمر الأمر. لم تُحذف بياناتك السابقة عن قصد."
+            "value": "تعذر على Todoshi فتح مخزن البيانات المحلي. أعد تثبيت التطبيق أو تواصل مع الدعم إن استمر الأمر. لم تُحذف بياناتك السابقة عن قصد."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nexus could not open its local data store. Please reinstall the app or contact support if this continues. Your previous data was not intentionally deleted."
+            "value": "Todoshi could not open its local data store. Please reinstall the app or contact support if this continues. Your previous data was not intentionally deleted."
           }
         }
       }
@@ -2952,7 +2952,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Create a basic todo in a selected Nexus project."
+            "value": "Create a basic todo in a selected Todoshi project."
           }
         }
       }
@@ -2963,13 +2963,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "إضافة مهمة إلى مشروع Nexus"
+            "value": "إضافة مهمة إلى مشروع Todoshi"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Add Task to Nexus Project"
+            "value": "Add Task to Todoshi Project"
           }
         }
       }
@@ -3082,13 +3082,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "افتح Nexus لإكمال الإعداد"
+            "value": "افتح Todoshi لإكمال الإعداد"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Open Nexus to finish setup"
+            "value": "Open Todoshi to finish setup"
           }
         }
       }
@@ -3218,13 +3218,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "اختر المشروع الذي يعرضه ويدجت Nexus."
+            "value": "اختر المشروع الذي يعرضه ويدجت Todoshi."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Choose the project shown in the Nexus widget."
+            "value": "Choose the project shown in the Todoshi widget."
           }
         }
       }
@@ -3343,7 +3343,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Show the previous or next active Nexus project in the widget."
+            "value": "Show the previous or next active Todoshi project in the widget."
           }
         }
       }
@@ -4351,7 +4351,7 @@
         }
       }
     },
-    "Nexus": {},
+    "Todoshi": {},
     "notification.allow": {
       "extractionState": "manual",
       "localizations": {
@@ -4596,13 +4596,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "يمكن لـ Nexus تذكيرك بالمهام في الأوقات التي تختارها. لا تُضمَّن الملاحظات أو الأوصاف."
+            "value": "يمكن لـ Todoshi تذكيرك بالمهام في الأوقات التي تختارها. لا تُضمَّن الملاحظات أو الأوصاف."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nexus can remind you about tasks at the times you choose. Task notes and descriptions are never included."
+            "value": "Todoshi can remind you about tasks at the times you choose. Task notes and descriptions are never included."
           }
         }
       }
@@ -4783,13 +4783,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nexus"
+            "value": "Todoshi"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nexus"
+            "value": "Todoshi"
           }
         }
       }
@@ -4925,7 +4925,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Widgets and reminders read from the same on-device App Group store used by Nexus."
+            "value": "Widgets and reminders read from the same on-device App Group store used by Todoshi."
           }
         }
       }
@@ -4936,13 +4936,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "قد يؤدي حذف التطبيق إلى إزالة بياناته المحلية وفق نُسخ iCloud الاحتياطية للجهاز. لا يوفّر Nexus تصديرًا سحابيًا أو استعادة بين الأجهزة."
+            "value": "قد يؤدي حذف التطبيق إلى إزالة بياناته المحلية وفق نُسخ iCloud الاحتياطية للجهاز. لا يوفّر Todoshi تصديرًا سحابيًا أو استعادة بين الأجهزة."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Removing Nexus may remove its local data, subject to device backups you have configured. Nexus does not currently provide encrypted cloud export or multi-device recovery."
+            "value": "Removing Todoshi may remove its local data, subject to device backups you have configured. Todoshi does not currently provide encrypted cloud export or multi-device recovery."
           }
         }
       }
@@ -4953,13 +4953,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "الملفات المستوردة المنسوخة إلى تخزين Nexus"
+            "value": "الملفات المستوردة المنسوخة إلى تخزين Todoshi"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Imported files copied into Nexus storage"
+            "value": "Imported files copied into Todoshi storage"
           }
         }
       }
@@ -5021,13 +5021,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "عند فتح رابط مرفق بمهمة، يفتحه iOS خارج Nexus (مثل Safari). لا يرسل Nexus محتوى عن بُعد."
+            "value": "عند فتح رابط مرفق بمهمة، يفتحه iOS خارج Todoshi (مثل Safari). لا يرسل Todoshi محتوى عن بُعد."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "When you open a link attached to a task, iOS opens it outside Nexus (for example Safari). Nexus does not proxy remote content."
+            "value": "When you open a link attached to a task, iOS opens it outside Todoshi (for example Safari). Todoshi does not proxy remote content."
           }
         }
       }
@@ -5038,13 +5038,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "تُنسخ الملفات المستوردة إلى تخزين Nexus المحلي على هذا الجهاز."
+            "value": "تُنسخ الملفات المستوردة إلى تخزين Todoshi المحلي على هذا الجهاز."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Imported files are copied into Nexus local storage on this device."
+            "value": "Imported files are copied into Todoshi local storage on this device."
           }
         }
       }
@@ -5055,13 +5055,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nexus تطبيق مهام محلي. تُحفظ بياناتك في قاعدة على هذا الجهاز، وفي مجموعة التطبيقات ليقرأها الويدجت."
+            "value": "Todoshi تطبيق مهام محلي. تُحفظ بياناتك في قاعدة على هذا الجهاز، وفي مجموعة التطبيقات ليقرأها الويدجت."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nexus is a local-first task app. Your work is stored in a database on this device (and in an App Group container so widgets can read the same data)."
+            "value": "Todoshi is a local-first task app. Your work is stored in a database on this device (and in an App Group container so widgets can read the same data)."
           }
         }
       }
@@ -5242,13 +5242,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "فتح المحتوى خارج Nexus"
+            "value": "فتح المحتوى خارج Todoshi"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Opening content outside Nexus"
+            "value": "Opening content outside Todoshi"
           }
         }
       }
@@ -5259,13 +5259,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "ما لا يفعله Nexus"
+            "value": "ما لا يفعله Todoshi"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "What Nexus does not do"
+            "value": "What Todoshi does not do"
           }
         }
       }
@@ -6933,13 +6933,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "تُنسخ الأوامر فقط. لا يشغّلها Nexus."
+            "value": "تُنسخ الأوامر فقط. لا يشغّلها Todoshi."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Commands are copied only. Nexus never runs them."
+            "value": "Commands are copied only. Todoshi never runs them."
           }
         }
       }
@@ -7341,13 +7341,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "تُنسخ الملفات إلى تخزين Nexus المحلي على هذا الجهاز."
+            "value": "تُنسخ الملفات إلى تخزين Todoshi المحلي على هذا الجهاز."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Files are copied into Nexus local storage on this device."
+            "value": "Files are copied into Todoshi local storage on this device."
           }
         }
       }
@@ -7953,13 +7953,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "يخزّن Nexus البيانات محليًا على هذا الجهاز. لا يلزم حساب ولا مزامنة سحابية في هذا الإصدار."
+            "value": "يخزّن Todoshi البيانات محليًا على هذا الجهاز. لا يلزم حساب ولا مزامنة سحابية في هذا الإصدار."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nexus stores data locally on this device. No account or cloud sync is required or used in this release."
+            "value": "Todoshi stores data locally on this device. No account or cloud sync is required or used in this release."
           }
         }
       }
@@ -8157,13 +8157,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "تعذر فتح بيانات Nexus"
+            "value": "تعذر فتح بيانات Todoshi"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Can’t Open Nexus Data"
+            "value": "Can’t Open Todoshi Data"
           }
         }
       }
@@ -9762,13 +9762,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "افتح Nexus لإنشاء مشروع"
+            "value": "افتح Todoshi لإنشاء مشروع"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Open Nexus to create a project"
+            "value": "Open Todoshi to create a project"
           }
         }
       }
@@ -9841,19 +9841,19 @@
         }
       }
     },
-    "widget.openNexus": {
+    "widget.openTodoshi": {
       "extractionState": "manual",
       "localizations": {
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "افتح Nexus لإكمال الإعداد"
+            "value": "افتح Todoshi لإكمال الإعداد"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Open Nexus to finish setup"
+            "value": "Open Todoshi to finish setup"
           }
         }
       }
@@ -10436,6 +10436,981 @@
           "stringUnit": {
             "state": "translated",
             "value": "نقل إلى جاهزة للبدء"
+          }
+        }
+      }
+    },
+    "account.section": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Account"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الحساب"
+          }
+        }
+      }
+    },
+    "account.signedOutDescription": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "An account is only required when sharing projects with others."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "استخدم حسابك فقط عند مشاركة المشاريع مع الآخرين."
+          }
+        }
+      }
+    },
+    "account.signInWithApple": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign in with Apple"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تسجيل الدخول باستخدام Apple"
+          }
+        }
+      }
+    },
+    "account.signOut": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign Out"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تسجيل الخروج"
+          }
+        }
+      }
+    },
+    "account.unavailable": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cloud collaboration is unavailable in this build. Personal tasks continue to work locally."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "التعاون السحابي غير متاح في هذا الإصدار. تستمر مهامك الشخصية محليًا."
+          }
+        }
+      }
+    },
+    "account.defaultLabel": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Signed in"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مسجّل الدخول"
+          }
+        }
+      }
+    },
+    "account.profileSyncWarning": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Signed in, but your profile could not sync to the cloud."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تم تسجيل الدخول، لكن تعذّر مزامنة ملفك الشخصي مع السحابة."
+          }
+        }
+      }
+    },
+    "account.testAuthenticationSheet": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Test Collaboration Sign-In"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "اختبار تسجيل الدخول للتعاون"
+          }
+        }
+      }
+    },
+    "account.sheet.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Share your projects"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مشاركة مشاريعك مع الآخرين"
+          }
+        }
+      }
+    },
+    "account.sheet.message": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "اختر طريقة تسجيل الدخول للتعاون في المشاريع المشتركة."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose how you'd like to sign in to collaborate on shared projects."
+          }
+        }
+      }
+    },
+    "account.error.unavailable": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Collaboration is unavailable right now."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "التعاون غير متاح حاليًا."
+          }
+        }
+      }
+    },
+    "account.error.notSignedIn": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign in to continue."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "سجّل الدخول للمتابعة."
+          }
+        }
+      }
+    },
+    "account.error.cancelled": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign in was cancelled."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تم إلغاء تسجيل الدخول."
+          }
+        }
+      }
+    },
+    "account.error.appleUnavailable": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign in with Apple is unavailable."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تسجيل الدخول باستخدام Apple غير متاح."
+          }
+        }
+      }
+    },
+    "account.error.invalidCredential": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not verify your Apple sign-in."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعذّر التحقق من تسجيل الدخول باستخدام Apple."
+          }
+        }
+      }
+    },
+    "account.error.profileSync": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your account signed in, but profile sync failed."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تم تسجيل الدخول، لكن فشلت مزامنة الملف الشخصي."
+          }
+        }
+      }
+    },
+    "project.share": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مشاركة المشروع"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Share Project"
+          }
+        }
+      }
+    },
+    "project.share.confirmTitle": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مشاركة المشروع"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Share Project"
+          }
+        }
+      }
+    },
+    "project.share.confirmMessage": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "سيصبح هذا المشروع جاهزًا للمشاركة مع الآخرين.\nلن تتم دعوة أي شخص حتى تختار ذلك لاحقًا."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This project will become ready to share with others.\nNo one will be invited until you choose to invite them later."
+          }
+        }
+      }
+    },
+    "project.share.continue": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "متابعة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continue"
+          }
+        }
+      }
+    },
+    "project.share.progress": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "جاري مشاركة المشروع…"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sharing project…"
+          }
+        }
+      }
+    },
+    "project.share.failed": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعذّرت مشاركة هذا المشروع. تحقق من الاتصال وحاول مجددًا."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn't share this project. Check your connection and try again."
+          }
+        }
+      }
+    },
+    "project.share.localSaveFailed": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تم إنشاء المشروع المشترك عبر الإنترنت، لكن فشل الحفظ محليًا. حاول مشاركة المشروع مجددًا لإصلاح الحالة."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The shared project was created online, but saving locally failed. Try Share Project again to repair."
+          }
+        }
+      }
+    },
+    "project.share.alreadyShared": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "هذا المشروع مشترك بالفعل."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This project is already shared."
+          }
+        }
+      }
+    },
+    "project.share.unavailable": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مشاركة المشاريع غير متاحة الآن. حاول لاحقًا."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Project sharing isn't available right now. Try again later."
+          }
+        }
+      }
+    },
+    "project.share.authContinue": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "سجّل الدخول لمتابعة مشاركة هذا المشروع."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign in to continue sharing this project."
+          }
+        }
+      }
+    },
+    "project.sharedA11y": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مشروع مشترك"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shared project"
+          }
+        }
+      }
+    },
+    "project.members": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الأعضاء"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Members"
+          }
+        }
+      }
+    },
+    "project.members.title": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "أعضاء المشروع"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Project Members"
+          }
+        }
+      }
+    },
+    "project.members.owner": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "المالك"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Owner"
+          }
+        }
+      }
+    },
+    "project.members.member": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "عضو"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Member"
+          }
+        }
+      }
+    },
+    "project.members.empty": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لا يوجد أعضاء بعد."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No members yet."
+          }
+        }
+      }
+    },
+    "project.members.loadFailed": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعذّر تحميل الأعضاء. حاول مجددًا."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn't load members. Try again."
+          }
+        }
+      }
+    },
+    "project.members.unnamed": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "عضو"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Member"
+          }
+        }
+      }
+    },
+    "common.retry": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "حاول مجددًا"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Try Again"
+          }
+        }
+      }
+    },
+    "project.share.conflict": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعذّرت مشاركة هذا المشروع لأن مشروعًا مشتركًا متعارضًا موجود بالفعل."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn't share this project because a conflicting shared project already exists."
+          }
+        }
+      }
+    },
+    "account.continueWithGoogle": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "المتابعة باستخدام Google"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continue with Google"
+          }
+        }
+      }
+    },
+    "account.signingIn": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "جاري تسجيل الدخول…"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Signing in…"
+          }
+        }
+      }
+    },
+    "account.error.googleSignInFailed": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعذر تسجيل الدخول باستخدام Google. حاول مرة أخرى."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unable to sign in with Google. Please try again."
+          }
+        }
+      }
+    },
+    "account.error.providerCollision": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "هذا البريد مرتبط بطريقة تسجيل دخول أخرى. سجّل الدخول باستخدام طريقتك الحالية أولًا."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This email is already associated with another sign-in method. Sign in using your existing method first."
+          }
+        }
+      }
+    },
+    "project.invite.member": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "دعوة عضو"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Invite Member"
+          }
+        }
+      }
+    },
+    "project.invite.shareMessage": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "انضم إلى مشروعي في Todoshi:\n%@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Join my project on Todoshi:\n%@"
+          }
+        }
+      }
+    },
+    "project.invite.previewTitle": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "دعوة إلى مشروع"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Project Invitation"
+          }
+        }
+      }
+    },
+    "project.invite.previewMessage": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "دعاك %@ للانضمام إلى هذا المشروع في Todoshi."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ invited you to join this project on Todoshi."
+          }
+        }
+      }
+    },
+    "project.invite.previewMessageAnonymous": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "دُعيت للانضمام إلى هذا المشروع في Todoshi."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You've been invited to join this project on Todoshi."
+          }
+        }
+      }
+    },
+    "project.invite.join": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الانضمام للمشروع"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Join Project"
+          }
+        }
+      }
+    },
+    "project.invite.expired": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "انتهت صلاحية هذه الدعوة.\nاطلب من مالك المشروع إرسال دعوة جديدة."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This invitation has expired.\nAsk the project owner to send a new invite."
+          }
+        }
+      }
+    },
+    "project.invite.alreadyUsed": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تم استخدام هذه الدعوة مسبقًا."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This invitation has already been used."
+          }
+        }
+      }
+    },
+    "project.invite.revoked": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تم إلغاء هذه الدعوة."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This invitation has been revoked."
+          }
+        }
+      }
+    },
+    "project.invite.invalid": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "رابط الدعوة غير صالح."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This invitation link is invalid."
+          }
+        }
+      }
+    },
+    "project.invite.createFailed": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعذّر إنشاء الدعوة. حاول مرة أخرى."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn't create the invitation. Try again."
+          }
+        }
+      }
+    },
+    "project.invite.acceptFailed": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعذّر الانضمام إلى المشروع. حاول مرة أخرى."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn't join the project. Try again."
+          }
+        }
+      }
+    },
+    "project.invite.ownerOnly": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يمكن لمالك المشروع فقط دعوة الأعضاء."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Only the project owner can invite members."
+          }
+        }
+      }
+    },
+    "project.invite.joinedNoTaskSync": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تم الانضمام إلى المشروع.\nمزامنة المهام المشتركة ستتوفر في المرحلة التالية."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You've joined this project.\nShared task synchronization is not enabled yet."
+          }
+        }
+      }
+    },
+    "project.invite.cancelInvitation": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إلغاء الدعوة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancel Invitation"
+          }
+        }
+      }
+    },
+    "project.invite.loading": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "جارٍ تحميل الدعوة…"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Loading invitation…"
+          }
+        }
+      }
+    },
+    "project.invite.joining": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "جارٍ الانضمام…"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Joining…"
+          }
+        }
+      }
+    },
+    "project.share.syncUnavailable": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعذّر الوصول إلى هذا المشروع المشترك. سجّل الدخول مجددًا أو اطلب دعوة جديدة."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This shared project is unavailable. Sign in again or ask for a new invite."
+          }
+        }
+      }
+    },
+    "project.share.syncingContent": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "جارٍ مزامنة محتوى المشروع…"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Syncing project content…"
+          }
+        }
+      }
+    },
+    "project.share.binaryResourceDeferred": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مزامنة الملفات المشتركة ستتوفر لاحقًا."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shared file sync is coming later."
           }
         }
       }

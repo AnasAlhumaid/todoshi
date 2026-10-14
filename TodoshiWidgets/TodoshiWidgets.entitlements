@@ -4,7 +4,7 @@
 <dict>
 	<key>com.apple.security.application-groups</key>
 	<array>
-		<string>group.com.anashamad.Nexus</string>
+		<string>group.com.anashamad.Todoshi</string>
 	</array>
 </dict>
 </plist>

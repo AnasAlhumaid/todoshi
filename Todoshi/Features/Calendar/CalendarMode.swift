@@ -1,5 +1,5 @@
 import Foundation
-import NexusCore
+import TodoshiCore
 
 public enum CalendarMode: String, CaseIterable, Identifiable, Sendable {
     case day
@@ -18,7 +18,7 @@ public enum CalendarMode: String, CaseIterable, Identifiable, Sendable {
 }
 
 public enum CalendarPreferences {
-    public static let modeKey = "nexus.calendar.mode"
-    public static let showCompletedKey = "nexus.calendar.showCompleted"
+    public static let modeKey = "todoshi.calendar.mode"
+    public static let showCompletedKey = "todoshi.calendar.showCompleted"
     public static let defaultMode: CalendarMode = .week
 }

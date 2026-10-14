@@ -1,6 +1,6 @@
 import Foundation
 import SwiftData
-import NexusCore
+import TodoshiCore
 
 enum WidgetContainerProvider {
     /// Short-lived container for a single timeline generation pass.
@@ -85,12 +85,14 @@ enum WidgetSnapshotLoader {
         )
 
         let option = ordered.first(where: { $0.id == displayedID })
+        let projectType = option?.projectType ?? snapshot.projectType
         let interaction = ProjectWidgetInteraction(
             baseConfigurationProjectID: baseConfigurationProjectID,
             displayedProjectID: displayedID,
             projectName: option?.name ?? snapshot.title,
             projectIcon: option?.icon ?? snapshot.projectIcon ?? "folder",
             projectColorHex: option?.colorHex ?? snapshot.projectColorHex ?? ProjectColorCatalog.defaultHex,
+            projectType: projectType,
             allowsProjectSelection: baseConfigurationProjectID != nil && !ordered.isEmpty,
             allowsQuickAdd: snapshot.projectAvailability == .available,
             hasActiveProjects: !ordered.isEmpty

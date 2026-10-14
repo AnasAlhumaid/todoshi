@@ -1,8 +1,8 @@
 import SwiftUI
-import NexusCore
+import TodoshiCore
 
 /// Shared task row: title, optional context, compact metadata, up to two labels.
-struct NexusTaskRow: View {
+struct TodoshiTaskRow: View {
     let title: String
     var isCompleted: Bool = false
     var context: String? = nil
@@ -23,14 +23,14 @@ struct NexusTaskRow: View {
     var showsLabels: Bool = true
 
     var body: some View {
-        HStack(alignment: .top, spacing: NexusSpacing.sm) {
+        HStack(alignment: .top, spacing: TodoshiSpacing.sm) {
             if showsProjectGlyph, let icon = projectIcon, let hex = projectColorHex {
-                NexusProjectGlyph(systemName: icon, colorHex: hex, size: NexusIconSize.glyph)
+                TodoshiProjectGlyph(systemName: icon, colorHex: hex, size: TodoshiIconSize.glyph)
                     .padding(.top, 2)
             }
 
-            VStack(alignment: .leading, spacing: NexusSpacing.xxs) {
-                HStack(alignment: .firstTextBaseline, spacing: NexusSpacing.xs) {
+            VStack(alignment: .leading, spacing: TodoshiSpacing.xxs) {
+                HStack(alignment: .firstTextBaseline, spacing: TodoshiSpacing.xs) {
                     Text(title)
                         .font(.body.weight(.medium))
                         .foregroundStyle(isCompleted ? Color.secondary : Color.primary)
@@ -40,18 +40,18 @@ struct NexusTaskRow: View {
                         Image(systemName: "repeat")
                             .font(.caption2)
                             .foregroundStyle(.tertiary)
-                            .accessibilityLabel(NexusL10n.tr("calendar.recurringTask"))
+                            .accessibilityLabel(TodoshiL10n.tr("calendar.recurringTask"))
                     }
                 }
 
                 if let context, !context.isEmpty {
                     Text(context)
-                        .font(NexusTypography.metadata)
+                        .font(TodoshiTypography.metadata)
                         .foregroundStyle(.secondary)
                         .lineLimit(1)
                 }
 
-                NexusMetadataLine(
+                TodoshiMetadataLine(
                     priority: priority,
                     dueDate: dueDate,
                     status: status,
@@ -70,7 +70,7 @@ struct NexusTaskRow: View {
 
             Spacer(minLength: 0)
         }
-        .padding(.vertical, NexusSpacing.xxs)
+        .padding(.vertical, TodoshiSpacing.xxs)
         .frame(minHeight: 44, alignment: .top)
         .opacity(isCompleted ? 0.78 : 1)
         .accessibilityElement(children: .combine)
@@ -82,7 +82,7 @@ struct TaskRowView: View {
     var showsProjectContext: Bool = false
 
     var body: some View {
-        NexusTaskRow(
+        TodoshiTaskRow(
             title: task.title,
             isCompleted: task.status == .done,
             context: showsProjectContext ? task.project?.name : nil,

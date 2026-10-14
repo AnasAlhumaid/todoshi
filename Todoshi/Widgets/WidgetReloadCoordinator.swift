@@ -1,6 +1,6 @@
 import Foundation
 import WidgetKit
-import NexusCore
+import TodoshiCore
 
 /// App-layer coordinator — call after successful repository writes.
 @MainActor

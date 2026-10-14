@@ -1,6 +1,6 @@
 import SwiftUI
 import SwiftData
-import NexusCore
+import TodoshiCore
 import UIKit
 
 struct UpcomingTasksView: View {
@@ -22,7 +22,7 @@ struct UpcomingTasksView: View {
                 CalendarEmptyState(
                     systemImage: "clock",
                     title: CalendarStrings.noUpcoming,
-                    message: NexusL10n.tr("calendar.upcomingEmptyMessage")
+                    message: TodoshiL10n.tr("calendar.upcomingEmptyMessage")
                 )
             } else {
                 ForEach(groups) { group in
@@ -45,13 +45,13 @@ struct UpcomingTasksView: View {
         .listStyle(.insetGrouped)
         .navigationTitle(CalendarStrings.upcoming)
         .alert(
-            NexusL10n.tr("common.somethingWrong"),
+            TodoshiL10n.tr("common.somethingWrong"),
             isPresented: Binding(
                 get: { actionError != nil },
                 set: { if !$0 { actionError = nil } }
             )
         ) {
-            Button(NexusL10n.tr("common.ok"), role: .cancel) {}
+            Button(TodoshiL10n.tr("common.ok"), role: .cancel) {}
         } message: {
             Text(actionError ?? "")
         }

@@ -1,6 +1,6 @@
 import SwiftUI
 import SwiftData
-import NexusCore
+import TodoshiCore
 import UIKit
 
 struct CalendarView: View {
@@ -175,10 +175,10 @@ struct CalendarView: View {
                     )
                     .toolbar {
                         ToolbarItem(placement: .cancellationAction) {
-                            Button(NexusL10n.tr("common.close")) { showCreateSheet = false }
+                            Button(TodoshiL10n.tr("common.close")) { showCreateSheet = false }
                         }
                         ToolbarItem(placement: .confirmationAction) {
-                            Button(NexusL10n.tr("common.createProject")) {
+                            Button(TodoshiL10n.tr("common.createProject")) {
                                 showCreateSheet = false
                                 showCreateProject = true
                             }
@@ -208,10 +208,10 @@ struct CalendarView: View {
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     ToolbarItem(placement: .cancellationAction) {
-                        Button(NexusL10n.tr("common.cancel")) { rescheduleTaskID = nil }
+                        Button(TodoshiL10n.tr("common.cancel")) { rescheduleTaskID = nil }
                     }
                     ToolbarItem(placement: .confirmationAction) {
-                        Button(NexusL10n.tr("common.save")) {
+                        Button(TodoshiL10n.tr("common.save")) {
                             viewModel.updateDueDate(taskID: item.id, dueDate: rescheduleDraftDate)
                             rescheduleTaskID = nil
                         }
@@ -222,13 +222,13 @@ struct CalendarView: View {
             .presentationDetents([.medium])
         }
         .alert(
-            NexusL10n.tr("common.somethingWrong"),
+            TodoshiL10n.tr("common.somethingWrong"),
             isPresented: Binding(
                 get: { viewModel.actionError != nil },
                 set: { if !$0 { viewModel.actionError = nil } }
             )
         ) {
-            Button(NexusL10n.tr("common.ok"), role: .cancel) {}
+            Button(TodoshiL10n.tr("common.ok"), role: .cancel) {}
         } message: {
             Text(viewModel.actionError ?? "")
         }

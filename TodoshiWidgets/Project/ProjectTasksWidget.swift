@@ -1,16 +1,16 @@
 import AppIntents
 import WidgetKit
 import SwiftUI
-import NexusCore
+import TodoshiCore
 
 // MARK: - Entity & configuration
 
-struct NexusProjectEntity: AppEntity {
+struct TodoshiProjectEntity: AppEntity {
     // App Intents metadata requires string-literal LocalizedStringResource initializers.
     static var typeDisplayRepresentation: TypeDisplayRepresentation = TypeDisplayRepresentation(
         name: "widget.configProject"
     )
-    static var defaultQuery = NexusProjectEntityQuery()
+    static var defaultQuery = TodoshiProjectEntityQuery()
 
     var id: UUID
     var name: String
@@ -40,20 +40,20 @@ struct NexusProjectEntity: AppEntity {
     }
 }
 
-struct NexusProjectEntityQuery: EntityQuery {
-    func entities(for identifiers: [UUID]) async throws -> [NexusProjectEntity] {
+struct TodoshiProjectEntityQuery: EntityQuery {
+    func entities(for identifiers: [UUID]) async throws -> [TodoshiProjectEntity] {
         let projects = (try? await loadProjects()) ?? []
         return identifiers.compactMap { id in
-            projects.first(where: { $0.id == id }).map(NexusProjectEntity.init)
+            projects.first(where: { $0.id == id }).map(TodoshiProjectEntity.init)
         }
     }
 
-    func suggestedEntities() async throws -> [NexusProjectEntity] {
-        try await loadProjects().map(NexusProjectEntity.init)
+    func suggestedEntities() async throws -> [TodoshiProjectEntity] {
+        try await loadProjects().map(TodoshiProjectEntity.init)
     }
 
-    func defaultResult() async -> NexusProjectEntity? {
-        try? await loadProjects().first.map(NexusProjectEntity.init)
+    func defaultResult() async -> TodoshiProjectEntity? {
+        try? await loadProjects().first.map(TodoshiProjectEntity.init)
     }
 
     private func loadProjects() async throws -> [WidgetProjectOption] {
@@ -68,11 +68,11 @@ struct ProjectWidgetConfigurationIntent: WidgetConfigurationIntent {
     static var description = IntentDescription("widget.projectTasksDesc")
 
     @Parameter(title: "widget.project")
-    var project: NexusProjectEntity?
+    var project: TodoshiProjectEntity?
 
     init() {}
 
-    init(project: NexusProjectEntity?) {
+    init(project: TodoshiProjectEntity?) {
         self.project = project
     }
 }
@@ -81,10 +81,10 @@ struct ProjectWidgetConfigurationIntent: WidgetConfigurationIntent {
 
 struct ProjectTasksProvider: AppIntentTimelineProvider {
     typealias Intent = ProjectWidgetConfigurationIntent
-    typealias Entry = NexusWidgetEntry
+    typealias Entry = TodoshiWidgetEntry
 
-    func placeholder(in context: Context) -> NexusWidgetEntry {
-        NexusWidgetEntry(
+    func placeholder(in context: Context) -> TodoshiWidgetEntry {
+        TodoshiWidgetEntry(
             date: .now,
             snapshot: WidgetPreviewData.projectPlaceholder(),
             state: .content,
@@ -94,27 +94,28 @@ struct ProjectTasksProvider: AppIntentTimelineProvider {
                 projectName: WidgetPreviewData.projectPlaceholder().title,
                 projectIcon: "folder.fill",
                 projectColorHex: ProjectColorCatalog.defaultHex,
+                projectType: .tasks,
                 allowsProjectSelection: true,
                 allowsQuickAdd: true
             )
         )
     }
 
-    func snapshot(for configuration: ProjectWidgetConfigurationIntent, in context: Context) async -> NexusWidgetEntry {
+    func snapshot(for configuration: ProjectWidgetConfigurationIntent, in context: Context) async -> TodoshiWidgetEntry {
         await MainActor.run {
             Self.loadEntry(configuration: configuration, now: .now)
         }
     }
 
-    func timeline(for configuration: ProjectWidgetConfigurationIntent, in context: Context) async -> Timeline<NexusWidgetEntry> {
+    func timeline(for configuration: ProjectWidgetConfigurationIntent, in context: Context) async -> Timeline<TodoshiWidgetEntry> {
         let entry = await MainActor.run {
             Self.loadEntry(configuration: configuration, now: .now)
         }
-        return NexusWidgetTimeline.timeline(for: entry)
+        return TodoshiWidgetTimeline.timeline(for: entry)
     }
 
     @MainActor
-    private static func loadEntry(configuration: ProjectWidgetConfigurationIntent, now: Date) -> NexusWidgetEntry {
+    private static func loadEntry(configuration: ProjectWidgetConfigurationIntent, now: Date) -> TodoshiWidgetEntry {
         do {
             let baseID = configuration.project?.id
             let loaded = try WidgetSnapshotLoader.loadConfiguredProjectEntry(
@@ -129,18 +130,22 @@ struct ProjectTasksProvider: AppIntentTimelineProvider {
             case .unavailable:
                 state = .projectUnavailable
             case .available:
-                state = loaded.snapshot.totalCount == 0 ? .empty : .content
+                state = WidgetProjectPresentation.isProjectWidgetEmpty(
+                    projectType: loaded.snapshot.projectType,
+                    remainingCount: loaded.snapshot.totalCount,
+                    allRootCount: loaded.snapshot.allRootCount
+                ) ? .empty : .content
             }
-            return NexusWidgetEntry(
+            return TodoshiWidgetEntry(
                 date: now,
                 snapshot: loaded.snapshot,
                 state: state,
                 projectInteraction: loaded.interaction
             )
         } catch {
-            return NexusWidgetEntry(
+            return TodoshiWidgetEntry(
                 date: now,
-                snapshot: .unavailable(title: NexusL10n.tr("common.project"), generatedAt: now),
+                snapshot: .unavailable(title: TodoshiL10n.tr("common.project"), generatedAt: now),
                 state: .storeUnavailable
             )
         }
@@ -151,16 +156,16 @@ struct ProjectTasksProvider: AppIntentTimelineProvider {
 
 struct ProjectTasksWidgetView: View {
     @Environment(\.widgetFamily) private var family
-    var entry: NexusWidgetEntry
+    var entry: TodoshiWidgetEntry
 
     var body: some View {
         Group {
             switch entry.state {
             case .storeUnavailable:
                 emptyShell(
-                    title: WidgetStrings.openNexus,
-                    message: WidgetStrings.openNexus,
-                    link: NexusDeepLink.projects.url,
+                    title: WidgetStrings.openTodoshi,
+                    message: WidgetStrings.openTodoshi,
+                    link: TodoshiDeepLink.projects.url,
                     allowsProjectSelection: false,
                     allowsQuickAdd: false
                 )
@@ -169,7 +174,7 @@ struct ProjectTasksWidgetView: View {
                 emptyShell(
                     title: noActive ? WidgetStrings.noActiveProjects : WidgetStrings.chooseProject,
                     message: noActive ? WidgetStrings.noActiveProjectsHint : WidgetStrings.chooseProjectHint,
-                    link: NexusDeepLink.projects.url,
+                    link: TodoshiDeepLink.projects.url,
                     allowsProjectSelection: false,
                     allowsQuickAdd: false
                 )
@@ -177,7 +182,7 @@ struct ProjectTasksWidgetView: View {
                 emptyShell(
                     title: WidgetStrings.projectUnavailable,
                     message: WidgetStrings.projectUnavailable,
-                    link: NexusDeepLink.projects.url,
+                    link: TodoshiDeepLink.projects.url,
                     allowsProjectSelection: entry.projectInteraction?.allowsProjectSelection == true,
                     allowsQuickAdd: false
                 )
@@ -187,10 +192,20 @@ struct ProjectTasksWidgetView: View {
                 projectLayout(isEmpty: false)
             }
         }
+        .fontDesign(.rounded)
+        // Follow the in-app language direction, which can differ from the system's.
+        .environment(\.layoutDirection, AppLanguageStore.isRightToLeft ? .rightToLeft : .leftToRight)
         .containerBackground(for: .widget) {
-            Color(.systemBackground)
+            ZStack {
+                WidgetTheme.canvas
+                projectTint.opacity(0.10)
+            }
         }
         .widgetURL(projectLink)
+    }
+
+    private var projectTint: Color {
+        Color(hex: entry.projectInteraction?.projectColorHex ?? entry.snapshot.projectColorHex ?? ProjectColorCatalog.defaultHex)
     }
 
     private var projectLink: URL {
@@ -198,9 +213,17 @@ struct ProjectTasksWidgetView: View {
            entry.state != .projectUnavailable,
            entry.state != .needsConfiguration,
            entry.state != .storeUnavailable {
-            return NexusDeepLink.project(id).url
+            return TodoshiDeepLink.project(id).url
         }
-        return NexusDeepLink.projects.url
+        return TodoshiDeepLink.projects.url
+    }
+
+    private var projectType: ProjectType {
+        entry.snapshot.projectType
+    }
+
+    private var presentationProjectType: ProjectType {
+        entry.projectInteraction?.projectType ?? projectType
     }
 
     private var displayLimit: Int {
@@ -229,6 +252,7 @@ struct ProjectTasksWidgetView: View {
             interaction: entry.projectInteraction,
             title: title,
             openCount: nil,
+            projectType: presentationProjectType,
             projectLink: link,
             allowsQuickAdd: allowsQuickAdd,
             allowsProjectSelection: allowsProjectSelection,
@@ -269,29 +293,35 @@ struct ProjectTasksWidgetView: View {
             interaction: entry.projectInteraction,
             title: entry.snapshot.title,
             openCount: entry.snapshot.totalCount,
+            projectType: presentationProjectType,
             projectLink: projectLink,
             allowsQuickAdd: entry.projectInteraction?.allowsQuickAdd == true,
             allowsProjectSelection: entry.projectInteraction?.allowsProjectSelection == true,
             family: .systemSmall,
-            showIcon: true
+            showIcon: false
         ) {
             if isEmpty {
-                Text(WidgetStrings.noOpenTasks)
+                Text(WidgetProjectPresentation.emptyTitle(for: presentationProjectType))
                     .font(.caption2)
                     .foregroundStyle(.secondary)
                     .lineLimit(2)
             } else if let first = shownTasks.first {
-                Link(destination: NexusDeepLink.task(first.id).url) {
-                    Text(first.title)
-                        .font(.caption.weight(.medium))
-                        .foregroundStyle(.primary)
-                        .lineLimit(2)
-                        .minimumScaleFactor(0.85)
-                        .privacySensitive()
+                Link(destination: TodoshiDeepLink.task(first.id).url) {
+                    ProjectWidgetTaskTitle(
+                        task: first,
+                        projectType: presentationProjectType,
+                        style: .compact
+                    )
                 }
             }
         }
-        .accessibilityLabel(WidgetStrings.openCountA11y(title: entry.snapshot.title, count: entry.snapshot.totalCount))
+        .accessibilityLabel(
+            WidgetProjectPresentation.openCountAccessibilityLabel(
+                title: entry.snapshot.title,
+                remaining: entry.snapshot.totalCount,
+                projectType: presentationProjectType
+            )
+        )
     }
 
     // MARK: Medium — name + switchers, up to 3 tasks, add
@@ -302,6 +332,7 @@ struct ProjectTasksWidgetView: View {
             interaction: entry.projectInteraction,
             title: entry.snapshot.title,
             openCount: entry.snapshot.totalCount,
+            projectType: presentationProjectType,
             projectLink: projectLink,
             allowsQuickAdd: entry.projectInteraction?.allowsQuickAdd == true,
             allowsProjectSelection: entry.projectInteraction?.allowsProjectSelection == true,
@@ -313,7 +344,7 @@ struct ProjectTasksWidgetView: View {
             } else {
                 VStack(alignment: .leading, spacing: 5) {
                     ForEach(shownTasks) { task in
-                        ProjectWidgetTaskRow(task: task, style: .compact)
+                        ProjectWidgetTaskRow(task: task, projectType: presentationProjectType, style: .compact)
                     }
                     if entry.snapshot.totalCount > shownTasks.count {
                         Text(WidgetStrings.remaining(entry.snapshot.totalCount - shownTasks.count))
@@ -323,7 +354,13 @@ struct ProjectTasksWidgetView: View {
                 }
             }
         }
-        .accessibilityLabel(WidgetStrings.openCountA11y(title: entry.snapshot.title, count: entry.snapshot.totalCount))
+        .accessibilityLabel(
+            WidgetProjectPresentation.openCountAccessibilityLabel(
+                title: entry.snapshot.title,
+                remaining: entry.snapshot.totalCount,
+                projectType: presentationProjectType
+            )
+        )
     }
 
     // MARK: Large — full header, up to 6 tasks, footer actions
@@ -335,6 +372,7 @@ struct ProjectTasksWidgetView: View {
                 interaction: entry.projectInteraction,
                 title: entry.snapshot.title,
                 openCount: entry.snapshot.totalCount,
+                projectType: presentationProjectType,
                 projectLink: projectLink,
                 allowsProjectSelection: entry.projectInteraction?.allowsProjectSelection == true,
                 showIcon: true,
@@ -347,7 +385,7 @@ struct ProjectTasksWidgetView: View {
             } else {
                 VStack(alignment: .leading, spacing: 6) {
                     ForEach(shownTasks) { task in
-                        ProjectWidgetTaskRow(task: task, style: .detailed)
+                        ProjectWidgetTaskRow(task: task, projectType: presentationProjectType, style: .detailed)
                     }
                 }
                 Spacer(minLength: 0)
@@ -355,22 +393,29 @@ struct ProjectTasksWidgetView: View {
 
             ProjectWidgetFooter(
                 interaction: entry.projectInteraction,
+                projectType: presentationProjectType,
                 projectLink: projectLink,
                 remaining: max(0, entry.snapshot.totalCount - shownTasks.count),
                 allowsQuickAdd: entry.projectInteraction?.allowsQuickAdd == true
             )
         }
         .padding()
-        .accessibilityLabel(WidgetStrings.openCountA11y(title: entry.snapshot.title, count: entry.snapshot.totalCount))
+        .accessibilityLabel(
+            WidgetProjectPresentation.openCountAccessibilityLabel(
+                title: entry.snapshot.title,
+                remaining: entry.snapshot.totalCount,
+                projectType: presentationProjectType
+            )
+        )
     }
 
     @ViewBuilder
     private func emptyBody(compact: Bool) -> some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text(WidgetStrings.noOpenTasks)
+            Text(WidgetProjectPresentation.emptyTitle(for: presentationProjectType))
                 .font(compact ? .caption.weight(.semibold) : .subheadline.weight(.semibold))
                 .foregroundStyle(.primary)
-            Text(WidgetStrings.noOpenTasksHint)
+            Text(WidgetProjectPresentation.emptySubtitle(for: presentationProjectType))
                 .font(.caption2)
                 .foregroundStyle(.secondary)
                 .lineLimit(3)
@@ -385,6 +430,7 @@ private struct ProjectWidgetChrome<Content: View>: View {
     let interaction: ProjectWidgetInteraction?
     let title: String
     let openCount: Int?
+    let projectType: ProjectType
     let projectLink: URL
     let allowsQuickAdd: Bool
     let allowsProjectSelection: Bool
@@ -398,6 +444,7 @@ private struct ProjectWidgetChrome<Content: View>: View {
                 interaction: interaction,
                 title: title,
                 openCount: openCount,
+                projectType: projectType,
                 projectLink: projectLink,
                 allowsProjectSelection: allowsProjectSelection,
                 showIcon: showIcon,
@@ -410,7 +457,8 @@ private struct ProjectWidgetChrome<Content: View>: View {
                     if allowsQuickAdd {
                         ProjectAddTaskButton(
                             projectID: interaction?.displayedProjectID,
-                            projectName: interaction?.projectName ?? title
+                            projectName: interaction?.projectName ?? title,
+                            projectType: projectType
                         )
                     }
                     Spacer(minLength: 0)
@@ -425,6 +473,7 @@ private struct ProjectWidgetHeader: View {
     let interaction: ProjectWidgetInteraction?
     let title: String
     let openCount: Int?
+    let projectType: ProjectType
     let projectLink: URL
     /// Shows the hamburger project selector when a base Edit Widget project exists.
     let allowsProjectSelection: Bool
@@ -434,21 +483,24 @@ private struct ProjectWidgetHeader: View {
     var body: some View {
         HStack(spacing: 6) {
             if showIcon {
-                Image(systemName: interaction?.projectIcon ?? "folder")
-                    .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(Color(hex: interaction?.projectColorHex ?? ProjectColorCatalog.defaultHex))
+                let tint = Color(hex: interaction?.projectColorHex ?? ProjectColorCatalog.defaultHex)
+                Image(systemName: projectType == .checklist ? "checklist" : (interaction?.projectIcon ?? "folder"))
+                    .font(.system(size: 13, weight: .semibold))
+                    .foregroundStyle(tint)
+                    .frame(width: 26, height: 26)
+                    .background(tint.opacity(0.16), in: RoundedRectangle(cornerRadius: 8, style: .continuous))
                     .accessibilityHidden(true)
             }
 
             Link(destination: projectLink) {
                 VStack(alignment: .leading, spacing: 1) {
                     Text(title)
-                        .font(.headline)
+                        .font(.headline.weight(.bold))
                         .foregroundStyle(.primary)
                         .lineLimit(1)
                         .minimumScaleFactor(0.75)
                     if showOpenCount, let openCount {
-                        Text(WidgetStrings.openTasksCount(openCount))
+                        Text(WidgetProjectPresentation.primaryCountText(remaining: openCount, projectType: projectType))
                             .font(.caption2.monospacedDigit())
                             .foregroundStyle(.secondary)
                             .lineLimit(1)
@@ -461,7 +513,7 @@ private struct ProjectWidgetHeader: View {
 
             if allowsProjectSelection, let base = interaction?.baseConfigurationProjectID {
                 // Deep link opens in-app picker. App Intent parameter UI is unreliable from Home Screen widgets.
-                Link(destination: NexusDeepLink.widgetProjectPicker(baseProjectID: base).url) {
+                Link(destination: TodoshiDeepLink.widgetProjectPicker(baseProjectID: base).url) {
                     Image(systemName: "line.3.horizontal")
                         .font(.body.weight(.semibold))
                         .frame(minWidth: 44, minHeight: 44)
@@ -476,6 +528,7 @@ private struct ProjectWidgetHeader: View {
 
 private struct ProjectWidgetFooter: View {
     let interaction: ProjectWidgetInteraction?
+    let projectType: ProjectType
     let projectLink: URL
     let remaining: Int
     let allowsQuickAdd: Bool
@@ -492,15 +545,19 @@ private struct ProjectWidgetFooter: View {
                     ProjectAddTaskButton(
                         projectID: interaction?.displayedProjectID,
                         projectName: interaction?.projectName ?? "",
+                        projectType: projectType,
                         style: .labeled
                     )
                 }
                 Link(destination: projectLink) {
-                    Label(WidgetStrings.openProject, systemImage: "arrow.up.right.square")
-                        .font(.caption.weight(.semibold))
-                        .labelStyle(.titleAndIcon)
+                    Label(
+                        WidgetProjectPresentation.openActionTitle(for: projectType),
+                        systemImage: "arrow.up.right.square"
+                    )
+                    .font(.caption.weight(.semibold))
+                    .labelStyle(.titleAndIcon)
                 }
-                .accessibilityLabel(WidgetStrings.openProject)
+                .accessibilityLabel(WidgetProjectPresentation.openActionTitle(for: projectType))
                 Spacer(minLength: 0)
             }
         }
@@ -510,6 +567,7 @@ private struct ProjectWidgetFooter: View {
 private struct ProjectAddTaskButton: View {
     let projectID: UUID?
     let projectName: String
+    let projectType: ProjectType
     var style: Style = .icon
 
     enum Style {
@@ -519,21 +577,17 @@ private struct ProjectAddTaskButton: View {
 
     var body: some View {
         if let projectID {
-            Button(
-                intent: AddTaskToSelectedProjectIntent(
-                    projectID: projectID,
-                    projectName: projectName
-                )
-            ) {
+            Link(destination: TodoshiDeepLink.quickAdd(projectID: projectID).url) {
                 label
             }
-            .buttonStyle(.plain)
-            .accessibilityLabel(WidgetStrings.addTaskTo(projectName))
+            .accessibilityLabel(
+                WidgetProjectPresentation.addAccessibilityLabel(projectName: projectName, projectType: projectType)
+            )
         } else {
-            Link(destination: NexusDeepLink.quickAdd.url) {
+            Link(destination: TodoshiDeepLink.quickAdd().url) {
                 label
             }
-            .accessibilityLabel(WidgetStrings.addTask)
+            .accessibilityLabel(WidgetProjectPresentation.addActionTitle(for: projectType))
         }
     }
 
@@ -541,18 +595,53 @@ private struct ProjectAddTaskButton: View {
     private var label: some View {
         switch style {
         case .icon:
-            Image(systemName: "plus.circle.fill")
-                .symbolRenderingMode(.hierarchical)
-                .font(.title3)
+            Image(systemName: "plus")
+                .font(.system(size: 14, weight: .bold))
+                .foregroundStyle(.white)
+                .frame(width: 28, height: 28)
+                .background(WidgetTheme.accent, in: Circle())
         case .labeled:
-            Label(WidgetStrings.addTask, systemImage: "plus.circle.fill")
-                .font(.caption.weight(.semibold))
-                .labelStyle(.titleAndIcon)
+            Label(
+                WidgetProjectPresentation.addActionTitle(for: projectType),
+                systemImage: "plus"
+            )
+            .font(.caption.weight(.bold))
+            .labelStyle(.titleAndIcon)
+            .foregroundStyle(.white)
+            .padding(.horizontal, 10)
+            .padding(.vertical, 6)
+            .background(WidgetTheme.accent, in: Capsule())
         }
     }
 }
 
 // MARK: - Task rows
+
+private struct ProjectWidgetTaskTitle: View {
+    let task: WidgetTaskItem
+    let projectType: ProjectType
+    let style: ProjectWidgetTaskRow.Style
+
+    private var isCompleted: Bool { task.status == .done }
+
+    var body: some View {
+        HStack(spacing: 4) {
+            if projectType == .checklist && isCompleted {
+                Image(systemName: "checkmark.circle.fill")
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+                    .accessibilityHidden(true)
+            }
+            Text(task.title)
+                .font(style == .compact ? .footnote.weight(.semibold) : .subheadline.weight(.semibold))
+                .foregroundStyle(isCompleted ? .secondary : .primary)
+                .strikethrough(isCompleted, color: .secondary)
+                .lineLimit(style == .compact ? 1 : 2)
+                .minimumScaleFactor(0.85)
+                .privacySensitive()
+        }
+    }
+}
 
 private struct ProjectWidgetTaskRow: View {
     enum Style {
@@ -561,73 +650,71 @@ private struct ProjectWidgetTaskRow: View {
     }
 
     let task: WidgetTaskItem
+    let projectType: ProjectType
     let style: Style
 
+    private var isCompleted: Bool { task.status == .done }
+
     var body: some View {
-        Link(destination: NexusDeepLink.task(task.id).url) {
+        Link(destination: TodoshiDeepLink.task(task.id).url) {
             VStack(alignment: .leading, spacing: 2) {
-                Text(task.title)
-                    .font(.caption.weight(.semibold))
-                    .foregroundStyle(.primary)
-                    .lineLimit(style == .compact ? 1 : 2)
-                    .minimumScaleFactor(0.85)
-                    .privacySensitive()
+                ProjectWidgetTaskTitle(task: task, projectType: projectType, style: style)
 
-                HStack(spacing: 4) {
-                    Text(task.status.displayName)
-                        .font(.caption2)
-                        .foregroundStyle(.secondary)
-                        .lineLimit(1)
+                // Compact rows (small/medium) stay one line each so the add button never clips.
+                if style == .detailed {
+                    HStack(spacing: 4) {
+                        Text(WidgetProjectPresentation.statusLabel(task.status, projectType: projectType))
+                            .font(.caption2)
+                            .foregroundStyle(.secondary)
+                            .lineLimit(1)
 
-                    if style == .detailed {
-                        if task.priority == .urgent || task.priority == .high {
-                            Text(task.priority.displayName)
-                                .font(.caption2.weight(.semibold))
-                                .foregroundStyle(task.priority == .urgent ? .red : .orange)
-                                .lineLimit(1)
-                        }
-                        if task.isOverdue {
-                            Text(NexusL10n.tr("common.overdue"))
-                                .font(.caption2.weight(.semibold))
-                                .foregroundStyle(.red)
-                                .lineLimit(1)
-                        } else if let due = task.dueDate {
-                            Text(due, style: .date)
-                                .font(.caption2)
-                                .foregroundStyle(.secondary)
-                                .lineLimit(1)
+                        if style == .detailed, projectType == .tasks {
+                            if task.priority == .urgent || task.priority == .high {
+                                Text(task.priority.displayName)
+                                    .font(.caption2.weight(.semibold))
+                                    .foregroundStyle(task.priority == .urgent ? .red : .orange)
+                                    .lineLimit(1)
+                            }
+                            if task.isOverdue {
+                                Text(TodoshiL10n.tr("common.overdue"))
+                                    .font(.caption2.weight(.semibold))
+                                    .foregroundStyle(.red)
+                                    .lineLimit(1)
+                            } else if let due = task.dueDate {
+                                Text(due, style: .date)
+                                    .font(.caption2)
+                                    .foregroundStyle(.secondary)
+                                    .lineLimit(1)
+                            }
                         }
                     }
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
         }
-        .accessibilityLabel(accessibilityLabel)
-    }
-
-    private var accessibilityLabel: String {
-        var parts = [task.title, task.status.displayName]
-        if task.priority == .urgent || task.priority == .high {
-            parts.append(task.priority.displayName)
-        }
-        if task.isOverdue {
-            parts.append(NexusL10n.tr("common.overdue"))
-        }
-        return parts.joined(separator: ", ")
+        .accessibilityLabel(
+            WidgetProjectPresentation.taskRowAccessibilityLabel(
+                title: task.title,
+                status: task.status,
+                projectType: projectType,
+                priority: task.priority,
+                isOverdue: task.isOverdue
+            )
+        )
     }
 }
 
 // MARK: - Widget definition
 
 struct ProjectTasksWidget: Widget {
-    let kind = NexusWidgetKind.project
+    let kind = TodoshiWidgetKind.project
 
     var body: some WidgetConfiguration {
         AppIntentConfiguration(kind: kind, intent: ProjectWidgetConfigurationIntent.self, provider: ProjectTasksProvider()) { entry in
             ProjectTasksWidgetView(entry: entry)
         }
-        .configurationDisplayName(NexusL10n.tr("widget.projectTasks"))
-        .description(NexusL10n.tr("widget.projectTasksDesc"))
+        .configurationDisplayName(TodoshiL10n.tr("widget.projectTasks"))
+        .description(TodoshiL10n.tr("widget.projectTasksDesc"))
         .supportedFamilies([.systemSmall, .systemMedium, .systemLarge])
     }
 }

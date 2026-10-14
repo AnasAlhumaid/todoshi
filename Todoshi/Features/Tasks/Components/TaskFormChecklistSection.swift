@@ -1,5 +1,5 @@
 import SwiftUI
-import NexusCore
+import TodoshiCore
 
 /// Inline checklist draft editor for Task Form (no SwiftData mutations until Save).
 struct TaskFormChecklistSection: View {
@@ -19,7 +19,7 @@ struct TaskFormChecklistSection: View {
                     .font(.subheadline)
             } else {
                 ForEach($items) { $item in
-                    HStack(spacing: NexusSpacing.sm) {
+                    HStack(spacing: TodoshiSpacing.sm) {
                         Button {
                             item.isCompleted.toggle()
                         } label: {
@@ -64,7 +64,7 @@ struct TaskFormChecklistSection: View {
         } header: {
             Text(ChecklistStrings.checklist)
         } footer: {
-            Text(NexusL10n.tr("checklist.formHint"))
+            Text(TodoshiL10n.tr("checklist.formHint"))
                 .font(.footnote)
         }
         .onChange(of: focusedID.wrappedValue) { _, newValue in

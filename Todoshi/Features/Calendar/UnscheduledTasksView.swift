@@ -1,6 +1,6 @@
 import SwiftUI
 import SwiftData
-import NexusCore
+import TodoshiCore
 
 struct UnscheduledTasksView: View {
     @Environment(\.modelContext) private var modelContext
@@ -21,7 +21,7 @@ struct UnscheduledTasksView: View {
                 CalendarEmptyState(
                     systemImage: "tray",
                     title: CalendarStrings.noUnscheduled,
-                    message: NexusL10n.tr("calendar.unscheduledEmptyMessage")
+                    message: TodoshiL10n.tr("calendar.unscheduledEmptyMessage")
                 )
             } else {
                 Section {
@@ -44,7 +44,7 @@ struct UnscheduledTasksView: View {
                         }
                     }
                 } footer: {
-                    Text(NexusL10n.tr("calendar.unscheduledHint"))
+                    Text(TodoshiL10n.tr("calendar.unscheduledHint"))
                 }
             }
         }
@@ -66,10 +66,10 @@ struct UnscheduledTasksView: View {
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     ToolbarItem(placement: .cancellationAction) {
-                        Button(NexusL10n.tr("common.cancel")) { assignTaskID = nil }
+                        Button(TodoshiL10n.tr("common.cancel")) { assignTaskID = nil }
                     }
                     ToolbarItem(placement: .confirmationAction) {
-                        Button(NexusL10n.tr("common.save")) {
+                        Button(TodoshiL10n.tr("common.save")) {
                             assignDue(taskID: item.id, date: assignDate)
                             assignTaskID = nil
                         }
@@ -80,13 +80,13 @@ struct UnscheduledTasksView: View {
             .presentationDetents([.medium])
         }
         .alert(
-            NexusL10n.tr("common.somethingWrong"),
+            TodoshiL10n.tr("common.somethingWrong"),
             isPresented: Binding(
                 get: { actionError != nil },
                 set: { if !$0 { actionError = nil } }
             )
         ) {
-            Button(NexusL10n.tr("common.ok"), role: .cancel) {}
+            Button(TodoshiL10n.tr("common.ok"), role: .cancel) {}
         } message: {
             Text(actionError ?? "")
         }

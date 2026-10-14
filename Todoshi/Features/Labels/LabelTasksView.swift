@@ -1,6 +1,6 @@
 import SwiftUI
 import SwiftData
-import NexusCore
+import TodoshiCore
 
 struct LabelTasksView: View {
     let labelID: UUID
@@ -23,12 +23,12 @@ struct LabelTasksView: View {
             if let label {
                 content(for: label)
             } else {
-                ContentUnavailableView(NexusL10n.tr("label.notFound"), systemImage: "tag.slash")
+                ContentUnavailableView(TodoshiL10n.tr("label.notFound"), systemImage: "tag.slash")
             }
         }
         .onAppear { reload() }
         .onChange(of: includeArchived) { _, _ in reload() }
-        .onReceive(NotificationCenter.default.publisher(for: NexusDataChangeCenter.notification)) { _ in
+        .onReceive(NotificationCenter.default.publisher(for: TodoshiDataChangeCenter.notification)) { _ in
             reload()
         }
     }
@@ -37,9 +37,9 @@ struct LabelTasksView: View {
     private func content(for label: LabelTag) -> some View {
         List {
             Section {
-                HStack(spacing: NexusSpacing.sm) {
+                HStack(spacing: TodoshiSpacing.sm) {
                     Circle()
-                        .fill(NexusColor.from(hex: label.colorHex))
+                        .fill(TodoshiColor.from(hex: label.colorHex))
                         .frame(width: 8, height: 8)
                     Text(label.name)
                         .font(.body.weight(.medium))
@@ -49,19 +49,19 @@ struct LabelTasksView: View {
                         .foregroundStyle(.secondary)
                         .accessibilityLabel("\(rows.count) tasks")
                 }
-                Toggle(NexusL10n.tr("search.includeArchived"), isOn: $includeArchived)
+                Toggle(TodoshiL10n.tr("search.includeArchived"), isOn: $includeArchived)
             }
 
             if rows.isEmpty {
                 ContentUnavailableView(
                     LabelStrings.noAssignedTasks,
                     systemImage: "checklist",
-                    description: Text(NexusL10n.tr("label.assignedEmpty"))
+                    description: Text(TodoshiL10n.tr("label.assignedEmpty"))
                 )
             } else {
                 ForEach(rows) { row in
                     NavigationLink(value: AppRoute.task(row.id)) {
-                        NexusTaskRow(
+                        TodoshiTaskRow(
                             title: row.title,
                             context: row.projectName,
                             showsProjectGlyph: false,

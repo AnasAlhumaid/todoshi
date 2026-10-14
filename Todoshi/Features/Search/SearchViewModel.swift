@@ -1,7 +1,7 @@
 import Foundation
 import Observation
 import SwiftData
-import NexusCore
+import TodoshiCore
 
 @Observable
 @MainActor

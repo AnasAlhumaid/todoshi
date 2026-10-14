@@ -1,15 +1,19 @@
 import SwiftUI
 import SwiftData
-import NexusCore
+import TodoshiCore
 
 // Quick Add intentionally omits checklist editing, parent selection, and resources (Phases 8–10).
 // Capture stays root-task-only without attachments.
 struct QuickAddView: View {
+    var preselectedProjectID: UUID? = nil
+
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
 
     @AppStorage(QuickAddPreferences.lastProjectIDKey) private var lastProjectIDStored: String = ""
     @AppStorage(QuickAddPreferences.showsOptionalFieldsKey) private var showsOptionalFields = false
+    @FocusState private var isTitleFocused: Bool
+    @State private var showsDatePicker = false
 
     @State private var viewModel: QuickAddViewModel?
     @State private var isCreatingProject = false
@@ -23,17 +27,15 @@ struct QuickAddView: View {
                     .onAppear { bootstrap() }
             }
         }
-        .navigationTitle(NexusL10n.tr("quickAdd.title"))
+        .navigationTitle(TodoshiL10n.tr("quickAdd.title"))
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {
-                Button(NexusL10n.tr("common.cancel")) { dismiss() }
+                Button(TodoshiL10n.tr("common.cancel")) { dismiss() }
             }
             ToolbarItem(placement: .confirmationAction) {
-                Button(NexusL10n.tr("common.add")) {
-                    if viewModel?.save() != nil {
-                        dismiss()
-                    }
+                Button(TodoshiL10n.tr("common.add")) {
+                    if let viewModel { submit(viewModel) }
                 }
                 .disabled(!(viewModel?.canSave ?? false))
                 .fontWeight(.semibold)
@@ -52,90 +54,158 @@ struct QuickAddView: View {
     private func formContent(_ viewModel: QuickAddViewModel) -> some View {
         if !viewModel.hasActiveProjects {
             ContentUnavailableView {
-                Label(NexusL10n.tr("quickAdd.noProjects"), systemImage: "folder.badge.plus")
+                Label(TodoshiL10n.tr("quickAdd.noProjects"), systemImage: "folder.badge.plus")
             } description: {
-                Text(NexusL10n.tr("quickAdd.noProjectsMessage"))
+                Text(TodoshiL10n.tr("quickAdd.noProjectsMessage"))
             } actions: {
-                Button(NexusL10n.tr("common.createProject")) { isCreatingProject = true }
+                Button(TodoshiL10n.tr("common.createProject")) { isCreatingProject = true }
                     .buttonStyle(.borderedProminent)
             }
         } else {
-            Form {
-                Section(NexusL10n.tr("common.task")) {
-                    TextField(NexusL10n.tr("common.title"), text: Binding(
+            VStack(alignment: .leading, spacing: TodoshiSpacing.md) {
+                TextField(
+                    TodoshiL10n.tr("quickAdd.placeholder"),
+                    text: Binding(
                         get: { viewModel.draft.title },
                         set: { viewModel.draft.title = $0 }
-                    ))
-                    Picker(NexusL10n.tr("common.project"), selection: Binding(
-                        get: { viewModel.draft.projectID },
-                        set: { viewModel.draft.projectID = $0 }
-                    )) {
-                        ForEach(viewModel.activeProjects, id: \.id) { project in
-                            Text(project.name).tag(Optional(project.id))
+                    )
+                )
+                .font(.title3.weight(.medium))
+                .focused($isTitleFocused)
+                .submitLabel(.done)
+                .onSubmit { submit(viewModel) }
+
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: TodoshiSpacing.xs) {
+                        dateChip(viewModel)
+                        projectChip(viewModel)
+                        if viewModel.selectedProjectType != .checklist {
+                            priorityChip(viewModel)
                         }
                     }
                 }
+                .scrollClipDisabled()
 
-                Section(NexusL10n.tr("form.planning")) {
-                    Picker(NexusL10n.tr("common.status"), selection: Binding(
-                        get: { viewModel.draft.status },
-                        set: { viewModel.draft.status = $0 }
-                    )) {
-                        ForEach(TaskStatus.allCases, id: \.self) { status in
-                            Text(status.displayName).tag(status)
-                        }
-                    }
-                    Picker(NexusL10n.tr("common.priority"), selection: Binding(
-                        get: { viewModel.draft.priority },
-                        set: { viewModel.draft.priority = $0 }
-                    )) {
-                        ForEach(TaskPriority.allCases, id: \.self) { priority in
-                            Text(priority.displayName).tag(priority)
-                        }
-                    }
-                    Toggle(NexusL10n.tr("common.dueDate"), isOn: Binding(
-                        get: { viewModel.draft.hasDueDate },
-                        set: { viewModel.draft.hasDueDate = $0 }
-                    ))
-                    if viewModel.draft.hasDueDate {
-                        DatePicker(
-                            NexusL10n.tr("common.dueDate"),
-                            selection: Binding(
-                                get: { viewModel.draft.dueDate ?? .now },
-                                set: { viewModel.draft.dueDate = $0 }
-                            ),
-                            displayedComponents: .date
-                        )
-                    }
-                }
-
-                Section {
-                    Toggle(NexusL10n.tr("form.moreDetails"), isOn: $showsOptionalFields)
-                    if showsOptionalFields {
-                        TextField(NexusL10n.tr("common.description"), text: Binding(
-                            get: { viewModel.draft.taskDescription },
-                            set: { viewModel.draft.taskDescription = $0 }
-                        ), axis: .vertical)
-                        .lineLimit(2...4)
-                        TextField(NexusL10n.tr("common.notes"), text: Binding(
-                            get: { viewModel.draft.notes },
-                            set: { viewModel.draft.notes = $0 }
-                        ), axis: .vertical)
-                        .lineLimit(2...5)
-                    }
+                if showsDatePicker {
+                    DatePicker(
+                        TodoshiL10n.tr("quickAdd.date.label"),
+                        selection: Binding(
+                            get: { viewModel.draft.dueDate ?? .now },
+                            set: {
+                                viewModel.draft.dueDate = $0
+                                viewModel.draft.hasDueDate = true
+                            }
+                        ),
+                        displayedComponents: .date
+                    )
+                    .font(.subheadline)
                 }
 
                 if let error = viewModel.errorMessage {
-                    Section {
-                        Text(error)
-                            .foregroundStyle(.red)
-                            .font(.footnote)
+                    Text(error)
+                        .foregroundStyle(.red)
+                        .font(.footnote)
+                }
+
+                Spacer(minLength: 0)
+            }
+            .padding(.horizontal, TodoshiSpacing.md)
+            .padding(.top, TodoshiSpacing.xs)
+            .onAppear { isTitleFocused = true }
+        }
+    }
+
+    private func submit(_ viewModel: QuickAddViewModel) {
+        guard viewModel.canSave, viewModel.save() != nil else { return }
+        TodoshiHaptics.taskStatusChanged(crossStatus: false)
+        dismiss()
+    }
+
+    // MARK: Chips
+
+    private func dateChip(_ viewModel: QuickAddViewModel) -> some View {
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: .now)
+        func setDue(_ date: Date?) {
+            showsDatePicker = false
+            viewModel.draft.dueDate = date
+            viewModel.draft.hasDueDate = date != nil
+        }
+        return Menu {
+            Button(TodoshiL10n.tr("quickAdd.date.today")) { setDue(today) }
+            Button(TodoshiL10n.tr("quickAdd.date.tomorrow")) {
+                setDue(calendar.date(byAdding: .day, value: 1, to: today))
+            }
+            Button(TodoshiL10n.tr("quickAdd.date.nextWeek")) {
+                setDue(calendar.date(byAdding: .day, value: 7, to: today))
+            }
+            Button(TodoshiL10n.tr("quickAdd.date.pick")) {
+                viewModel.draft.dueDate = viewModel.draft.dueDate ?? today
+                viewModel.draft.hasDueDate = true
+                showsDatePicker = true
+            }
+            if viewModel.draft.hasDueDate {
+                Divider()
+                Button(TodoshiL10n.tr("quickAdd.date.none"), role: .destructive) { setDue(nil) }
+            }
+        } label: {
+            QuickAddChip(
+                title: dueTitle(viewModel),
+                systemImage: "calendar",
+                isActive: viewModel.draft.hasDueDate
+            )
+        }
+    }
+
+    private func dueTitle(_ viewModel: QuickAddViewModel) -> String {
+        guard viewModel.draft.hasDueDate, let due = viewModel.draft.dueDate else {
+            return TodoshiL10n.tr("quickAdd.date.label")
+        }
+        let calendar = Calendar.current
+        if calendar.isDateInToday(due) { return TodoshiL10n.tr("quickAdd.date.today") }
+        if calendar.isDateInTomorrow(due) { return TodoshiL10n.tr("quickAdd.date.tomorrow") }
+        return due.formatted(.dateTime.day().month(.abbreviated).locale(AppLanguageStore.resolvedLocale))
+    }
+
+    private func projectChip(_ viewModel: QuickAddViewModel) -> some View {
+        let selected = viewModel.activeProjects.first { $0.id == viewModel.draft.projectID }
+        return Menu {
+            ForEach(viewModel.activeProjects, id: \.id) { project in
+                Button {
+                    viewModel.selectProject(project.id)
+                } label: {
+                    if project.id == viewModel.draft.projectID {
+                        Label(project.name, systemImage: "checkmark")
+                    } else {
+                        Text(project.name)
                     }
                 }
             }
-            .onChange(of: showsOptionalFields) { _, newValue in
-                viewModel.draft.showsOptionalFields = newValue
+            Divider()
+            Button(TodoshiL10n.tr("common.createProject")) { isCreatingProject = true }
+        } label: {
+            QuickAddChip(
+                title: selected?.name ?? TodoshiL10n.tr("common.project"),
+                systemImage: "folder.fill",
+                isActive: selected != nil,
+                tint: selected.map { TodoshiColor.from(hex: $0.colorHex) }
+            )
+        }
+    }
+
+    private func priorityChip(_ viewModel: QuickAddViewModel) -> some View {
+        let priority = viewModel.draft.priority
+        return Menu {
+            ForEach(TaskPriority.allCases, id: \.self) { option in
+                Button(option.displayName) { viewModel.draft.priority = option }
             }
+        } label: {
+            QuickAddChip(
+                title: priority == .none ? TodoshiL10n.tr("quickAdd.priority.label") : priority.displayName,
+                systemImage: "flag.fill",
+                isActive: priority != .none,
+                tint: priority == .urgent || priority == .high ? .orange : nil
+            )
         }
     }
 
@@ -144,6 +214,7 @@ struct QuickAddView: View {
         viewModel = QuickAddViewModel(
             context: modelContext,
             lastProjectIDStored: stored,
+            preselectedProjectID: preselectedProjectID,
             showsOptionalFields: showsOptionalFields,
             persistLastProjectID: { value in
                 lastProjectIDStored = value ?? ""
@@ -152,5 +223,27 @@ struct QuickAddView: View {
                 lastProjectIDStored.isEmpty ? nil : lastProjectIDStored
             }
         )
+    }
+}
+
+private struct QuickAddChip: View {
+    let title: String
+    let systemImage: String
+    let isActive: Bool
+    var tint: Color? = nil
+
+    var body: some View {
+        let color = tint ?? (isActive ? TodoshiBrand.accent : Color.secondary)
+        HStack(spacing: 5) {
+            Image(systemName: systemImage)
+                .font(.caption)
+            Text(title)
+                .font(.subheadline.weight(.medium))
+                .lineLimit(1)
+        }
+        .foregroundStyle(color)
+        .padding(.horizontal, TodoshiSpacing.sm)
+        .frame(minHeight: 36)
+        .background(color.opacity(isActive ? 0.14 : 0.08), in: Capsule())
     }
 }

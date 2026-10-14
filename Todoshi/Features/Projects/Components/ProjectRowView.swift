@@ -1,13 +1,13 @@
 import SwiftUI
-import NexusCore
+import TodoshiCore
 
 struct ProjectRowView: View {
     let project: Project
     let openTaskCount: Int
 
     var body: some View {
-        HStack(spacing: NexusSpacing.sm) {
-            NexusProjectGlyph(systemName: project.icon, colorHex: project.colorHex)
+        HStack(spacing: TodoshiSpacing.sm) {
+            TodoshiProjectGlyph(systemName: project.icon, colorHex: project.colorHex)
 
             VStack(alignment: .leading, spacing: 2) {
                 Text(project.name)
@@ -15,20 +15,20 @@ struct ProjectRowView: View {
                     .foregroundStyle(.primary)
                 if !project.projectDescription.isEmpty {
                     Text(project.projectDescription)
-                        .font(NexusTypography.metadata)
+                        .font(TodoshiTypography.metadata)
                         .foregroundStyle(.secondary)
                         .lineLimit(1)
                 }
             }
 
-            Spacer(minLength: NexusSpacing.xs)
+            Spacer(minLength: TodoshiSpacing.xs)
 
             Text("\(openTaskCount)")
                 .font(.subheadline.monospacedDigit())
                 .foregroundStyle(.secondary)
-                .accessibilityLabel(NexusL10n.plural("widget.openTasksCount", count: openTaskCount))
+                .accessibilityLabel(TodoshiL10n.plural("widget.openTasksCount", count: openTaskCount))
         }
-        .padding(.vertical, NexusSpacing.xxs)
+        .padding(.vertical, TodoshiSpacing.xxs)
         .frame(minHeight: 44)
         .accessibilityElement(children: .combine)
         .accessibilityLabel(accessibilityLabel)
@@ -39,7 +39,7 @@ struct ProjectRowView: View {
         if !project.projectDescription.isEmpty {
             parts.append(project.projectDescription)
         }
-        parts.append(NexusL10n.plural("widget.openTasksCount", count: openTaskCount))
+        parts.append(TodoshiL10n.plural("widget.openTasksCount", count: openTaskCount))
         return parts.joined(separator: ", ")
     }
 }

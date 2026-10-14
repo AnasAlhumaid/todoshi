@@ -1,6 +1,6 @@
 import SwiftUI
 
-enum NexusColor {
+enum TodoshiColor {
     /// Parses `#RRGGBB` (and optional `#AARRGGBB` ignored → RGB only).
     static func from(hex: String) -> Color {
         var cleaned = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()

@@ -1,33 +1,33 @@
 import WidgetKit
 import SwiftUI
-import NexusCore
+import TodoshiCore
 
 struct TodayTasksProvider: TimelineProvider {
-    func placeholder(in context: Context) -> NexusWidgetEntry {
-        NexusWidgetEntry(date: .now, snapshot: WidgetPreviewData.today(), state: .content)
+    func placeholder(in context: Context) -> TodoshiWidgetEntry {
+        TodoshiWidgetEntry(date: .now, snapshot: WidgetPreviewData.today(), state: .content)
     }
 
-    func getSnapshot(in context: Context, completion: @escaping (NexusWidgetEntry) -> Void) {
+    func getSnapshot(in context: Context, completion: @escaping (TodoshiWidgetEntry) -> Void) {
         Task { @MainActor in
             completion(Self.loadEntry(now: .now, limit: 3))
         }
     }
 
-    func getTimeline(in context: Context, completion: @escaping (Timeline<NexusWidgetEntry>) -> Void) {
+    func getTimeline(in context: Context, completion: @escaping (Timeline<TodoshiWidgetEntry>) -> Void) {
         Task { @MainActor in
             let entry = Self.loadEntry(now: .now, limit: 6)
-            completion(NexusWidgetTimeline.timeline(for: entry))
+            completion(TodoshiWidgetTimeline.timeline(for: entry))
         }
     }
 
     @MainActor
-    private static func loadEntry(now: Date, limit: Int) -> NexusWidgetEntry {
+    private static func loadEntry(now: Date, limit: Int) -> TodoshiWidgetEntry {
         do {
             let snapshot = try WidgetSnapshotLoader.loadTodaySnapshot(referenceDate: now, limit: limit)
             let state: WidgetLoadState = snapshot.totalCount == 0 ? .empty : .content
-            return NexusWidgetEntry(date: now, snapshot: snapshot, state: state)
+            return TodoshiWidgetEntry(date: now, snapshot: snapshot, state: state)
         } catch {
-            return NexusWidgetEntry(
+            return TodoshiWidgetEntry(
                 date: now,
                 snapshot: .unavailable(title: WidgetStrings.today, generatedAt: now),
                 state: .storeUnavailable
@@ -38,13 +38,13 @@ struct TodayTasksProvider: TimelineProvider {
 
 struct TodayTasksWidgetView: View {
     @Environment(\.widgetFamily) private var family
-    var entry: NexusWidgetEntry
+    var entry: TodoshiWidgetEntry
 
     var body: some View {
         Group {
             switch entry.state {
             case .storeUnavailable:
-                WidgetEmptyView(title: WidgetStrings.today, message: WidgetStrings.openNexus)
+                WidgetEmptyView(title: WidgetStrings.today, message: WidgetStrings.openTodoshi)
             case .empty:
                 WidgetEmptyView(title: WidgetStrings.today, message: WidgetStrings.nothingToday)
                     .overlay(alignment: .bottomTrailing) {
@@ -54,10 +54,13 @@ struct TodayTasksWidgetView: View {
                 content
             }
         }
+        .fontDesign(.rounded)
+        // Follow the in-app language direction, which can differ from the system's.
+        .environment(\.layoutDirection, AppLanguageStore.isRightToLeft ? .rightToLeft : .leftToRight)
         .containerBackground(for: .widget) {
-            Color(.systemBackground)
+            WidgetTheme.canvas
         }
-        .widgetURL(NexusDeepLink.dashboard.url)
+        .widgetURL(TodoshiDeepLink.dashboard.url)
     }
 
     @ViewBuilder
@@ -68,14 +71,14 @@ struct TodayTasksWidgetView: View {
         WidgetListChrome(
             title: WidgetStrings.today,
             count: entry.snapshot.totalCount,
-            headerLink: NexusDeepLink.dashboard.url
+            headerLink: TodoshiDeepLink.dashboard.url
         ) {
             if family == .systemSmall {
                 if let first = shown.first {
                     WidgetTaskRowView(task: first, showProject: false)
                 }
             } else {
-                VStack(alignment: .leading, spacing: 6) {
+                VStack(alignment: .leading, spacing: 8) {
                     ForEach(shown) { task in
                         WidgetTaskRowView(task: task)
                     }
@@ -87,19 +90,19 @@ struct TodayTasksWidgetView: View {
                 }
             }
         }
-        .accessibilityLabel(NexusL10n.format("widget.a11yToday", entry.snapshot.totalCount))
+        .accessibilityLabel(TodoshiL10n.format("widget.a11yToday", entry.snapshot.totalCount))
     }
 }
 
 struct TodayTasksWidget: Widget {
-    let kind = NexusWidgetKind.today
+    let kind = TodoshiWidgetKind.today
 
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: TodayTasksProvider()) { entry in
             TodayTasksWidgetView(entry: entry)
         }
-        .configurationDisplayName(NexusL10n.tr("widget.today"))
-        .description(NexusL10n.tr("widget.todayDesc"))
+        .configurationDisplayName(TodoshiL10n.tr("widget.today"))
+        .description(TodoshiL10n.tr("widget.todayDesc"))
         .supportedFamilies([.systemSmall, .systemMedium, .systemLarge])
     }
 }

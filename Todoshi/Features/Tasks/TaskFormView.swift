@@ -1,9 +1,10 @@
 import SwiftUI
 import SwiftData
-import NexusCore
+import TodoshiCore
 
 struct TaskFormView: View {
     @Environment(\.dismiss) private var dismiss
+    @Environment(AuthSessionController.self) private var authSession
     @State private var viewModel: TaskFormViewModel
     @State private var showLabelPicker = false
 
@@ -12,7 +13,8 @@ struct TaskFormView: View {
         projectID: UUID,
         taskID: UUID? = nil,
         initialStatus: TaskStatus = .todo,
-        parentTaskID: UUID? = nil
+        parentTaskID: UUID? = nil,
+        initialColumnID: UUID? = nil
     ) {
         _viewModel = State(
             initialValue: TaskFormViewModel(
@@ -20,7 +22,8 @@ struct TaskFormView: View {
                 projectID: projectID,
                 taskID: taskID,
                 initialStatus: initialStatus,
-                parentTaskID: parentTaskID
+                parentTaskID: parentTaskID,
+                initialColumnID: initialColumnID
             )
         )
     }
@@ -54,13 +57,13 @@ struct TaskFormView: View {
             }
 
             Section {
-                TextField(NexusL10n.tr("task.titlePlaceholder"), text: $viewModel.draft.title)
+                TextField(TodoshiL10n.tr("task.titlePlaceholder"), text: $viewModel.draft.title)
             }
 
-            Section(NexusL10n.tr("form.planning")) {
-                Picker(NexusL10n.tr("common.status"), selection: $viewModel.draft.status) {
-                    ForEach(TaskStatus.allCases, id: \.self) { status in
-                        Text(status.displayName).tag(status)
+            Section(TodoshiL10n.tr("form.planning")) {
+                Picker(TodoshiL10n.tr("common.status"), selection: $viewModel.draft.status) {
+                    ForEach(viewModel.allowedStatuses, id: \.self) { status in
+                        Text(ProjectStatusPolicy.displayName(status, for: viewModel.projectType)).tag(status)
                     }
                 }
                 .onChange(of: viewModel.draft.status) { _, newStatus in
@@ -68,15 +71,17 @@ struct TaskFormView: View {
                         viewModel.setReminderEnabled(false)
                     }
                 }
-                Picker(NexusL10n.tr("common.priority"), selection: $viewModel.draft.priority) {
-                    ForEach(TaskPriority.allCases, id: \.self) { priority in
-                        Text(priority.displayName).tag(priority)
+                if !viewModel.isChecklistProject {
+                    Picker(TodoshiL10n.tr("common.priority"), selection: $viewModel.draft.priority) {
+                        ForEach(TaskPriority.allCases, id: \.self) { priority in
+                            Text(priority.displayName).tag(priority)
+                        }
                     }
                 }
-                Toggle(NexusL10n.tr("common.dueDate"), isOn: $viewModel.draft.hasDueDate)
+                Toggle(TodoshiL10n.tr("common.dueDate"), isOn: $viewModel.draft.hasDueDate)
                 if viewModel.draft.hasDueDate {
                     DatePicker(
-                        NexusL10n.tr("common.dueDate"),
+                        TodoshiL10n.tr("common.dueDate"),
                         selection: Binding(
                             get: { viewModel.draft.dueDate ?? .now },
                             set: { viewModel.draft.dueDate = $0 }
@@ -88,18 +93,18 @@ struct TaskFormView: View {
 
             Section {
                 Toggle(
-                    NexusL10n.tr("common.reminder"),
+                    TodoshiL10n.tr("common.reminder"),
                     isOn: Binding(
                         get: { viewModel.draft.hasReminder },
                         set: { viewModel.setReminderEnabled($0) }
                     )
                 )
-                .accessibilityLabel(NexusL10n.tr("reminder.a11y"))
+                .accessibilityLabel(TodoshiL10n.tr("reminder.a11y"))
                 .disabled(viewModel.draft.status == .done)
 
                 if viewModel.draft.hasReminder {
                     DatePicker(
-                        NexusL10n.tr("reminder.remindMe"),
+                        TodoshiL10n.tr("reminder.remindMe"),
                         selection: Binding(
                             get: {
                                 viewModel.draft.reminderDate
@@ -111,9 +116,9 @@ struct TaskFormView: View {
                         ),
                         displayedComponents: [.date, .hourAndMinute]
                     )
-                    .accessibilityLabel(NexusL10n.tr("reminder.a11yDate"))
+                    .accessibilityLabel(TodoshiL10n.tr("reminder.a11yDate"))
 
-                    Button(NexusL10n.tr("reminder.clear"), role: .destructive) {
+                    Button(TodoshiL10n.tr("reminder.clear"), role: .destructive) {
                         viewModel.setReminderEnabled(false)
                     }
 
@@ -133,7 +138,7 @@ struct TaskFormView: View {
                         .foregroundStyle(.red)
                 }
             } header: {
-                Text(NexusL10n.tr("common.reminder"))
+                Text(TodoshiL10n.tr("common.reminder"))
             }
 
             if viewModel.showsRecurrenceControls {
@@ -200,27 +205,31 @@ struct TaskFormView: View {
                 Text(LabelStrings.formHint)
             }
 
-            TaskFormChecklistSection(
-                items: $viewModel.draft.checklistItems,
-                focusedID: Binding(
-                    get: { viewModel.focusedChecklistDraftID },
-                    set: { viewModel.focusedChecklistDraftID = $0 }
-                ),
-                onAdd: { viewModel.addChecklistDraft() },
-                onDelete: { viewModel.deleteChecklistDraft(id: $0) },
-                onMove: { viewModel.moveChecklistDrafts(from: $0, to: $1) }
-            )
-            .environment(\.editMode, .constant(.active))
+            if ProjectTypeCapabilities.supportsNestedChecklist(viewModel.projectType) {
+                TaskFormChecklistSection(
+                    items: $viewModel.draft.checklistItems,
+                    focusedID: Binding(
+                        get: { viewModel.focusedChecklistDraftID },
+                        set: { viewModel.focusedChecklistDraftID = $0 }
+                    ),
+                    onAdd: { viewModel.addChecklistDraft() },
+                    onDelete: { viewModel.deleteChecklistDraft(id: $0) },
+                    onMove: { viewModel.moveChecklistDrafts(from: $0, to: $1) }
+                )
+                .environment(\.editMode, .constant(.active))
+            }
 
-            TaskFormResourcesSection(viewModel: viewModel)
+            if ProjectTypeCapabilities.supportsResources(viewModel.projectType) {
+                TaskFormResourcesSection(viewModel: viewModel)
+            }
 
-            Section(NexusL10n.tr("common.description")) {
-                TextField(NexusL10n.tr("task.descriptionPlaceholder"), text: $viewModel.draft.taskDescription, axis: .vertical)
+            Section(TodoshiL10n.tr("common.description")) {
+                TextField(TodoshiL10n.tr("task.descriptionPlaceholder"), text: $viewModel.draft.taskDescription, axis: .vertical)
                     .lineLimit(2...5)
             }
 
-            Section(NexusL10n.tr("common.notes")) {
-                TextField(NexusL10n.tr("common.notes"), text: $viewModel.draft.notes, axis: .vertical)
+            Section(TodoshiL10n.tr("common.notes")) {
+                TextField(TodoshiL10n.tr("common.notes"), text: $viewModel.draft.notes, axis: .vertical)
                     .lineLimit(3...8)
             }
 
@@ -244,7 +253,9 @@ struct TaskFormView: View {
         .task {
             await viewModel.refreshAuthorization()
             viewModel.reloadLabels()
+            refreshCompletionActor()
         }
+        .onAppear { refreshCompletionActor() }
         .sheet(isPresented: $showLabelPicker, onDismiss: {
             viewModel.reloadLabels()
         }) {
@@ -252,7 +263,7 @@ struct TaskFormView: View {
                 LabelPickerView(selectedIDs: $viewModel.draft.labelIDs)
                     .toolbar {
                         ToolbarItem(placement: .confirmationAction) {
-                            Button(NexusL10n.tr("common.done")) { showLabelPicker = false }
+                            Button(TodoshiL10n.tr("common.done")) { showLabelPicker = false }
                                 .fontWeight(.semibold)
                         }
                     }
@@ -268,13 +279,13 @@ struct TaskFormView: View {
         }
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {
-                Button(NexusL10n.tr("common.cancel")) {
+                Button(TodoshiL10n.tr("common.cancel")) {
                     viewModel.discardStagedResourceFiles()
                     dismiss()
                 }
             }
             ToolbarItem(placement: .confirmationAction) {
-                Button(NexusL10n.tr("common.save")) {
+                Button(TodoshiL10n.tr("common.save")) {
                     if viewModel.save() {
                         dismiss()
                     }
@@ -283,6 +294,13 @@ struct TaskFormView: View {
                 .fontWeight(.semibold)
             }
         }
+    }
+
+    private func refreshCompletionActor() {
+        viewModel.resolveCompletionActor(
+            uid: authSession.currentSession?.user.id,
+            displayName: authSession.currentSession?.user.displayName
+        )
     }
 }
 

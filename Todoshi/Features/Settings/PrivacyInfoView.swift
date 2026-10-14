@@ -1,41 +1,41 @@
 import SwiftUI
-import NexusCore
+import TodoshiCore
 
 struct PrivacyInfoView: View {
     var body: some View {
         List {
             Section {
-                Text(NexusL10n.tr("privacy.intro"))
+                Text(TodoshiL10n.tr("privacy.intro"))
                     .font(.body)
             }
 
-            Section(NexusL10n.tr("privacy.sectionDevice")) {
-                privacyRow(NexusL10n.tr("privacy.device.tasks"))
-                privacyRow(NexusL10n.tr("privacy.device.files"))
-                privacyRow(NexusL10n.tr("privacy.device.notifications"))
-                privacyRow(NexusL10n.tr("privacy.device.widgets"))
+            Section(TodoshiL10n.tr("privacy.sectionDevice")) {
+                privacyRow(TodoshiL10n.tr("privacy.device.tasks"))
+                privacyRow(TodoshiL10n.tr("privacy.device.files"))
+                privacyRow(TodoshiL10n.tr("privacy.device.notifications"))
+                privacyRow(TodoshiL10n.tr("privacy.device.widgets"))
             }
 
-            Section(NexusL10n.tr("privacy.sectionNot")) {
-                privacyRow(NexusL10n.tr("privacy.not.account"))
-                privacyRow(NexusL10n.tr("privacy.not.cloud"))
-                privacyRow(NexusL10n.tr("privacy.not.analytics"))
-                privacyRow(NexusL10n.tr("privacy.not.ads"))
+            Section(TodoshiL10n.tr("privacy.sectionNot")) {
+                privacyRow(TodoshiL10n.tr("privacy.not.account"))
+                privacyRow(TodoshiL10n.tr("privacy.not.cloud"))
+                privacyRow(TodoshiL10n.tr("privacy.not.analytics"))
+                privacyRow(TodoshiL10n.tr("privacy.not.ads"))
             }
 
-            Section(NexusL10n.tr("privacy.sectionExternal")) {
-                Text(NexusL10n.tr("privacy.external"))
+            Section(TodoshiL10n.tr("privacy.sectionExternal")) {
+                Text(TodoshiL10n.tr("privacy.external"))
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             }
 
-            Section(NexusL10n.tr("privacy.sectionDelete")) {
-                Text(NexusL10n.tr("privacy.deletion"))
+            Section(TodoshiL10n.tr("privacy.sectionDelete")) {
+                Text(TodoshiL10n.tr("privacy.deletion"))
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             }
         }
-        .navigationTitle(NexusL10n.tr("privacy.title"))
+        .navigationTitle(TodoshiL10n.tr("privacy.title"))
         .navigationBarTitleDisplayMode(.inline)
     }
 

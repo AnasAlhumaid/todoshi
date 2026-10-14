@@ -1,6 +1,6 @@
 import SwiftUI
 import SwiftData
-import NexusCore
+import TodoshiCore
 import UIKit
 
 struct KanbanBoardView: View {
@@ -19,12 +19,12 @@ struct KanbanBoardView: View {
         GeometryReader { proxy in
             let height = max(proxy.size.height, 320)
             ScrollView(.horizontal, showsIndicators: false) {
-                HStack(alignment: .top, spacing: NexusSpacing.sm) {
+                HStack(alignment: .top, spacing: TodoshiSpacing.sm) {
                     ForEach(TaskStatus.allCases, id: \.self) { status in
                         KanbanColumnView(
                             status: status,
                             tasks: tasks(for: status),
-                            columnHeight: height - NexusSpacing.md,
+                            columnHeight: height - TodoshiSpacing.md,
                             dragState: dragState,
                             onAddTask: { onAddTask(status) },
                             onEditTask: onEditTask,
@@ -36,8 +36,8 @@ struct KanbanBoardView: View {
                         )
                     }
                 }
-                .padding(.horizontal, NexusSpacing.md)
-                .padding(.vertical, NexusSpacing.xs)
+                .padding(.horizontal, TodoshiSpacing.md)
+                .padding(.vertical, TodoshiSpacing.xs)
             }
         }
     }

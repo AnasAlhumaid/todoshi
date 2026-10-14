@@ -1,6 +1,6 @@
 import SwiftUI
 import SwiftData
-import NexusCore
+import TodoshiCore
 
 struct LabelFormView: View {
     @Environment(\.dismiss) private var dismiss
@@ -20,7 +20,7 @@ struct LabelFormView: View {
                     .accessibilityLabel(LabelStrings.name)
             }
 
-            Section(NexusL10n.tr("common.color")) {
+            Section(TodoshiL10n.tr("common.color")) {
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 44), spacing: 12)], spacing: 12) {
                     ForEach(LabelColorCatalog.swatches) { swatch in
                         Button {
@@ -29,7 +29,7 @@ struct LabelFormView: View {
                         } label: {
                             ZStack {
                                 Circle()
-                                    .fill(NexusColor.from(hex: swatch.hex))
+                                    .fill(TodoshiColor.from(hex: swatch.hex))
                                     .frame(width: 36, height: 36)
                                 if viewModel.draft.colorHex.uppercased() == swatch.hex.uppercased() {
                                     Image(systemName: "checkmark")
@@ -62,10 +62,10 @@ struct LabelFormView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {
-                Button(NexusL10n.tr("common.cancel")) { dismiss() }
+                Button(TodoshiL10n.tr("common.cancel")) { dismiss() }
             }
             ToolbarItem(placement: .confirmationAction) {
-                Button(NexusL10n.tr("common.save")) {
+                Button(TodoshiL10n.tr("common.save")) {
                     if viewModel.save() { dismiss() }
                 }
                 .disabled(!viewModel.canSave)

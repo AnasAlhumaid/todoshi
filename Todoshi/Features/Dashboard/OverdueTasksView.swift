@@ -1,6 +1,6 @@
 import SwiftUI
 import SwiftData
-import NexusCore
+import TodoshiCore
 import UIKit
 
 struct OverdueTasksView: View {
@@ -22,9 +22,9 @@ struct OverdueTasksView: View {
         Group {
             if overdueTasks.isEmpty {
                 ContentUnavailableView(
-                    NexusL10n.tr("dashboard.noOverdue"),
+                    TodoshiL10n.tr("dashboard.noOverdue"),
                     systemImage: "checkmark.seal",
-                    description: Text(NexusL10n.tr("overdue.empty"))
+                    description: Text(TodoshiL10n.tr("overdue.empty"))
                 )
             } else {
                 List {
@@ -33,7 +33,7 @@ struct OverdueTasksView: View {
                             DashboardTaskRowView(task: task, overdueEmphasis: true)
                         }
                         .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                            Button(NexusL10n.tr("common.done")) {
+                            Button(TodoshiL10n.tr("common.done")) {
                                 complete(taskID: task.id)
                             }
                             .tint(.green)
@@ -43,15 +43,15 @@ struct OverdueTasksView: View {
                 .listStyle(.insetGrouped)
             }
         }
-        .navigationTitle(NexusL10n.tr("overdue.title"))
+        .navigationTitle(TodoshiL10n.tr("overdue.title"))
         .alert(
-            NexusL10n.tr("common.somethingWrong"),
+            TodoshiL10n.tr("common.somethingWrong"),
             isPresented: Binding(
                 get: { actionError != nil },
                 set: { if !$0 { actionError = nil } }
             )
         ) {
-            Button(NexusL10n.tr("common.ok"), role: .cancel) {}
+            Button(TodoshiL10n.tr("common.ok"), role: .cancel) {}
         } message: {
             Text(actionError ?? "")
         }

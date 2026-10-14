@@ -1,6 +1,6 @@
 import Foundation
 import SwiftData
-import NexusCore
+import TodoshiCore
 
 /// App-layer bridge that repairs pending system notifications against SwiftData.
 @MainActor

@@ -1,6 +1,6 @@
 import SwiftUI
 import SwiftData
-import NexusCore
+import TodoshiCore
 
 /// Multi-select label picker bound to draft label IDs (no immediate persistence).
 struct LabelPickerView: View {
@@ -26,7 +26,7 @@ struct LabelPickerView: View {
                 ContentUnavailableView {
                     Label(LabelStrings.noLabels, systemImage: "tag")
                 } description: {
-                    Text(NexusL10n.tr("label.pickerEmpty"))
+                    Text(TodoshiL10n.tr("label.pickerEmpty"))
                 } actions: {
                     Button(LabelStrings.createNewLabel) {
                         isCreating = true
@@ -39,11 +39,11 @@ struct LabelPickerView: View {
                     Button {
                         toggle(label.id)
                     } label: {
-                        HStack(spacing: NexusSpacing.sm) {
+                        HStack(spacing: TodoshiSpacing.sm) {
                             Image(systemName: selectedIDs.contains(label.id) ? "checkmark.circle.fill" : "circle")
                                 .foregroundStyle(selectedIDs.contains(label.id) ? Color.accentColor : Color.secondary)
                             Circle()
-                                .fill(NexusColor.from(hex: label.colorHex))
+                                .fill(TodoshiColor.from(hex: label.colorHex))
                                 .frame(width: 12, height: 12)
                             Text(label.name)
                                 .foregroundStyle(.primary)
@@ -51,12 +51,12 @@ struct LabelPickerView: View {
                         }
                     }
                     .accessibilityLabel(label.name)
-                    .accessibilityValue(selectedIDs.contains(label.id) ? NexusL10n.tr("common.selected") : NexusL10n.tr("common.notSelected"))
+                    .accessibilityValue(selectedIDs.contains(label.id) ? TodoshiL10n.tr("common.selected") : TodoshiL10n.tr("common.notSelected"))
                     .accessibilityAddTraits(selectedIDs.contains(label.id) ? .isSelected : [])
                 }
             }
         }
-        .searchable(text: $query, prompt: Text(NexusL10n.tr("label.searchPrompt")))
+        .searchable(text: $query, prompt: Text(TodoshiL10n.tr("label.searchPrompt")))
         .navigationTitle(LabelStrings.selectLabels)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {

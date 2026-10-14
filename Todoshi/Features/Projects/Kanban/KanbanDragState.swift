@@ -1,6 +1,6 @@
 import Foundation
 import Observation
-import NexusCore
+import TodoshiCore
 
 /// Transient drag visuals only — not a source of truth.
 @Observable

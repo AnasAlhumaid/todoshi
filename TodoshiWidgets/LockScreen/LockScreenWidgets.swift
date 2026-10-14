@@ -1,6 +1,6 @@
 import WidgetKit
 import SwiftUI
-import NexusCore
+import TodoshiCore
 
 struct QuickAddAccessoryProvider: TimelineProvider {
     func placeholder(in context: Context) -> SimpleEntry {
@@ -23,8 +23,8 @@ struct QuickAddAccessoryProvider: TimelineProvider {
     }
 }
 
-struct NexusQuickAddAccessoryWidget: Widget {
-    let kind = NexusWidgetKind.quickAddAccessory
+struct TodoshiQuickAddAccessoryWidget: Widget {
+    let kind = TodoshiWidgetKind.quickAddAccessory
 
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: QuickAddAccessoryProvider()) { _ in
@@ -33,14 +33,14 @@ struct NexusQuickAddAccessoryWidget: Widget {
                 Image(systemName: "plus")
                     .font(.title2.weight(.semibold))
             }
-            .widgetURL(NexusDeepLink.quickAdd.url)
+            .widgetURL(TodoshiDeepLink.quickAdd().url)
             .containerBackground(for: .widget) {
                 AccessoryWidgetBackground()
             }
             .accessibilityLabel(WidgetStrings.quickAdd)
         }
-        .configurationDisplayName(NexusL10n.tr("widget.quickAddAccessory"))
-        .description(NexusL10n.tr("widget.quickAdd"))
+        .configurationDisplayName(TodoshiL10n.tr("widget.quickAddAccessory"))
+        .description(TodoshiL10n.tr("widget.quickAdd"))
         .supportedFamilies([.accessoryCircular, .accessoryInline])
     }
 }
@@ -83,8 +83,8 @@ struct TodayCountAccessoryProvider: TimelineProvider {
     }
 }
 
-struct NexusTodayCountAccessoryWidget: Widget {
-    let kind = NexusWidgetKind.todayCountAccessory
+struct TodoshiTodayCountAccessoryWidget: Widget {
+    let kind = TodoshiWidgetKind.todayCountAccessory
 
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: TodayCountAccessoryProvider()) { entry in
@@ -100,16 +100,16 @@ struct NexusTodayCountAccessoryWidget: Widget {
                         Text(WidgetStrings.today)
                             .font(.caption2)
                     }
-                    .accessibilityLabel(NexusL10n.format("widget.a11yToday", entry.count))
+                    .accessibilityLabel(TodoshiL10n.format("widget.a11yToday", entry.count))
                 }
             }
-            .widgetURL(NexusDeepLink.dashboard.url)
+            .widgetURL(TodoshiDeepLink.dashboard.url)
             .containerBackground(for: .widget) {
                 AccessoryWidgetBackground()
             }
         }
-        .configurationDisplayName(NexusL10n.tr("widget.todayCount"))
-        .description(NexusL10n.tr("widget.todayDesc"))
+        .configurationDisplayName(TodoshiL10n.tr("widget.todayCount"))
+        .description(TodoshiL10n.tr("widget.todayDesc"))
         .supportedFamilies([.accessoryCircular, .accessoryRectangular, .accessoryInline])
     }
 }

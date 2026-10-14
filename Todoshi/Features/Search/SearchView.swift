@@ -1,6 +1,6 @@
 import SwiftUI
 import SwiftData
-import NexusCore
+import TodoshiCore
 
 struct SearchView: View {
     @Environment(\.modelContext) private var modelContext
@@ -40,7 +40,7 @@ struct SearchView: View {
             }
         }
         .listStyle(.insetGrouped)
-        .navigationTitle(NexusL10n.tr("search.navTitle"))
+        .navigationTitle(TodoshiL10n.tr("search.navTitle"))
         .searchable(
             text: $viewModel.query,
             placement: .navigationBarDrawer(displayMode: .always),
@@ -55,8 +55,8 @@ struct SearchView: View {
                     Image(systemName: includeArchived ? "archivebox.fill" : "archivebox")
                 }
                 .toggleStyle(.button)
-                .accessibilityLabel(includeArchived ? NexusL10n.tr("search.includingArchivedA11y") : NexusL10n.tr("search.includeArchivedA11y"))
-                .accessibilityHint(NexusL10n.tr("search.includeArchivedHint"))
+                .accessibilityLabel(includeArchived ? TodoshiL10n.tr("search.includingArchivedA11y") : TodoshiL10n.tr("search.includeArchivedA11y"))
+                .accessibilityHint(TodoshiL10n.tr("search.includeArchivedHint"))
             }
         }
         .onChange(of: viewModel.query) { _, _ in
@@ -117,7 +117,7 @@ struct SearchView: View {
                                 .contentShape(Rectangle())
                         }
                         .buttonStyle(.plain)
-                        .accessibilityLabel(NexusL10n.format("search.forTermA11y", term))
+                        .accessibilityLabel(TodoshiL10n.format("search.forTermA11y", term))
 
                         Button(role: .destructive) {
                             viewModel.deleteRecent(term)
@@ -126,7 +126,7 @@ struct SearchView: View {
                                 .foregroundStyle(.secondary)
                         }
                         .buttonStyle(.plain)
-                        .accessibilityLabel(NexusL10n.format("search.removeRecentA11y", term))
+                        .accessibilityLabel(TodoshiL10n.format("search.removeRecentA11y", term))
                     }
                 }
 
@@ -231,30 +231,30 @@ struct SearchView: View {
 
 /// Centralized user-facing search copy.
 enum SearchStrings {
-    static var prompt: String { NexusL10n.tr("search.prompt") }
-    static var recentTitle: String { NexusL10n.tr("search.recent") }
-    static var quickLinksTitle: String { NexusL10n.tr("search.activeProjects") }
-    static var clearRecents: String { NexusL10n.tr("search.clearRecent") }
-    static var clearSearch: String { NexusL10n.tr("search.clear") }
-    static var noProjectsTitle: String { NexusL10n.tr("search.noProjectsTitle") }
-    static var noProjectsMessage: String { NexusL10n.tr("search.noProjectsMessage") }
-    static var createProject: String { NexusL10n.tr("search.createProject") }
-    static var noResultsTitle: String { NexusL10n.tr("search.noResults") }
+    static var prompt: String { TodoshiL10n.tr("search.prompt") }
+    static var recentTitle: String { TodoshiL10n.tr("search.recent") }
+    static var quickLinksTitle: String { TodoshiL10n.tr("search.activeProjects") }
+    static var clearRecents: String { TodoshiL10n.tr("search.clearRecent") }
+    static var clearSearch: String { TodoshiL10n.tr("search.clear") }
+    static var noProjectsTitle: String { TodoshiL10n.tr("search.noProjectsTitle") }
+    static var noProjectsMessage: String { TodoshiL10n.tr("search.noProjectsMessage") }
+    static var createProject: String { TodoshiL10n.tr("search.createProject") }
+    static var noResultsTitle: String { TodoshiL10n.tr("search.noResults") }
 
     static func noResultsMessage(for query: String) -> String {
-        NexusL10n.format("search.noResultsMessage", query)
+        TodoshiL10n.format("search.noResultsMessage", query)
     }
 
     static func projectsHeader(count: Int) -> String {
-        NexusL10n.format("search.projectsHeader", count)
+        TodoshiL10n.format("search.projectsHeader", count)
     }
 
     static func tasksHeader(count: Int) -> String {
-        NexusL10n.format("search.tasksHeader", count)
+        TodoshiL10n.format("search.tasksHeader", count)
     }
 
     static func showingPreview(visible: Int, total: Int) -> String {
-        NexusL10n.format("search.showingPreview", visible, total)
+        TodoshiL10n.format("search.showingPreview", visible, total)
     }
 }
 

@@ -1,6 +1,6 @@
 import SwiftUI
 import SwiftData
-import NexusCore
+import TodoshiCore
 
 struct ArchivedProjectsView: View {
     @Environment(\.modelContext) private var modelContext
@@ -25,9 +25,9 @@ struct ArchivedProjectsView: View {
         Group {
             if projects.isEmpty {
                 ContentUnavailableView(
-                    NexusL10n.tr("project.noArchivedTitle"),
+                    TodoshiL10n.tr("project.noArchivedTitle"),
                     systemImage: "archivebox",
-                    description: Text(NexusL10n.tr("project.archivedEmpty"))
+                    description: Text(TodoshiL10n.tr("project.archivedEmpty"))
                 )
             } else {
                 List {
@@ -42,17 +42,17 @@ struct ArchivedProjectsView: View {
                 .listStyle(.insetGrouped)
             }
         }
-        .navigationTitle(NexusL10n.tr("project.archivedTitle"))
+        .navigationTitle(TodoshiL10n.tr("project.archivedTitle"))
         .confirmationDialog(
             deleteDialogTitle,
             isPresented: deleteDialogPresented,
             titleVisibility: .visible,
             presenting: projectPendingDelete
         ) { project in
-            Button(NexusL10n.tr("common.delete"), role: .destructive) {
+            Button(TodoshiL10n.tr("common.delete"), role: .destructive) {
                 delete(project)
             }
-            Button(NexusL10n.tr("common.cancel"), role: .cancel) {}
+            Button(TodoshiL10n.tr("common.cancel"), role: .cancel) {}
         } message: { project in
             Text(Self.deleteMessage(for: project))
         }
@@ -104,13 +104,13 @@ private struct ArchivedProjectRow: View {
             )
         }
         .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-            Button(NexusL10n.tr("project.restoreShort"), action: onRestore)
+            Button(TodoshiL10n.tr("project.restoreShort"), action: onRestore)
                 .tint(.blue)
-            Button(NexusL10n.tr("common.delete"), role: .destructive, action: onDelete)
+            Button(TodoshiL10n.tr("common.delete"), role: .destructive, action: onDelete)
         }
         .contextMenu {
-            Button(NexusL10n.tr("project.restoreShort"), action: onRestore)
-            Button(NexusL10n.tr("common.delete"), role: .destructive, action: onDelete)
+            Button(TodoshiL10n.tr("project.restoreShort"), action: onRestore)
+            Button(TodoshiL10n.tr("common.delete"), role: .destructive, action: onDelete)
         }
     }
 }

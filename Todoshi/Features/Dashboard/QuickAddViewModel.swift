@@ -1,7 +1,7 @@
 import Foundation
 import Observation
 import SwiftData
-import NexusCore
+import TodoshiCore
 
 @Observable
 @MainActor
@@ -17,9 +17,21 @@ final class QuickAddViewModel {
     var canSave: Bool { draft.isValid }
     var hasActiveProjects: Bool { !activeProjects.isEmpty }
 
+    var selectedProjectType: ProjectType {
+        guard let id = draft.projectID,
+              let project = activeProjects.first(where: { $0.id == id })
+        else { return .tasks }
+        return project.projectType
+    }
+
+    var allowedStatuses: [TaskStatus] {
+        ProjectTypeCapabilities.allowedStatuses(for: selectedProjectType)
+    }
+
     init(
         context: ModelContext,
         lastProjectIDStored: String? = nil,
+        preselectedProjectID: UUID? = nil,
         showsOptionalFields: Bool = false,
         persistLastProjectID: @escaping (String?) -> Void = { _ in },
         readLastProjectID: @escaping () -> String? = { nil }
@@ -28,15 +40,20 @@ final class QuickAddViewModel {
         self.lastProjectStorage = persistLastProjectID
         self.readLastProjectStorage = readLastProjectID
         self.draft = QuickAddDraft(showsOptionalFields: showsOptionalFields)
-        reloadProjects(preferredStoredID: lastProjectIDStored ?? readLastProjectID())
+        reloadProjects(
+            preferredStoredID: lastProjectIDStored ?? readLastProjectID(),
+            preselectedProjectID: preselectedProjectID
+        )
     }
 
-    func reloadProjects(preferredStoredID: String? = nil) {
+    func reloadProjects(preferredStoredID: String? = nil, preselectedProjectID: UUID? = nil) {
         do {
             activeProjects = try ProjectRepository(context: context).fetch(status: .active)
             let ids = Set(activeProjects.map(\.id))
             let stored = preferredStoredID ?? readLastProjectStorage()
-            if let resolved = QuickAddPreferences.resolvedProjectID(stored: stored, activeProjectIDs: ids) {
+            if let preselected = preselectedProjectID, ids.contains(preselected) {
+                draft.projectID = preselected
+            } else if let resolved = QuickAddPreferences.resolvedProjectID(stored: stored, activeProjectIDs: ids) {
                 draft.projectID = resolved
             } else {
                 if let current = draft.projectID, ids.contains(current) {
@@ -49,6 +66,7 @@ final class QuickAddViewModel {
                     lastProjectStorage(nil)
                 }
             }
+            clampStatusToSelectedProject()
         } catch {
             errorMessage = UserFacingError.message(for: error)
             activeProjects = []
@@ -60,14 +78,14 @@ final class QuickAddViewModel {
     func save() -> UUID? {
         errorMessage = nil
         guard let projectID = draft.projectID else {
-            errorMessage = NexusL10n.tr("task.chooseProject")
+            errorMessage = TodoshiL10n.tr("task.chooseProject")
             return nil
         }
         do {
             let projects = ProjectRepository(context: context)
             guard let project = try projects.fetchProject(id: projectID),
                   project.status == .active else {
-                errorMessage = NexusL10n.tr("task.chooseActiveProject")
+                errorMessage = TodoshiL10n.tr("task.chooseActiveProject")
                 draft.projectID = nil
                 reloadProjects()
                 return nil
@@ -84,11 +102,26 @@ final class QuickAddViewModel {
             lastProjectStorage(QuickAddPreferences.storageValue(for: project.id))
             return task.id
         } catch RepositoryValidationError.emptyName {
-            errorMessage = NexusL10n.tr("task.titleRequired")
+            errorMessage = TodoshiL10n.tr("task.titleRequired")
             return nil
         } catch {
             errorMessage = UserFacingError.message(for: error)
             return nil
+        }
+    }
+
+    func selectProject(_ projectID: UUID?) {
+        draft.projectID = projectID
+        clampStatusToSelectedProject()
+    }
+
+    private func clampStatusToSelectedProject() {
+        let allowed = allowedStatuses
+        if !allowed.contains(draft.status) {
+            draft.status = ProjectTypeCapabilities.defaultStatus(for: selectedProjectType)
+        }
+        if selectedProjectType == .checklist {
+            draft.priority = .none
         }
     }
 }

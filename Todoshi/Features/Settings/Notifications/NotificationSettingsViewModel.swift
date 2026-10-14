@@ -1,7 +1,7 @@
 import Foundation
 import Observation
 import SwiftData
-import NexusCore
+import TodoshiCore
 
 @Observable
 @MainActor
@@ -22,12 +22,12 @@ final class NotificationSettingsViewModel {
 
     var authorizationLabel: String {
         switch authorizationState {
-        case .notDetermined: return NexusL10n.tr("notification.auth.notRequested")
-        case .denied: return NexusL10n.tr("notification.auth.denied")
-        case .authorized: return NexusL10n.tr("notification.auth.authorized")
-        case .provisional: return NexusL10n.tr("notification.auth.provisional")
-        case .ephemeral: return NexusL10n.tr("notification.auth.ephemeral")
-        case .unknown: return NexusL10n.tr("notification.auth.unknown")
+        case .notDetermined: return TodoshiL10n.tr("notification.auth.notRequested")
+        case .denied: return TodoshiL10n.tr("notification.auth.denied")
+        case .authorized: return TodoshiL10n.tr("notification.auth.authorized")
+        case .provisional: return TodoshiL10n.tr("notification.auth.provisional")
+        case .ephemeral: return TodoshiL10n.tr("notification.auth.ephemeral")
+        case .unknown: return TodoshiL10n.tr("notification.auth.unknown")
         }
     }
 
@@ -82,6 +82,6 @@ final class NotificationSettingsViewModel {
         statusMessage = nil
         await reconciler.reconcile(context: context, preferences: preferences)
         pendingReminderCount = await scheduler.pendingTaskReminderIDs().count
-        statusMessage = NexusL10n.tr("notification.refreshed")
+        statusMessage = TodoshiL10n.tr("notification.refreshed")
     }
 }

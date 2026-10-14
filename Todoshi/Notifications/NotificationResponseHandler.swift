@@ -1,6 +1,6 @@
 import Foundation
 import UserNotifications
-import NexusCore
+import TodoshiCore
 
 /// Routes notification taps through existing deep-link parsing.
 final class NotificationResponseHandler: NSObject, UNUserNotificationCenterDelegate {
@@ -20,12 +20,14 @@ final class NotificationResponseHandler: NSObject, UNUserNotificationCenterDeleg
         withCompletionHandler completionHandler: @escaping () -> Void
     ) {
         let info = response.notification.request.content.userInfo
-        if let raw = info[NotificationUserInfoKey.deepLink] as? String,
+        let deepLinkRaw = info[NotificationUserInfoKey.deepLink] as? String
+            ?? info[NotificationUserInfoKey.legacyDeepLink] as? String
+        if let raw = deepLinkRaw,
            let url = URL(string: raw) {
             onOpenURL?(url)
         } else if let idRaw = info[NotificationUserInfoKey.taskID] as? String,
                   let id = UUID(uuidString: idRaw) {
-            onOpenURL?(NexusDeepLink.task(id).url)
+            onOpenURL?(TodoshiDeepLink.task(id).url)
         }
         completionHandler()
     }

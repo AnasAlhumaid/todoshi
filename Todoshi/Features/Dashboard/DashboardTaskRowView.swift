@@ -1,12 +1,12 @@
 import SwiftUI
-import NexusCore
+import TodoshiCore
 
 struct DashboardTaskRowView: View {
     let task: DashboardTaskInput
     var overdueEmphasis: Bool = false
 
     var body: some View {
-        NexusTaskRow(
+        TodoshiTaskRow(
             title: task.title,
             isCompleted: task.status == .done,
             context: task.projectName,
