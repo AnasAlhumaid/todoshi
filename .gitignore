@@ -15,8 +15,8 @@ build/
 # Swift Package Manager
 .build/
 .swiftpm/
-Packages/NexusCore/.build/
-Packages/NexusCore/build/
+Packages/TodoshiCore/.build/
+Packages/TodoshiCore/build/
 
 # Local tool caches
 .tool-home/
@@ -29,3 +29,17 @@ Packages/NexusCore/build/
 *.p8
 *.pem
 *.key
+
+# Firebase (environment-specific client config and admin credentials)
+GoogleService-Info.plist
+**/GoogleService-Info.plist
+firebase/service-account*.json
+firebase/*-adminsdk-*.json
+**/firebase-adminsdk*.json
+
+# Firebase tooling
+firebase/node_modules/
+*.log
+
+# Store screenshots (large binaries)
+marketing-images/
