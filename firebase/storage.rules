@@ -1,0 +1,40 @@
+rules_version = '2';
+
+// DEFERRED — Firebase Storage is not enabled for the current Todoshi MVP.
+//
+// Firebase Storage is not enabled for the current MVP.
+// Profile avatars use generated initials.
+// Storage will be enabled later for shared attachments/profile images.
+//
+// Keep these rules secure for the future Storage phase. Do not deploy until
+// Storage is intentionally enabled (typically requires Blaze billing).
+// Deploy later with: firebase deploy --only storage --project "$PROJECT_ID"
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isSelf(userId) {
+      return signedIn() && request.auth.uid == userId;
+    }
+
+    function isAvatarImage() {
+      return request.resource != null
+        && request.resource.size < 1 * 1024 * 1024
+        && request.resource.contentType.matches('image/jpeg');
+    }
+
+    match /profile-images/{userId}/avatar.jpg {
+      allow read: if isSelf(userId);
+      allow create, update: if isSelf(userId) && isAvatarImage();
+      allow delete: if isSelf(userId);
+    }
+
+    // Deny everything else by default.
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -1,0 +1,1113 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isSelf(userId) {
+      return signedIn() && request.auth.uid == userId;
+    }
+
+    function membershipDocumentPath(projectId) {
+      return /databases/$(database)/documents/projects/$(projectId)/members/$(request.auth.uid);
+    }
+
+    function projectDocumentPath(projectId) {
+      return /databases/$(database)/documents/projects/$(projectId);
+    }
+
+    function inviteDocumentPath(inviteId) {
+      return /databases/$(database)/documents/projectInvites/$(inviteId);
+    }
+
+    // Authorization authority: membership document existence only.
+    // memberIds[] is never used to grant access.
+    function isProjectMember(projectId) {
+      return signedIn()
+        && projectId is string
+        && exists(membershipDocumentPath(projectId));
+    }
+
+    function projectDocument(projectId) {
+      return get(projectDocumentPath(projectId));
+    }
+
+    function isProjectOwner(projectId) {
+      return signedIn()
+        && projectId is string
+        && exists(projectDocumentPath(projectId))
+        && projectDocument(projectId).data.ownerId == request.auth.uid;
+    }
+
+    function preservesOwnerAndMemberIds() {
+      return request.resource.data.ownerId == resource.data.ownerId
+        && request.resource.data.memberIds == resource.data.memberIds;
+    }
+
+    function isExactOwnerMemberIds() {
+      return request.resource.data.memberIds is list
+        && request.resource.data.memberIds.size() == 1
+        && request.resource.data.memberIds[0] == request.auth.uid;
+    }
+
+    function isValidSharedProjectTitle(title) {
+      return title is string
+        && title.size() > 0
+        && title.size() <= 100;
+    }
+
+    function isValidSharedProjectDescription(description) {
+      return description is string
+        && description.size() <= 2000;
+    }
+
+    function isValidSharedProjectColor(color) {
+      return color is string
+        && color.size() > 0
+        && color.size() <= 16;
+    }
+
+    function isValidInviteTokenShape(token) {
+      return token is string
+        && token.size() >= 40
+        && token.size() <= 64;
+    }
+
+    function isUnusedInviteData(data) {
+      return data.acceptedBy == null
+        && data.revokedAt == null
+        && data.expiresAt is timestamp
+        && data.expiresAt > request.time
+        && data.role == 'member';
+    }
+
+    // Phase 2: brand-new project + creator as owner.
+    function isOwnerProjectBootstrap(projectId) {
+      return signedIn()
+        && request.resource.data.keys().hasOnly([
+          'id',
+          'ownerId',
+          'title',
+          'description',
+          'color',
+          'memberIds',
+          'projectType',
+          'createdAt',
+          'updatedAt',
+          'deletedAt'
+        ])
+        && request.resource.data.id == projectId
+        && request.resource.data.ownerId == request.auth.uid
+        && isExactOwnerMemberIds()
+        && isValidSharedProjectTitle(request.resource.data.title)
+        && isValidSharedProjectDescription(request.resource.data.description)
+        && isValidSharedProjectColor(request.resource.data.color)
+        && isValidProjectTypeValue(request.resource.data.projectType)
+        && request.resource.data.deletedAt == null
+        && existsAfter(membershipDocumentPath(projectId))
+        && getAfter(membershipDocumentPath(projectId)).data.userId == request.auth.uid
+        && getAfter(membershipDocumentPath(projectId)).data.role == 'owner';
+    }
+
+    function isValidProjectTypeValue(value) {
+      return value in ['tasks', 'checklist'];
+    }
+
+    // Legacy missing field → tasks. Explicit values must be valid.
+    function projectTypeOf(projectId) {
+      let data = get(projectDocumentPath(projectId)).data;
+      return (!('projectType' in data) || data.projectType == null)
+        ? 'tasks'
+        : data.projectType;
+    }
+
+    function preservesProjectType() {
+      let before = ('projectType' in resource.data) ? resource.data.projectType : null;
+      let after = ('projectType' in request.resource.data) ? request.resource.data.projectType : null;
+      return before == after;
+    }
+
+    function isInitialOwnerMembershipBootstrap(projectId, memberId) {
+      return signedIn()
+        && memberId == request.auth.uid
+        && request.resource.data.keys().hasOnly(['userId', 'role', 'displayName', 'joinedAt', 'accessLevel'])
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.role == 'owner'
+        && request.resource.data.accessLevel == 'full'
+        && (request.resource.data.displayName == null
+            || (request.resource.data.displayName is string
+                && request.resource.data.displayName.size() <= 80))
+        && !exists(projectDocumentPath(projectId))
+        && existsAfter(projectDocumentPath(projectId))
+        && getAfter(projectDocumentPath(projectId)).data.ownerId == request.auth.uid
+        && getAfter(projectDocumentPath(projectId)).data.memberIds is list
+        && getAfter(projectDocumentPath(projectId)).data.memberIds.size() == 1
+        && getAfter(projectDocumentPath(projectId)).data.memberIds[0] == request.auth.uid;
+    }
+
+    // Phase 3: invite acceptance membership — only via unused invite in the same batch.
+    // Phase 6: new members default to accessLevel = restricted.
+    function isValidInviteAcceptanceMembership(projectId, memberId) {
+      return signedIn()
+        && memberId == request.auth.uid
+        && request.resource.data.keys().hasOnly([
+          'userId',
+          'role',
+          'displayName',
+          'joinedAt',
+          'acceptedInviteId',
+          'accessLevel'
+        ])
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.role == 'member'
+        && request.resource.data.accessLevel == 'restricted'
+        && isValidInviteTokenShape(request.resource.data.acceptedInviteId)
+        && (request.resource.data.displayName == null
+            || (request.resource.data.displayName is string
+                && request.resource.data.displayName.size() <= 80))
+        && exists(inviteDocumentPath(request.resource.data.acceptedInviteId))
+        && get(inviteDocumentPath(request.resource.data.acceptedInviteId)).data.projectId == projectId
+        && isUnusedInviteData(get(inviteDocumentPath(request.resource.data.acceptedInviteId)).data)
+        && existsAfter(inviteDocumentPath(request.resource.data.acceptedInviteId))
+        && getAfter(inviteDocumentPath(request.resource.data.acceptedInviteId)).data.acceptedBy
+          == request.auth.uid
+        && getAfter(inviteDocumentPath(request.resource.data.acceptedInviteId)).data.acceptedAt
+          == request.time
+        && existsAfter(projectDocumentPath(projectId))
+        && request.auth.uid in getAfter(projectDocumentPath(projectId)).data.memberIds;
+    }
+
+    function isOwnerMemberAccessLevelUpdate(projectId, memberId) {
+      return isMembershipOwner(projectId)
+        && memberId != request.auth.uid
+        && resource.data.role == 'member'
+        && request.resource.data.userId == resource.data.userId
+        && request.resource.data.role == resource.data.role
+        && request.resource.data.joinedAt == resource.data.joinedAt
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['accessLevel'])
+        && request.resource.data.accessLevel in ['full', 'restricted'];
+    }
+
+    function memberAccessLevel(data) {
+      return ('accessLevel' in data) ? data.accessLevel : 'restricted';
+    }
+
+    function preservesMemberAcceptedInviteId() {
+      return !('acceptedInviteId' in resource.data)
+        || request.resource.data.acceptedInviteId == resource.data.acceptedInviteId;
+    }
+
+    // Member may update only their own membership displayName snapshot.
+    function isSelfMembershipDisplayNameUpdate(projectId, memberId) {
+      return signedIn()
+        && memberId == request.auth.uid
+        && isProjectMember(projectId)
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['displayName'])
+        && request.resource.data.displayName != resource.data.displayName
+        && request.resource.data.userId == resource.data.userId
+        && request.resource.data.role == resource.data.role
+        && request.resource.data.joinedAt == resource.data.joinedAt
+        && memberAccessLevel(request.resource.data) == memberAccessLevel(resource.data)
+        && preservesMemberAcceptedInviteId()
+        && request.resource.data.displayName is string
+        && request.resource.data.displayName.size() > 0
+        && request.resource.data.displayName.size() <= 80;
+    }
+
+    // Phase 9A — member lifecycle (owner removal + self-leave).
+    function isExactlyOneMemberIdsRemoval(before, after) {
+      return before is list
+        && after is list
+        && after.size() == before.size() - 1
+        && after.toSet().difference(before.toSet()).size() == 0;
+    }
+
+    function isOwnerMemberRemovalMemberIdsUpdate(projectId) {
+      return isMembershipOwner(projectId)
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['memberIds'])
+        && request.resource.data.ownerId == resource.data.ownerId
+        && preservesProjectType()
+        && isExactlyOneMemberIdsRemoval(resource.data.memberIds, request.resource.data.memberIds)
+        && resource.data.ownerId in request.resource.data.memberIds;
+    }
+
+    function isSelfLeaveMemberIdsUpdate(projectId) {
+      let before = resource.data.memberIds;
+      let after = request.resource.data.memberIds;
+      return signedIn()
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['memberIds'])
+        && request.resource.data.ownerId == resource.data.ownerId
+        && preservesProjectType()
+        && request.auth.uid in before
+        && !(request.auth.uid in after)
+        && isExactlyOneMemberIdsRemoval(before, after)
+        && resource.data.ownerId in after
+        && exists(membershipDocumentPath(projectId))
+        && get(membershipDocumentPath(projectId)).data.role != 'owner'
+        && !existsAfter(membershipDocumentPath(projectId))
+        && after.toSet() == before.toSet().difference([request.auth.uid].toSet());
+    }
+
+    function isOwnerRemovingMember(projectId, memberId) {
+      let before = get(projectDocumentPath(projectId)).data.memberIds;
+      let after = getAfter(projectDocumentPath(projectId)).data.memberIds;
+      return isMembershipOwner(projectId)
+        && memberId != request.auth.uid
+        && resource.data.role != 'owner'
+        && resource.data.userId == memberId
+        && memberId in before
+        && !(memberId in after)
+        && isExactlyOneMemberIdsRemoval(before, after)
+        && get(projectDocumentPath(projectId)).data.ownerId in after
+        && getAfter(projectDocumentPath(projectId)).data.ownerId
+          == get(projectDocumentPath(projectId)).data.ownerId
+        && getAfter(projectDocumentPath(projectId)).data.diff(get(projectDocumentPath(projectId)).data)
+             .affectedKeys().hasOnly(['memberIds'])
+        && after.toSet() == before.toSet().difference([memberId].toSet());
+    }
+
+    function isSelfLeaveMembershipDelete(projectId, memberId) {
+      let before = get(projectDocumentPath(projectId)).data.memberIds;
+      let after = getAfter(projectDocumentPath(projectId)).data.memberIds;
+      return memberId == request.auth.uid
+        && resource.data.role != 'owner'
+        && resource.data.userId == request.auth.uid
+        && request.auth.uid in before
+        && !(request.auth.uid in after)
+        && isExactlyOneMemberIdsRemoval(before, after)
+        && get(projectDocumentPath(projectId)).data.ownerId in after
+        && getAfter(projectDocumentPath(projectId)).data.ownerId
+          == get(projectDocumentPath(projectId)).data.ownerId
+        && getAfter(projectDocumentPath(projectId)).data.diff(get(projectDocumentPath(projectId)).data)
+             .affectedKeys().hasOnly(['memberIds'])
+        && after.toSet() == before.toSet().difference([request.auth.uid].toSet());
+    }
+
+    // Invitee may add only their own UID to memberIds during invite acceptance.
+    function isInviteAcceptanceMemberIdsUpdate(projectId) {
+      return signedIn()
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['memberIds'])
+        && request.resource.data.ownerId == resource.data.ownerId
+        && request.resource.data.memberIds is list
+        && resource.data.memberIds is list
+        && request.resource.data.memberIds.toSet()
+          == resource.data.memberIds.toSet().union([request.auth.uid].toSet())
+        && !(request.auth.uid in resource.data.memberIds)
+        && existsAfter(membershipDocumentPath(projectId))
+        && getAfter(membershipDocumentPath(projectId)).data.userId == request.auth.uid
+        && getAfter(membershipDocumentPath(projectId)).data.role == 'member'
+        && isValidInviteTokenShape(getAfter(membershipDocumentPath(projectId)).data.acceptedInviteId)
+        && exists(inviteDocumentPath(getAfter(membershipDocumentPath(projectId)).data.acceptedInviteId))
+        && get(inviteDocumentPath(getAfter(membershipDocumentPath(projectId)).data.acceptedInviteId)).data.projectId
+          == projectId
+        && isUnusedInviteData(
+          get(inviteDocumentPath(getAfter(membershipDocumentPath(projectId)).data.acceptedInviteId)).data
+        )
+        && getAfter(
+          inviteDocumentPath(getAfter(membershipDocumentPath(projectId)).data.acceptedInviteId)
+        ).data.acceptedBy == request.auth.uid
+        && getAfter(
+          inviteDocumentPath(getAfter(membershipDocumentPath(projectId)).data.acceptedInviteId)
+        ).data.acceptedAt == request.time;
+    }
+
+    function isOwnerInviteCreate(inviteId) {
+      return signedIn()
+        && isValidInviteTokenShape(inviteId)
+        && request.resource.data.keys().hasOnly([
+          'projectId',
+          'createdBy',
+          'role',
+          'projectTitle',
+          'inviterDisplayName',
+          'createdAt',
+          'expiresAt',
+          'acceptedAt',
+          'acceptedBy',
+          'revokedAt'
+        ])
+        && request.resource.data.createdBy == request.auth.uid
+        && request.resource.data.projectId is string
+        && isProjectOwner(request.resource.data.projectId)
+        && request.resource.data.role == 'member'
+        && isValidSharedProjectTitle(request.resource.data.projectTitle)
+        && (request.resource.data.inviterDisplayName == null
+            || (request.resource.data.inviterDisplayName is string
+                && request.resource.data.inviterDisplayName.size() <= 80))
+        && request.resource.data.acceptedAt == null
+        && request.resource.data.acceptedBy == null
+        && request.resource.data.revokedAt == null
+        && request.resource.data.expiresAt is timestamp
+        && request.resource.data.expiresAt > request.time
+        && request.resource.data.expiresAt <= request.time + duration.value(7, 'd');
+    }
+
+    function isInviteAcceptanceUpdate(inviteId) {
+      return signedIn()
+        && isUnusedInviteData(resource.data)
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['acceptedBy', 'acceptedAt'])
+        && request.resource.data.acceptedBy == request.auth.uid
+        && request.resource.data.acceptedAt == request.time
+        && request.resource.data.projectId == resource.data.projectId
+        && request.resource.data.createdBy == resource.data.createdBy
+        && request.resource.data.role == resource.data.role
+        && existsAfter(membershipDocumentPath(resource.data.projectId))
+        && getAfter(membershipDocumentPath(resource.data.projectId)).data.acceptedInviteId == inviteId
+        && getAfter(membershipDocumentPath(resource.data.projectId)).data.userId == request.auth.uid
+        && getAfter(membershipDocumentPath(resource.data.projectId)).data.role == 'member'
+        && request.auth.uid in getAfter(projectDocumentPath(resource.data.projectId)).data.memberIds;
+    }
+
+    function isInviteRevocationUpdate() {
+      return signedIn()
+        && isProjectOwner(resource.data.projectId)
+        && resource.data.acceptedBy == null
+        && resource.data.revokedAt == null
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['revokedAt'])
+        && request.resource.data.revokedAt == request.time;
+    }
+
+    function isValidTaskStatus(value) {
+      return value in ['backlog', 'todo', 'inProgress', 'review', 'done'];
+    }
+
+    function isValidChecklistTaskStatus(value) {
+      return value in ['todo', 'inProgress', 'done'];
+    }
+
+    function isValidTaskStatusForProject(projectId, value) {
+      return projectTypeOf(projectId) == 'checklist'
+        ? isValidChecklistTaskStatus(value)
+        : isValidTaskStatus(value);
+    }
+
+    function isValidTaskPriority(value) {
+      return value in ['none', 'low', 'medium', 'high', 'urgent'];
+    }
+
+    function isValidCloudResourceKind(value) {
+      return value in ['link', 'text', 'codeSnippet', 'terminalCommand'];
+    }
+
+    function isValidParentTaskId(projectId, taskId) {
+      return !('parentTaskId' in request.resource.data)
+        || request.resource.data.parentTaskId == null
+        || (
+          request.resource.data.parentTaskId is string
+          && request.resource.data.parentTaskId.size() > 0
+          && request.resource.data.parentTaskId != taskId
+          && exists(
+            /databases/$(database)/documents/projects/$(projectId)/tasks/$(request.resource.data.parentTaskId)
+          )
+        );
+    }
+
+    function isValidSharedTaskWrite(projectId, taskId) {
+      return request.resource.data.keys().hasAll([
+          'id',
+          'projectId',
+          'title',
+          'description',
+          'notes',
+          'statusRaw',
+          'priorityRaw',
+          'position'
+        ])
+        && request.resource.data.id == taskId
+        && request.resource.data.projectId == projectId
+        && request.resource.data.title is string
+        && request.resource.data.title.size() > 0
+        && request.resource.data.title.size() <= 200
+        && request.resource.data.description is string
+        && request.resource.data.description.size() <= 5000
+        && request.resource.data.notes is string
+        && request.resource.data.notes.size() <= 10000
+        && isValidTaskStatusForProject(projectId, request.resource.data.statusRaw)
+        && isValidTaskPriority(request.resource.data.priorityRaw)
+        && request.resource.data.position is number
+        && isValidParentTaskId(projectId, taskId)
+        && isValidEditorUIDsField()
+        && isValidAssigneeUIDField(projectId)
+        && isValidChecklistTaskShape(projectId);
+    }
+
+    // Checklist projects: root-only tasks. Tasks projects keep existing parent rules.
+    function isValidChecklistTaskShape(projectId) {
+      return projectTypeOf(projectId) != 'checklist'
+        || requestParentTaskId() == null;
+    }
+
+    function isValidEditorUIDsField() {
+      return !('editorUIDs' in request.resource.data)
+        || (
+          request.resource.data.editorUIDs is list
+          && request.resource.data.editorUIDs.size() <= 100
+        );
+    }
+
+    // Phase 7 assignment (responsibility). Never an authorization source.
+    function requestAssigneeUID() {
+      return ('assigneeUID' in request.resource.data)
+        ? request.resource.data.assigneeUID
+        : null;
+    }
+
+    function resourceAssigneeUID() {
+      return ('assigneeUID' in resource.data)
+        ? resource.data.assigneeUID
+        : null;
+    }
+
+    function requestParentTaskId() {
+      return ('parentTaskId' in request.resource.data)
+        ? request.resource.data.parentTaskId
+        : null;
+    }
+
+    // Root tasks may carry a same-project member UID; subtasks must stay null.
+    function isValidAssigneeUIDField(projectId) {
+      let uid = requestAssigneeUID();
+      return uid == null
+        || (
+          requestParentTaskId() == null
+          && uid is string
+          && uid.size() > 0
+          && uid.size() <= 128
+          && exists(/databases/$(database)/documents/projects/$(projectId)/members/$(uid))
+        );
+    }
+
+    function preservesAssigneeUID() {
+      return requestAssigneeUID() == resourceAssigneeUID();
+    }
+
+    function preservesAssigneeUIDOnCreate() {
+      return requestAssigneeUID() == null;
+    }
+
+    // Phase 8.1 — completion attribution (who marked Done). Independent of assigneeUID.
+    function requestCompletedByUID() {
+      return ('completedByUID' in request.resource.data)
+        ? request.resource.data.completedByUID
+        : null;
+    }
+
+    function resourceCompletedByUID() {
+      return ('completedByUID' in resource.data)
+        ? resource.data.completedByUID
+        : null;
+    }
+
+    function requestCompletedByDisplayName() {
+      return ('completedByDisplayName' in request.resource.data)
+        ? request.resource.data.completedByDisplayName
+        : null;
+    }
+
+    function resourceCompletedByDisplayName() {
+      return ('completedByDisplayName' in resource.data)
+        ? resource.data.completedByDisplayName
+        : null;
+    }
+
+    function isBoundedDisplayName(value) {
+      return value == null
+        || (
+          value is string
+          && value.size() <= 200
+        );
+    }
+
+    function requestStatusRaw() {
+      return request.resource.data.statusRaw;
+    }
+
+    function resourceStatusRaw() {
+      return resource.data.statusRaw;
+    }
+
+    function isEnteringDone() {
+      return requestStatusRaw() == 'done'
+        && resourceStatusRaw() != 'done';
+    }
+
+    function isLeavingDone() {
+      return requestStatusRaw() != 'done'
+        && resourceStatusRaw() == 'done';
+    }
+
+    function isStayingDone() {
+      return requestStatusRaw() == 'done'
+        && resourceStatusRaw() == 'done';
+    }
+
+    function preservesCompletionAttribution() {
+      return requestCompletedByUID() == resourceCompletedByUID()
+        && requestCompletedByDisplayName() == resourceCompletedByDisplayName()
+        && request.resource.data.completedAt == resource.data.completedAt;
+    }
+
+    function clearsCompletionAttribution() {
+      return requestCompletedByUID() == null
+        && requestCompletedByDisplayName() == null;
+    }
+
+    function hasSelfCompletionAttribution() {
+      return requestCompletedByUID() == request.auth.uid
+        && isBoundedDisplayName(requestCompletedByDisplayName());
+    }
+
+    // Checklist: strict attribution on Done. Tasks: optional fields, but never spoof another UID.
+    function isValidCompletionAttributionOnCreate(projectId) {
+      return requestStatusRaw() != 'done'
+        ? clearsCompletionAttribution()
+        : (
+          hasSelfCompletionAttribution()
+          || (
+            projectTypeOf(projectId) != 'checklist'
+            && clearsCompletionAttribution()
+          )
+        );
+    }
+
+    function isValidCompletionAttributionOnUpdate(projectId) {
+      return isLeavingDone()
+        ? clearsCompletionAttribution()
+        : (
+          isEnteringDone()
+            ? (
+              hasSelfCompletionAttribution()
+              || (
+                projectTypeOf(projectId) != 'checklist'
+                && clearsCompletionAttribution()
+              )
+            )
+            : (
+              isStayingDone()
+                ? (
+                  preservesCompletionAttribution()
+                  || (
+                    // Tasks projects may still omit attribution on legacy Done docs.
+                    projectTypeOf(projectId) != 'checklist'
+                    && requestCompletedByUID() == null
+                    && requestCompletedByDisplayName() == null
+                    && resourceCompletedByUID() == null
+                    && resourceCompletedByDisplayName() == null
+                  )
+                )
+                : clearsCompletionAttribution()
+            )
+        );
+    }
+
+    function taskDocumentPath(projectId, taskId) {
+      return /databases/$(database)/documents/projects/$(projectId)/tasks/$(taskId);
+    }
+
+    function effectiveMemberAccessLevel(projectId) {
+      let data = get(membershipDocumentPath(projectId)).data;
+      return (!('accessLevel' in data) || data.accessLevel == null)
+        ? 'full'
+        : data.accessLevel;
+    }
+
+    function editorUIDsOf(projectId, taskId) {
+      let data = get(taskDocumentPath(projectId, taskId)).data;
+      return ('editorUIDs' in data && data.editorUIDs is list) ? data.editorUIDs : [];
+    }
+
+    function rootTaskIdForACL(projectId, taskId) {
+      let data = get(taskDocumentPath(projectId, taskId)).data;
+      return (!('parentTaskId' in data) || data.parentTaskId == null)
+        ? taskId
+        : data.parentTaskId;
+    }
+
+    function uidIsRestrictedEditorOfRoot(projectId, taskId) {
+      return exists(taskDocumentPath(projectId, taskId))
+        && request.auth.uid in editorUIDsOf(projectId, rootTaskIdForACL(projectId, taskId));
+    }
+
+    // Phase 6 task content edit authorization (not comments).
+    function canEditTask(projectId, taskId) {
+      return isProjectMember(projectId)
+        && (
+          isMembershipOwner(projectId)
+          || membershipRole(projectId) == 'owner'
+          || effectiveMemberAccessLevel(projectId) == 'full'
+          || (
+            effectiveMemberAccessLevel(projectId) == 'restricted'
+            && uidIsRestrictedEditorOfRoot(projectId, taskId)
+          )
+        );
+    }
+
+    function canCreateSharedTask(projectId, taskId) {
+      return taskId is string
+        && isProjectMember(projectId)
+        && (
+          isMembershipOwner(projectId)
+          || membershipRole(projectId) == 'owner'
+          || effectiveMemberAccessLevel(projectId) == 'full'
+          || (
+            effectiveMemberAccessLevel(projectId) == 'restricted'
+            && request.resource.data.parentTaskId is string
+            && canEditTask(projectId, request.resource.data.parentTaskId)
+          )
+        );
+    }
+
+    function preservesEditorUIDs() {
+      let before = ('editorUIDs' in resource.data && resource.data.editorUIDs is list)
+        ? resource.data.editorUIDs
+        : [];
+      let after = ('editorUIDs' in request.resource.data && request.resource.data.editorUIDs is list)
+        ? request.resource.data.editorUIDs
+        : [];
+      return before == after;
+    }
+
+    function preservesEditorUIDsOnCreate() {
+      return !('editorUIDs' in request.resource.data)
+        || (
+          request.resource.data.editorUIDs is list
+          && request.resource.data.editorUIDs.size() == 0
+        );
+    }
+
+    function resourceEditorUIDs() {
+      return ('editorUIDs' in resource.data && resource.data.editorUIDs is list)
+        ? resource.data.editorUIDs
+        : [];
+    }
+
+    function requestEditorUIDs() {
+      return ('editorUIDs' in request.resource.data && request.resource.data.editorUIDs is list)
+        ? request.resource.data.editorUIDs
+        : [];
+    }
+
+    // Phase 9A — member self-leave may clear own assignee and remove self from editorUIDs only.
+    function isSelfLeaveTaskCleanup(projectId, taskId) {
+      let uid = request.auth.uid;
+      return isProjectMember(projectId)
+        && membershipRole(projectId) == 'member'
+        && request.resource.data.diff(resource.data).affectedKeys()
+             .hasOnly(['assigneeUID', 'editorUIDs', 'updatedAt'])
+        && (
+          (resourceAssigneeUID() == uid && requestAssigneeUID() == null)
+          || resourceAssigneeUID() == requestAssigneeUID()
+        )
+        && (
+          !(uid in resourceEditorUIDs())
+          || requestEditorUIDs().toSet() == resourceEditorUIDs().toSet().difference([uid].toSet())
+        )
+        && preservesCompletionAttribution();
+    }
+
+    function canMutateProjectLabels(projectId) {
+      return isProjectMember(projectId)
+        && (
+          isMembershipOwner(projectId)
+          || membershipRole(projectId) == 'owner'
+          || effectiveMemberAccessLevel(projectId) == 'full'
+        );
+    }
+
+    function isValidChecklistWrite(itemId) {
+      return request.resource.data.id == itemId
+        && request.resource.data.title is string
+        && request.resource.data.title.size() > 0
+        && request.resource.data.title.size() <= 200
+        && request.resource.data.isCompleted is bool
+        && request.resource.data.position is number;
+    }
+
+    function isValidCloudResourceWrite(resourceId) {
+      return request.resource.data.id == resourceId
+        && isValidCloudResourceKind(request.resource.data.kindRaw)
+        && request.resource.data.title is string
+        && request.resource.data.title.size() <= 200
+        && request.resource.data.position is number
+        && !('relativeFilePath' in request.resource.data)
+        && !('mimeType' in request.resource.data)
+        && !('fileSize' in request.resource.data);
+    }
+
+    function isValidLabelWrite(labelId) {
+      return request.resource.data.id == labelId
+        && request.resource.data.name is string
+        && request.resource.data.name.size() > 0
+        && request.resource.data.name.size() <= 40
+        && isValidSharedProjectColor(request.resource.data.color);
+    }
+
+    function membershipRole(projectId) {
+      return get(membershipDocumentPath(projectId)).data.role;
+    }
+
+    // Membership document role (not project.ownerId) for comment moderation.
+    function isMembershipOwner(projectId) {
+      return isProjectMember(projectId) && membershipRole(projectId) == 'owner';
+    }
+
+    function isLiveTask(projectId, taskId) {
+      return exists(taskDocumentPath(projectId, taskId))
+        && get(taskDocumentPath(projectId, taskId)).data.deletedAt == null;
+    }
+
+    function isValidCommentBody(body) {
+      return body is string
+        && body.size() > 0
+        && body.size() <= 4000;
+    }
+
+    function isValidActivityKind(value) {
+      return value in [
+        'taskUpdated',
+        'statusChanged',
+        'commentAdded',
+        'commentEdited',
+        'subtaskChanged',
+        'checklistChanged',
+        'assignmentChanged',
+        'resourceChanged'
+      ];
+    }
+
+    function isValidActivityAttribution() {
+      return !('lastActivityByUID' in request.resource.data)
+        || request.resource.data.lastActivityByUID == request.auth.uid;
+    }
+
+    function isValidActivityKindField() {
+      return !('lastActivityKind' in request.resource.data)
+        || isValidActivityKind(request.resource.data.lastActivityKind);
+    }
+
+    function isCommentActivityKind(kind) {
+      return kind in ['commentAdded', 'commentEdited'];
+    }
+
+    // Narrow path: comment writers and subtask editors may bump root activity without task-edit ACL.
+    function isCollaborationActivitySummaryUpdate(projectId, taskId) {
+      let kind = request.resource.data.lastActivityKind;
+      return isProjectMember(projectId)
+        && isLiveTask(projectId, taskId)
+        && requestParentTaskId() == null
+        && request.resource.data.diff(resource.data).affectedKeys()
+             .hasOnly(['lastActivityAt', 'lastActivityByUID', 'lastActivityKind', 'updatedAt'])
+        && request.resource.data.lastActivityByUID == request.auth.uid
+        && isValidActivityKind(kind)
+        && (
+          canEditTask(projectId, taskId)
+          || isCommentActivityKind(kind)
+          || (
+            kind == 'subtaskChanged'
+            && request.auth.uid in editorUIDsOf(projectId, taskId)
+          )
+        );
+    }
+
+    function isValidCommentCreate(projectId, taskId, commentId) {
+      return isProjectMember(projectId)
+        && isLiveTask(projectId, taskId)
+        && request.resource.data.keys().hasOnly([
+          'id',
+          'authorUID',
+          'authorDisplayName',
+          'body',
+          'createdAt',
+          'updatedAt',
+          'deletedAt'
+        ])
+        && request.resource.data.id == commentId
+        && request.resource.data.authorUID == request.auth.uid
+        && request.resource.data.authorDisplayName is string
+        && request.resource.data.authorDisplayName.size() > 0
+        && request.resource.data.authorDisplayName.size() <= 200
+        && isValidCommentBody(request.resource.data.body)
+        && request.resource.data.deletedAt == null;
+    }
+
+    function commentAuthorFieldsUnchanged() {
+      return request.resource.data.id == resource.data.id
+        && request.resource.data.authorUID == resource.data.authorUID
+        && request.resource.data.authorDisplayName == resource.data.authorDisplayName
+        && request.resource.data.createdAt == resource.data.createdAt;
+    }
+
+    function isOwnCommentBodyEdit() {
+      return resource.data.authorUID == request.auth.uid
+        && commentAuthorFieldsUnchanged()
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['body', 'updatedAt'])
+        && isValidCommentBody(request.resource.data.body)
+        && request.resource.data.deletedAt == null
+        && resource.data.deletedAt == null;
+    }
+
+    function isOwnCommentSoftDelete() {
+      return resource.data.authorUID == request.auth.uid
+        && commentAuthorFieldsUnchanged()
+        && request.resource.data.diff(resource.data).affectedKeys()
+             .hasOnly(['deletedAt', 'updatedAt'])
+        && request.resource.data.deletedAt != null
+        && request.resource.data.body == resource.data.body;
+    }
+
+    function isOwnerCommentSoftDelete(projectId) {
+      return isMembershipOwner(projectId)
+        && commentAuthorFieldsUnchanged()
+        && request.resource.data.diff(resource.data).affectedKeys()
+             .hasOnly(['deletedAt', 'updatedAt'])
+        && request.resource.data.deletedAt != null
+        && request.resource.data.body == resource.data.body;
+    }
+
+    // Account deletion — hard-delete own comments only (no membership required).
+    function isOwnCommentAccountDeletionHardDelete() {
+      return signedIn()
+        && resource.data.authorUID == request.auth.uid;
+    }
+
+    // Account deletion — scrub own completion attribution only.
+    // affectedKeys.hasOnly guarantees title/status/assignee/etc. are unchanged.
+    function isAccountDeletionCompletionScrub() {
+      return signedIn()
+        && request.resource.data.diff(resource.data).affectedKeys()
+             .hasOnly(['completedByUID', 'completedByDisplayName'])
+        && resource.data.completedByUID == request.auth.uid
+        && request.resource.data.completedByUID == null
+        && request.resource.data.completedByDisplayName == null;
+    }
+
+    // Account deletion — scrub own lastActivityByUID only.
+    function isAccountDeletionActivityScrub() {
+      return signedIn()
+        && request.resource.data.diff(resource.data).affectedKeys()
+             .hasOnly(['lastActivityByUID'])
+        && resource.data.lastActivityByUID == request.auth.uid
+        && request.resource.data.lastActivityByUID == null;
+    }
+
+    function isOwnerSubcollectionHardDelete(projectId) {
+      return isProjectOwner(projectId);
+    }
+
+    function isValidTodoshiIdShape(todoshiId) {
+      return todoshiId is string
+        && todoshiId.matches('^TD-[0-9A-HJKMNP-TV-Z]{4}-[0-9A-HJKMNP-TV-Z]{4}-[0-9A-HJKMNP-TV-Z]{5}$');
+    }
+
+    function hasProvisionedTodoshiId(data) {
+      return data != null
+        && ('todoshiId' in data)
+        && data.todoshiId is string
+        && isValidTodoshiIdShape(data.todoshiId);
+    }
+
+    // Legacy profiles may have a missing or null todoshiId before first provisioning.
+    // Once a valid Todoshi ID exists, it is immutable.
+    function preservesTodoshiIdOnProfileUpdate() {
+      return !('todoshiId' in request.resource.data)
+        || (
+          resource == null || !hasProvisionedTodoshiId(resource.data)
+            ? request.resource.data.todoshiId is string
+              && isValidTodoshiIdShape(request.resource.data.todoshiId)
+            : request.resource.data.todoshiId == resource.data.todoshiId
+        );
+    }
+
+    function isValidPublicIdentityCreate(userId) {
+      return request.resource.data.keys().hasOnly(['userId', 'todoshiId', 'createdAt'])
+        && request.resource.data.userId == userId
+        && request.resource.data.userId == request.auth.uid
+        && isValidTodoshiIdShape(request.resource.data.todoshiId);
+    }
+
+    function isValidTodoshiIdClaimCreate(todoshiId) {
+      return isValidTodoshiIdShape(todoshiId)
+        && request.resource.data.keys().hasOnly(['uid', 'createdAt'])
+        && request.resource.data.uid == request.auth.uid;
+    }
+
+    match /todoshiIds/{todoshiId} {
+      allow get: if signedIn();
+      allow list: if false;
+      allow create: if signedIn() && isValidTodoshiIdClaimCreate(todoshiId);
+      allow update: if false;
+      allow delete: if signedIn()
+        && resource.data.uid == request.auth.uid;
+    }
+
+    match /publicIdentities/{userId} {
+      allow get: if signedIn();
+      allow list: if false;
+      allow create: if isSelf(userId) && isValidPublicIdentityCreate(userId);
+      allow update: if false;
+      allow delete: if isSelf(userId);
+    }
+
+    match /users/{userId} {
+      allow read: if isSelf(userId);
+      allow create, update: if isSelf(userId) && preservesTodoshiIdOnProfileUpdate();
+      allow delete: if isSelf(userId);
+    }
+
+    // Collection-group discovery for account deletion self-content cleanup.
+    match /{path=**}/comments/{commentId} {
+      allow list: if signedIn() && resource.data.authorUID == request.auth.uid;
+      allow delete: if isOwnCommentAccountDeletionHardDelete();
+    }
+
+    match /{path=**}/tasks/{taskId} {
+      allow list: if signedIn() && (
+        resource.data.completedByUID == request.auth.uid
+        || resource.data.lastActivityByUID == request.auth.uid
+      );
+    }
+
+    match /projects/{projectId} {
+      // get: membership is authorization authority for project contents.
+      // list: memberIds powers discovery queries (arrayContains); not a content grant.
+      allow get: if isProjectMember(projectId);
+      allow list: if signedIn() && request.auth.uid in resource.data.memberIds;
+      allow create: if isOwnerProjectBootstrap(projectId);
+      allow update: if (isProjectOwner(projectId) && preservesOwnerAndMemberIds() && preservesProjectType())
+        || isInviteAcceptanceMemberIdsUpdate(projectId)
+        || isOwnerMemberRemovalMemberIdsUpdate(projectId)
+        || isSelfLeaveMemberIdsUpdate(projectId);
+      allow delete: if isProjectOwner(projectId);
+
+      match /members/{memberId} {
+        allow read: if isProjectMember(projectId);
+        allow create: if isInitialOwnerMembershipBootstrap(projectId, memberId)
+          || isValidInviteAcceptanceMembership(projectId, memberId);
+        allow update: if isOwnerMemberAccessLevelUpdate(projectId, memberId)
+          || isSelfMembershipDisplayNameUpdate(projectId, memberId);
+        allow delete: if isOwnerRemovingMember(projectId, memberId)
+          || isSelfLeaveMembershipDelete(projectId, memberId)
+          || isOwnerSubcollectionHardDelete(projectId);
+      }
+
+      match /tasks/{taskId} {
+        allow read: if isProjectMember(projectId);
+        allow create: if isValidSharedTaskWrite(projectId, taskId)
+          && canCreateSharedTask(projectId, taskId)
+          && isValidCompletionAttributionOnCreate(projectId)
+          && isValidActivityAttribution()
+          && isValidActivityKindField()
+          && (
+            isMembershipOwner(projectId)
+            || (preservesEditorUIDsOnCreate() && preservesAssigneeUIDOnCreate())
+          );
+        allow update: if (
+            isValidSharedTaskWrite(projectId, taskId)
+            && isValidActivityAttribution()
+            && isValidActivityKindField()
+            && (
+              (isMembershipOwner(projectId) && isValidCompletionAttributionOnUpdate(projectId))
+              || isSelfLeaveTaskCleanup(projectId, taskId)
+              || isCollaborationActivitySummaryUpdate(projectId, taskId)
+              || (
+                canEditTask(projectId, taskId)
+                && preservesEditorUIDs()
+                && preservesAssigneeUID()
+                && isValidCompletionAttributionOnUpdate(projectId)
+              )
+            )
+          )
+          || isAccountDeletionCompletionScrub()
+          || isAccountDeletionActivityScrub();
+        allow delete: if isOwnerSubcollectionHardDelete(projectId);
+
+        match /checklist/{itemId} {
+          allow read: if isProjectMember(projectId);
+          allow create, update: if canEditTask(projectId, taskId)
+            && isValidChecklistWrite(itemId);
+          allow delete: if isOwnerSubcollectionHardDelete(projectId);
+        }
+
+        match /resources/{resourceId} {
+          allow read: if isProjectMember(projectId);
+          allow create, update: if canEditTask(projectId, taskId)
+            && isValidCloudResourceWrite(resourceId);
+          allow delete: if isOwnerSubcollectionHardDelete(projectId);
+        }
+
+        match /comments/{commentId} {
+          allow read: if isProjectMember(projectId);
+          allow create: if isValidCommentCreate(projectId, taskId, commentId);
+          allow update: if isProjectMember(projectId)
+            && (
+              isOwnCommentBodyEdit()
+              || isOwnCommentSoftDelete()
+              || isOwnerCommentSoftDelete(projectId)
+            );
+          allow delete: if isOwnerSubcollectionHardDelete(projectId);
+        }
+      }
+
+      match /labels/{labelId} {
+        allow read: if isProjectMember(projectId);
+        allow create, update: if canMutateProjectLabels(projectId)
+          && isValidLabelWrite(labelId);
+        allow delete: if isOwnerSubcollectionHardDelete(projectId);
+      }
+    }
+
+    // Custom board columns for shared Tasks projects. Kept outside /projects so the
+    // existing project/task documents, their rules, and older app versions are untouched.
+    // Projects without a board document keep the three default columns.
+    match /projectBoards/{projectId} {
+      allow read: if isProjectMember(projectId);
+      allow create, update: if isProjectOwner(projectId) && isValidProjectBoard(projectId);
+      allow delete: if isProjectOwner(projectId);
+
+      // Which column a root task sits in. Document ID is the task ID.
+      match /placements/{taskId} {
+        allow read: if isProjectMember(projectId);
+        allow create, update: if canEditTask(projectId, taskId)
+          && isValidTaskPlacement(projectId, taskId);
+        allow delete: if isProjectOwner(projectId) || canEditTask(projectId, taskId);
+      }
+    }
+
+    function isValidProjectBoard(projectId) {
+      return request.resource.data.keys().hasOnly(['projectId', 'columns', 'updatedAt', 'updatedBy'])
+        && request.resource.data.projectId == projectId
+        && request.resource.data.columns is list
+        && request.resource.data.columns.size() >= 3
+        && request.resource.data.columns.size() <= 12
+        && request.resource.data.updatedBy == request.auth.uid;
+    }
+
+    function isValidTaskPlacement(projectId, taskId) {
+      return request.resource.data.keys().hasOnly(['taskId', 'columnId', 'updatedAt', 'updatedBy'])
+        && request.resource.data.taskId == taskId
+        && request.resource.data.columnId is string
+        && request.resource.data.columnId.size() <= 64
+        && request.resource.data.updatedBy == request.auth.uid
+        && exists(/databases/$(database)/documents/projects/$(projectId)/tasks/$(taskId));
+    }
+
+    // Bearer-token invites. Document ID IS the secret token.
+    // List: creator (account deletion) or current project owner (owned-project invite wipe).
+    match /projectInvites/{inviteId} {
+      allow get: if signedIn();
+      allow list: if signedIn() && (
+        resource.data.createdBy == request.auth.uid
+        || (
+          resource.data.projectId is string
+          && isProjectOwner(resource.data.projectId)
+        )
+      );
+      allow create: if isOwnerInviteCreate(inviteId);
+      allow update: if isInviteAcceptanceUpdate(inviteId) || isInviteRevocationUpdate();
+      allow delete: if false;
+    }
+  }
+}
