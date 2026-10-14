@@ -371,7 +371,8 @@ struct HomeTodayCard: View {
         }
         .foregroundStyle(.white)
         .padding(TodoshiSpacing.md)
-        .background(TodoshiBrand.accent, in: RoundedRectangle(cornerRadius: TodoshiRadius.card + 4, style: .continuous))
+        // Fixed deep indigo in both appearances: the dark-mode accent is too light for white text.
+        .background(Color(red: 0.322, green: 0.282, blue: 0.851), in: RoundedRectangle(cornerRadius: TodoshiRadius.card + 4, style: .continuous))
         .accessibilityElement(children: .combine)
     }
 

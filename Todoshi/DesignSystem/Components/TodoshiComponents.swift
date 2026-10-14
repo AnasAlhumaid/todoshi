@@ -309,6 +309,8 @@ struct TodoshiTabBar: View {
         }
         .padding(.horizontal, TodoshiSpacing.md)
         .padding(.bottom, TodoshiSpacing.xxs)
+        // The bar has a fixed height; larger type would collide. Long-press shows full labels (HUD).
+        .dynamicTypeSize(...DynamicTypeSize.xLarge)
         .sensoryFeedback(.selection, trigger: selection)
     }
 

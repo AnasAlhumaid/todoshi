@@ -10,7 +10,9 @@ struct RootView: View {
     @State private var accessLossToast: String?
 
     var body: some View {
-        ZStack(alignment: .bottom) {
+        // System TabView keeps each tab's stack alive and only the selected tab interactive
+        // (including its navigation bar); its own bar is hidden in favor of TodoshiTabBar.
+        TabView(selection: $router.selectedTab) {
             tabContent(.dashboard) {
                 NavigationStack(path: $router.dashboardPath) {
                     DashboardView()
@@ -59,6 +61,8 @@ struct RootView: View {
                 .id("settings-auth-\(authSession.sessionUIEpoch)")
             }
 
+        }
+        .overlay(alignment: .bottom) {
             TodoshiTabBar(
                 selection: $router.selectedTab,
                 onAdd: { router.presentQuickAdd() }
@@ -159,20 +163,18 @@ struct RootView: View {
         }
     }
 
-    /// Keeps every tab's navigation state alive while only the selected one is visible.
+    /// One TabView page: hides the system tab bar and reserves room for the floating one.
     private func tabContent<Content: View>(
         _ tab: AppTab,
         @ViewBuilder content: () -> Content
     ) -> some View {
-        let isSelected = router.selectedTab == tab
-        return content()
+        content()
             // Content margins reach every scroll view in the stack, including pushed screens,
             // so the last row can scroll clear of the floating bar.
             .contentMargins(.bottom, TodoshiTabBar.reservedHeight, for: .scrollContent)
             .contentMargins(.bottom, TodoshiTabBar.reservedHeight, for: .scrollIndicators)
-            .opacity(isSelected ? 1 : 0)
-            .allowsHitTesting(isSelected)
-            .accessibilityHidden(!isSelected)
+            .toolbar(.hidden, for: .tabBar)
+            .tag(tab)
     }
 
     private func handleAuthStateChange(_ newState: AuthenticationState, previous: AuthenticationState) {

@@ -112,6 +112,10 @@ struct ProjectVerticalBoardView: View {
                 }
                 .padding(.horizontal, TodoshiSpacing.md)
             }
+            .onAppear {
+                // Start on the selected (first) column; RTL horizontal scroll views otherwise open at the far end.
+                if let id = selectedColumn?.id { proxy.scrollTo(id, anchor: .center) }
+            }
             .onChange(of: selectedColumnID) { _, id in
                 guard let id else { return }
                 withAnimation(reduceMotion ? nil : .snappy) { proxy.scrollTo(id, anchor: .center) }
