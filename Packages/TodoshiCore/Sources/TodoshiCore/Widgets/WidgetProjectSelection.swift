@@ -99,7 +99,7 @@ public enum WidgetProjectOverrideApplier: Sendable {
 /// Two instances that share the same base configuration project will share the override (WidgetKit limitation).
 public enum WidgetProjectSelectionStore: Sendable {
     public static let suiteName = AppGroupConstants.suiteName
-    private static let keyPrefix = "nexus.widget.project.override."
+    private static let keyPrefix = "todoshi.widget.project.override."
 
     public static func defaults(suiteName: String = suiteName) -> UserDefaults? {
         UserDefaults(suiteName: suiteName)
@@ -114,8 +114,18 @@ public enum WidgetProjectSelectionStore: Sendable {
         forBase baseID: UUID,
         suite: UserDefaults? = defaults()
     ) -> UUID? {
-        guard let raw = suite?.string(forKey: storageKey(forBase: baseID)) else { return nil }
-        return UUID(uuidString: raw)
+        if let raw = suite?.string(forKey: storageKey(forBase: baseID)),
+           let id = UUID(uuidString: raw) {
+            return id
+        }
+        let legacyKey = "nexus.widget.project.override." + baseID.uuidString
+        if let legacy = suite?.string(forKey: legacyKey),
+           let id = UUID(uuidString: legacy) {
+            setOverride(id, forBase: baseID, suite: suite)
+            suite?.removeObject(forKey: legacyKey)
+            return id
+        }
+        return nil
     }
 
     public static func setOverride(

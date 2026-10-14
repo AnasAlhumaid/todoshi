@@ -11,12 +11,21 @@ public enum WidgetSnapshotBuilder: Sendable {
     public static let projectFamilyLimitMedium = 3
     public static let projectFamilyLimitLarge = 6
 
-    /// Open workflow statuses shown in Project Tasks (excludes `.done`).
+    /// Open workflow statuses shown in Tasks project widgets (excludes `.done`).
     private static let projectStatusOrder: [TaskStatus: Int] = [
         .inProgress: 0,
         .review: 1,
         .todo: 2,
         .backlog: 3
+    ]
+
+    /// Checklist widget row order: active items first, then completed.
+    private static let checklistStatusOrder: [TaskStatus: Int] = [
+        .inProgress: 0,
+        .todo: 1,
+        .done: 2,
+        .backlog: 99,
+        .review: 99
     ]
 
     public static func mapItem(
@@ -59,7 +68,7 @@ public enum WidgetSnapshotBuilder: Sendable {
         let items = selected.prefix(limit).map { mapDashboard($0, calendar: calendar, now: now) }
         return WidgetTaskSnapshot(
             generatedAt: now,
-            title: NexusL10n.tr("widget.today"),
+            title: TodoshiL10n.tr("widget.today"),
             tasks: Array(items),
             totalCount: selected.count
         )
@@ -96,7 +105,7 @@ public enum WidgetSnapshotBuilder: Sendable {
         let items = selected.prefix(limit).map { mapDashboard($0, calendar: calendar, now: now) }
         return WidgetTaskSnapshot(
             generatedAt: now,
-            title: NexusL10n.tr("widget.highPriority"),
+            title: TodoshiL10n.tr("widget.highPriority"),
             tasks: Array(items),
             totalCount: selected.count
         )
@@ -108,6 +117,7 @@ public enum WidgetSnapshotBuilder: Sendable {
         projectIcon: String?,
         projectColorHex: String?,
         projectIsActive: Bool?,
+        projectType: ProjectType = .tasks,
         tasks: [DashboardTaskInput],
         limit: Int = defaultProjectLimit,
         calendar: Calendar = .autoupdatingCurrent,
@@ -119,36 +129,62 @@ public enum WidgetSnapshotBuilder: Sendable {
         guard projectIsActive == true, let projectName else {
             return WidgetTaskSnapshot(
                 generatedAt: now,
-                title: projectName ?? NexusL10n.tr("common.project"),
+                title: projectName ?? TodoshiL10n.tr("common.project"),
                 tasks: [],
                 totalCount: 0,
+                allRootCount: 0,
                 projectID: projectID,
                 projectIcon: projectIcon,
                 projectColorHex: projectColorHex,
+                projectType: projectType,
                 projectAvailability: .unavailable
             )
         }
 
-        // Open root tasks only for this active project — no due-date filter.
-        let selected = tasks
-            .filter { task in
-                task.isRoot
-                    && task.projectID == projectID
-                    && task.projectIsActive
-                    && projectStatusOrder[task.status] != nil
-            }
-            .sorted(by: projectSort)
-        let items = selected.prefix(limit).map { mapDashboard($0, calendar: calendar, now: now) }
-        return WidgetTaskSnapshot(
-            generatedAt: now,
-            title: projectName,
-            tasks: Array(items),
-            totalCount: selected.count,
-            projectID: projectID,
-            projectIcon: projectIcon,
-            projectColorHex: projectColorHex,
-            projectAvailability: .available
-        )
+        let roots = tasks.filter { task in
+            task.isRoot
+                && task.projectID == projectID
+                && task.projectIsActive
+        }
+
+        switch projectType {
+        case .tasks:
+            let selected = roots
+                .filter { projectStatusOrder[$0.status] != nil }
+                .sorted(by: projectSort)
+            let items = selected.prefix(limit).map { mapDashboard($0, calendar: calendar, now: now) }
+            return WidgetTaskSnapshot(
+                generatedAt: now,
+                title: projectName,
+                tasks: Array(items),
+                totalCount: selected.count,
+                allRootCount: selected.count,
+                projectID: projectID,
+                projectIcon: projectIcon,
+                projectColorHex: projectColorHex,
+                projectType: projectType,
+                projectAvailability: .available
+            )
+        case .checklist:
+            let allowed = Set(ProjectStatusPolicy.progressStatuses(for: .checklist))
+            let checklistRoots = roots.filter { allowed.contains($0.status) }
+            let incomplete = checklistRoots.filter { $0.status != .done }.sorted(by: checklistSort)
+            let completed = checklistRoots.filter { $0.status == .done }.sorted(by: checklistCompletedSort)
+            let ordered = incomplete + completed
+            let items = ordered.prefix(limit).map { mapDashboard($0, calendar: calendar, now: now) }
+            return WidgetTaskSnapshot(
+                generatedAt: now,
+                title: projectName,
+                tasks: Array(items),
+                totalCount: incomplete.count,
+                allRootCount: checklistRoots.count,
+                projectID: projectID,
+                projectIcon: projectIcon,
+                projectColorHex: projectColorHex,
+                projectType: projectType,
+                projectAvailability: .available
+            )
+        }
     }
 
     private static func mapDashboard(
@@ -190,6 +226,22 @@ public enum WidgetSnapshotBuilder: Sendable {
         if lhs.priority.sortRank != rhs.priority.sortRank {
             return lhs.priority.sortRank > rhs.priority.sortRank
         }
+        return lhs.updatedAt > rhs.updatedAt
+    }
+
+    private static func checklistSort(_ lhs: DashboardTaskInput, _ rhs: DashboardTaskInput) -> Bool {
+        let lo = checklistStatusOrder[lhs.status] ?? 99
+        let ro = checklistStatusOrder[rhs.status] ?? 99
+        if lo != ro { return lo < ro }
+        if lhs.position != rhs.position { return lhs.position < rhs.position }
+        return lhs.updatedAt > rhs.updatedAt
+    }
+
+    private static func checklistCompletedSort(_ lhs: DashboardTaskInput, _ rhs: DashboardTaskInput) -> Bool {
+        if lhs.position != rhs.position { return lhs.position < rhs.position }
+        let lCompleted = lhs.completedAt ?? lhs.updatedAt
+        let rCompleted = rhs.completedAt ?? rhs.updatedAt
+        if lCompleted != rCompleted { return lCompleted > rCompleted }
         return lhs.updatedAt > rhs.updatedAt
     }
 }

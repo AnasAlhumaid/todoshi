@@ -5,11 +5,11 @@ public enum PrimaryNavigationPolicy: Sendable {
     public static let tabIdentifiers: [String] = ["dashboard", "calendar", "search", "settings"]
 
     /// Maps legacy `nexus://projects` deep links to Home after Projects tab removal.
-    public static func opensHome(for deepLink: NexusDeepLink) -> Bool {
+    public static func opensHome(for deepLink: TodoshiDeepLink) -> Bool {
         switch deepLink {
         case .dashboard, .projects:
             return true
-        case .project, .task, .quickAdd, .widgetProjectPicker:
+        case .project, .task, .quickAdd, .widgetProjectPicker, .invite:
             return false
         }
     }

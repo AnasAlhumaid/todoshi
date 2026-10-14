@@ -1,6 +1,6 @@
 import Foundation
 import Testing
-@testable import NexusCore
+@testable import TodoshiCore
 
 struct Phase13ReleaseReadinessTests {
     @Test("Release store reset is never allowed under DEBUG flag simulation")
@@ -26,19 +26,19 @@ struct Phase13ReleaseReadinessTests {
 
     @Test("Deep link parser accepts known hosts and rejects invalid UUIDs")
     func deepLinks() {
-        #expect(NexusDeepLink(url: URL(string: "nexus://dashboard")!) == .dashboard)
-        #expect(NexusDeepLink(url: URL(string: "nexus://projects")!) == .projects)
-        #expect(NexusDeepLink(url: URL(string: "nexus://quick-add")!) == .quickAdd)
+        #expect(TodoshiDeepLink(url: URL(string: "nexus://dashboard")!) == .dashboard)
+        #expect(TodoshiDeepLink(url: URL(string: "nexus://projects")!) == .projects)
+        #expect(TodoshiDeepLink(url: URL(string: "nexus://quick-add")!) == .quickAdd(projectID: nil))
         let id = UUID()
-        #expect(NexusDeepLink(url: URL(string: "nexus://task/\(id.uuidString)")!) == .task(id))
-        #expect(NexusDeepLink(url: URL(string: "nexus://project/\(id.uuidString)")!) == .project(id))
-        #expect(NexusDeepLink(url: URL(string: "nexus://task/not-a-uuid")!) == nil)
-        #expect(NexusDeepLink(url: URL(string: "https://example.com")!) == nil)
-        #expect(NexusDeepLink(url: URL(string: "nexus://unknown")!) == nil)
+        #expect(TodoshiDeepLink(url: URL(string: "nexus://task/\(id.uuidString)")!) == .task(id))
+        #expect(TodoshiDeepLink(url: URL(string: "nexus://project/\(id.uuidString)")!) == .project(id))
+        #expect(TodoshiDeepLink(url: URL(string: "nexus://task/not-a-uuid")!) == nil)
+        #expect(TodoshiDeepLink(url: URL(string: "https://example.com")!) == nil)
+        #expect(TodoshiDeepLink(url: URL(string: "nexus://unknown")!) == nil)
         let pickerBase = UUID()
-        let pickerURL = NexusDeepLink.widgetProjectPicker(baseProjectID: pickerBase).url
-        #expect(NexusDeepLink(url: pickerURL) == .widgetProjectPicker(baseProjectID: pickerBase))
-        #expect(NexusDeepLink(url: URL(string: "nexus://widget/project-picker")!) == .widgetProjectPicker(baseProjectID: nil))
+        let pickerURL = TodoshiDeepLink.widgetProjectPicker(baseProjectID: pickerBase).url
+        #expect(TodoshiDeepLink(url: pickerURL) == .widgetProjectPicker(baseProjectID: pickerBase))
+        #expect(TodoshiDeepLink(url: URL(string: "nexus://widget/project-picker")!) == .widgetProjectPicker(baseProjectID: nil))
     }
 
     @Test("Widget open path never enables destructive reset API")

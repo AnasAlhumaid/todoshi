@@ -101,7 +101,7 @@ public enum TaskReminderPolicy: Sendable {
         let request = TaskReminderRequest(
             taskID: task.id,
             taskTitle: task.title,
-            projectName: task.projectName ?? NexusL10n.tr("common.project"),
+            projectName: task.projectName ?? TodoshiL10n.tr("common.project"),
             reminderDate: reminderDate,
             dueDate: task.dueDate
         )

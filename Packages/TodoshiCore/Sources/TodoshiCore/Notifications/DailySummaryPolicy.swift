@@ -56,7 +56,7 @@ public struct DailySummaryScheduleRequest: Equatable, Sendable {
 }
 
 public enum DailySummaryPolicy: Sendable {
-    public static var title: String { NexusL10n.tr("notification.title") }
+    public static var title: String { TodoshiL10n.tr("notification.title") }
 
     /// Next local wall-clock occurrence at `hour`:`minute` strictly after `now`.
     public static func nextFireDate(
@@ -104,27 +104,27 @@ public enum DailySummaryPolicy: Sendable {
     /// Count-only body; never includes task titles.
     public static func content(
         for counts: DailySummaryCounts,
-        locale: Locale = .autoupdatingCurrent
+        locale: Locale = AppLanguageStore.resolvedLocale
     ) -> DailySummaryContent {
         var parts: [String] = []
         if counts.dueToday > 0 {
-            parts.append(NexusL10n.plural("summary.due_today", count: counts.dueToday, locale: locale))
+            parts.append(TodoshiL10n.plural("summary.due_today", count: counts.dueToday, locale: locale))
         }
         if counts.overdue > 0 {
-            parts.append(NexusL10n.plural("summary.overdue", count: counts.overdue, locale: locale))
+            parts.append(TodoshiL10n.plural("summary.overdue", count: counts.overdue, locale: locale))
         }
         if counts.highPriority > 0 && counts.dueToday == 0 && counts.overdue == 0 {
-            parts.append(NexusL10n.plural("summary.high_priority_only", count: counts.highPriority, locale: locale))
+            parts.append(TodoshiL10n.plural("summary.high_priority_only", count: counts.highPriority, locale: locale))
         } else if counts.highPriority > 0 {
-            parts.append(NexusL10n.plural("summary.high_priority_short", count: counts.highPriority, locale: locale))
+            parts.append(TodoshiL10n.plural("summary.high_priority_short", count: counts.highPriority, locale: locale))
         }
         let body = parts.isEmpty
-            ? NexusL10n.tr("summary.allCaughtUp", locale: locale)
+            ? TodoshiL10n.tr("summary.allCaughtUp", locale: locale)
             : parts.joined(separator: " · ")
         return DailySummaryContent(
-            title: NexusL10n.tr("notification.title", locale: locale),
+            title: TodoshiL10n.tr("notification.title", locale: locale),
             body: body,
-            deepLinkURL: NexusDeepLink.dashboard.url
+            deepLinkURL: TodoshiDeepLink.dashboard.url
         )
     }
 
@@ -147,7 +147,7 @@ public enum DailySummaryPolicy: Sendable {
         )
         return DailySummaryScheduleRequest(
             fireDate: fire,
-            content: content(for: summaryCounts)
+            content: content(for: summaryCounts, locale: AppLanguageStore.resolvedLocale)
         )
     }
 }

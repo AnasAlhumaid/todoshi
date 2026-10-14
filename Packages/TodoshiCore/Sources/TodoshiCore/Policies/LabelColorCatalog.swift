@@ -37,24 +37,24 @@ public enum LabelColorCatalog: Sendable {
     public static func name(for hex: String, locale: Locale = .autoupdatingCurrent) -> String {
         let upper = hex.uppercased()
         guard let swatch = swatches.first(where: { $0.hex.uppercased() == upper }) else {
-            return NexusL10n.tr("label.generic", locale: locale)
+            return TodoshiL10n.tr("label.generic", locale: locale)
         }
         return localizedColorName(hex: swatch.hex, locale: locale)
     }
 
     private static func localizedColorName(hex: String, locale: Locale) -> String {
         switch hex.uppercased() {
-        case "#E85D75": return NexusL10n.tr("color.rose", locale: locale)
-        case "#F08C3A": return NexusL10n.tr("color.orange", locale: locale)
-        case "#E5B53A": return NexusL10n.tr("color.gold", locale: locale)
-        case "#3DBB7A": return NexusL10n.tr("color.green", locale: locale)
-        case "#2BB8C2": return NexusL10n.tr("color.teal", locale: locale)
-        case "#5B8DEF": return NexusL10n.tr("color.blue", locale: locale)
-        case "#7C5CFC": return NexusL10n.tr("color.indigo", locale: locale)
-        case "#C45CDA": return NexusL10n.tr("color.violet", locale: locale)
-        case "#8E8E93": return NexusL10n.tr("color.gray", locale: locale)
-        case "#6B7280": return NexusL10n.tr("color.slate", locale: locale)
-        default: return NexusL10n.tr("label.generic", locale: locale)
+        case "#E85D75": return TodoshiL10n.tr("color.rose", locale: locale)
+        case "#F08C3A": return TodoshiL10n.tr("color.orange", locale: locale)
+        case "#E5B53A": return TodoshiL10n.tr("color.gold", locale: locale)
+        case "#3DBB7A": return TodoshiL10n.tr("color.green", locale: locale)
+        case "#2BB8C2": return TodoshiL10n.tr("color.teal", locale: locale)
+        case "#5B8DEF": return TodoshiL10n.tr("color.blue", locale: locale)
+        case "#7C5CFC": return TodoshiL10n.tr("color.indigo", locale: locale)
+        case "#C45CDA": return TodoshiL10n.tr("color.violet", locale: locale)
+        case "#8E8E93": return TodoshiL10n.tr("color.gray", locale: locale)
+        case "#6B7280": return TodoshiL10n.tr("color.slate", locale: locale)
+        default: return TodoshiL10n.tr("label.generic", locale: locale)
         }
     }
 }

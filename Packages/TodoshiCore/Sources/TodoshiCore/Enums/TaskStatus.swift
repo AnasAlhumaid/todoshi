@@ -9,16 +9,16 @@ public enum TaskStatus: String, Codable, CaseIterable, Sendable {
     case done
 
     public var displayName: String {
-        displayName(locale: .autoupdatingCurrent)
+        displayName(locale: AppLanguageStore.resolvedLocale)
     }
 
     public func displayName(locale: Locale) -> String {
         switch self {
-        case .backlog: return NexusL10n.tr("status.backlog", locale: locale)
-        case .todo: return NexusL10n.tr("status.todo", locale: locale)
-        case .inProgress: return NexusL10n.tr("status.inProgress", locale: locale)
-        case .review: return NexusL10n.tr("status.review", locale: locale)
-        case .done: return NexusL10n.tr("status.done", locale: locale)
+        case .backlog: return TodoshiL10n.tr("status.backlog", locale: locale)
+        case .todo: return TodoshiL10n.tr("status.todo", locale: locale)
+        case .inProgress: return TodoshiL10n.tr("status.inProgress", locale: locale)
+        case .review: return TodoshiL10n.tr("status.review", locale: locale)
+        case .done: return TodoshiL10n.tr("status.done", locale: locale)
         }
     }
 }

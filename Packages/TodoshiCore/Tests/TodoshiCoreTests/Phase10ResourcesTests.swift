@@ -1,7 +1,7 @@
 import Foundation
 import SwiftData
 import Testing
-@testable import NexusCore
+@testable import TodoshiCore
 
 @MainActor
 struct Phase10ResourcesTests {
@@ -34,10 +34,10 @@ struct Phase10ResourcesTests {
 
     // MARK: - Schema
 
-    @Test("Schema V4 includes TaskResource; current version is V4")
+    @Test("Schema includes TaskResource; current version is V8")
     func schemaIdentity() {
-        #expect(NexusSchema.currentVersion == NexusSchemaV4.versionIdentifier)
-        #expect(NexusSchema.currentModels.contains { $0 == TaskResource.self })
+        #expect(TodoshiSchema.currentVersion == TodoshiSchemaV9.versionIdentifier)
+        #expect(TodoshiSchema.currentModels.contains { $0 == TaskResource.self })
         #expect(StoreResetPolicy.allowsDestructiveAppGroupReset == {
             #if DEBUG
             true

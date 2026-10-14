@@ -30,7 +30,7 @@ public enum LocalizationAudit {
         for locale in locales {
             let id = locale.identifier
             for key in criticalKeys {
-                let value = NexusL10n.tr(key, locale: locale)
+                let value = TodoshiL10n.tr(key, locale: locale)
                 if value.isEmpty {
                     findings.append(Finding(key: key, localeID: id, reason: "empty"))
                 } else if value == key {

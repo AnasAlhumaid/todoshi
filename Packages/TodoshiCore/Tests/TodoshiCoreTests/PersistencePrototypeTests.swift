@@ -1,7 +1,7 @@
 import Foundation
 import SwiftData
 import Testing
-@testable import NexusCore
+@testable import TodoshiCore
 
 @MainActor
 struct PersistencePrototypeTests {
@@ -136,8 +136,8 @@ struct PersistencePrototypeTests {
 
     @Test("App Group constants and store path (opens when container is available)")
     func appGroupStoreConfiguration() throws {
-        #expect(AppGroupConstants.suiteName == "group.com.anashamad.Nexus")
-        #expect(AppGroupConstants.storeFileName == "Nexus.store")
+        #expect(AppGroupConstants.suiteName == "group.com.anashamad.Todoshi")
+        #expect(AppGroupConstants.storeFileName == "Todoshi.store")
 
         // Container is only non-nil when the process is entitlements-enabled with the group.
         // Prefer an isolated probe file so tests never fight a stale production store schema.
@@ -251,8 +251,8 @@ struct PersistencePrototypeTests {
     @Test("Deep link quick-add parses")
     func deepLinkQuickAdd() {
         let url = URL(string: "nexus://quick-add")!
-        #expect(NexusDeepLink(url: url) == .quickAdd)
-        #expect(NexusDeepLink.quickAdd.url.absoluteString == "nexus://quick-add")
+        #expect(TodoshiDeepLink(url: url) == .quickAdd(projectID: nil))
+        #expect(TodoshiDeepLink.quickAdd().url.absoluteString == "todoshi://quick-add")
     }
 
     @Test("Seed data creates a consistent graph")

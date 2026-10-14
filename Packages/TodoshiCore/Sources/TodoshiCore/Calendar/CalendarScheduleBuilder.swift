@@ -3,7 +3,7 @@ import Foundation
 /// Pure calendar schedule construction from mapped task values.
 ///
 /// Presentation notes:
-/// - Due dates are absolute timestamps; Nexus has no all-day flag, so Day agenda lists
+/// - Due dates are absolute timestamps; Todoshi has no all-day flag, so Day agenda lists
 ///   all due tasks ordered by due time (no invented “Any Time” group).
 /// - Agenda shows open tasks by default; completed due that day appear when `includeCompleted`.
 /// - Day/week/month count chips include open + completed due that day.

@@ -49,7 +49,8 @@ public final class ChecklistRepository {
         context.insert(item)
         task.updatedAt = date
         try context.save()
-        NexusDataChangeCenter.post(.checklistUpdated)
+        TodoshiDataChangeCenter.post(.checklistUpdated)
+        emitSharedChecklistIfNeeded(task)
         return item
     }
 
@@ -66,7 +67,10 @@ public final class ChecklistRepository {
         item.updatedAt = date
         item.task?.updatedAt = date
         try context.save()
-        NexusDataChangeCenter.post(.checklistUpdated)
+        TodoshiDataChangeCenter.post(.checklistUpdated)
+        if let task = item.task {
+            emitSharedChecklistIfNeeded(task)
+        }
     }
 
     public func setCompleted(itemID: UUID, isCompleted: Bool, at date: Date = .now) throws {
@@ -78,7 +82,10 @@ public final class ChecklistRepository {
         item.updatedAt = date
         item.task?.updatedAt = date
         try context.save()
-        NexusDataChangeCenter.post(.checklistItemToggled)
+        TodoshiDataChangeCenter.post(.checklistItemToggled)
+        if let task = item.task {
+            emitSharedChecklistIfNeeded(task)
+        }
     }
 
     public func deleteItem(itemID: UUID, at date: Date = .now) throws {
@@ -89,7 +96,10 @@ public final class ChecklistRepository {
         context.delete(item)
         task?.updatedAt = date
         try context.save()
-        NexusDataChangeCenter.post(.checklistUpdated)
+        TodoshiDataChangeCenter.post(.checklistUpdated)
+        if let task {
+            emitSharedChecklistIfNeeded(task)
+        }
     }
 
     /// Move `itemID` before `targetItemID`, or to end when target is nil.
@@ -139,7 +149,7 @@ public final class ChecklistRepository {
         normalizeIfNeeded(without, at: date)
         task.updatedAt = date
         try context.save()
-        NexusDataChangeCenter.post(.checklistUpdated)
+        TodoshiDataChangeCenter.post(.checklistUpdated)
         return true
     }
 
@@ -185,7 +195,7 @@ public final class ChecklistRepository {
 
         task.updatedAt = date
         try context.save()
-        NexusDataChangeCenter.post(.checklistUpdated)
+        TodoshiDataChangeCenter.post(.checklistUpdated)
     }
 
     public func progress(for taskID: UUID) throws -> ChecklistProgress {
@@ -219,5 +229,12 @@ public final class ChecklistRepository {
         case .emptyTitle: return .emptyName
         case .tooLong: return .checklistTitleTooLong
         }
+    }
+
+    private func emitSharedChecklistIfNeeded(_ task: TaskItem) {
+        guard let project = task.project, project.isShared else { return }
+        SharedProjectMutationHook.emit(
+            .checklistChanged(projectID: project.id, taskID: task.id)
+        )
     }
 }

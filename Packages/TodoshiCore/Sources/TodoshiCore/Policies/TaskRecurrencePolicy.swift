@@ -24,14 +24,14 @@ public enum TaskRecurrenceKind: String, Codable, CaseIterable, Sendable {
 
     public func displayName(locale: Locale) -> String {
         switch self {
-        case .daily: return NexusL10n.tr("recurrence.daily", locale: locale)
-        case .weekdays: return NexusL10n.tr("recurrence.weekdays", locale: locale)
-        case .weekly: return NexusL10n.tr("recurrence.weekly", locale: locale)
-        case .monthly: return NexusL10n.tr("recurrence.monthly", locale: locale)
-        case .yearly: return NexusL10n.tr("recurrence.yearly", locale: locale)
-        case .customDays: return NexusL10n.tr("recurrence.everyNDays", locale: locale)
-        case .customWeeks: return NexusL10n.tr("recurrence.everyNWeeks", locale: locale)
-        case .customMonths: return NexusL10n.tr("recurrence.everyNMonths", locale: locale)
+        case .daily: return TodoshiL10n.tr("recurrence.daily", locale: locale)
+        case .weekdays: return TodoshiL10n.tr("recurrence.weekdays", locale: locale)
+        case .weekly: return TodoshiL10n.tr("recurrence.weekly", locale: locale)
+        case .monthly: return TodoshiL10n.tr("recurrence.monthly", locale: locale)
+        case .yearly: return TodoshiL10n.tr("recurrence.yearly", locale: locale)
+        case .customDays: return TodoshiL10n.tr("recurrence.everyNDays", locale: locale)
+        case .customWeeks: return TodoshiL10n.tr("recurrence.everyNWeeks", locale: locale)
+        case .customMonths: return TodoshiL10n.tr("recurrence.everyNMonths", locale: locale)
         }
     }
 }
@@ -63,38 +63,38 @@ public struct TaskRecurrenceRule: Hashable, Codable, Sendable {
         case .monthly: return TaskRecurrenceKind.monthly.displayName(locale: locale)
         case .yearly: return TaskRecurrenceKind.yearly.displayName(locale: locale)
         case .customDays:
-            return NexusL10n.plural("recurrence.every_days", count: interval, locale: locale)
+            return TodoshiL10n.plural("recurrence.every_days", count: interval, locale: locale)
         case .customWeeks:
-            return NexusL10n.plural("recurrence.every_weeks", count: interval, locale: locale)
+            return TodoshiL10n.plural("recurrence.every_weeks", count: interval, locale: locale)
         case .customMonths:
-            return NexusL10n.plural("recurrence.every_months", count: interval, locale: locale)
+            return TodoshiL10n.plural("recurrence.every_months", count: interval, locale: locale)
         }
     }
 }
 
 public enum TaskRecurrenceStrings: Sendable {
-    public static var repeatSection: String { NexusL10n.tr("recurrence.section") }
-    public static var doesNotRepeat: String { NexusL10n.tr("recurrence.none") }
-    public static var daily: String { NexusL10n.tr("recurrence.daily") }
-    public static var weekdays: String { NexusL10n.tr("recurrence.weekdays") }
-    public static var weekly: String { NexusL10n.tr("recurrence.weekly") }
-    public static var monthly: String { NexusL10n.tr("recurrence.monthly") }
-    public static var yearly: String { NexusL10n.tr("recurrence.yearly") }
-    public static var everyNDays: String { NexusL10n.tr("recurrence.everyNDays") }
-    public static var everyNWeeks: String { NexusL10n.tr("recurrence.everyNWeeks") }
-    public static var everyNMonths: String { NexusL10n.tr("recurrence.everyNMonths") }
+    public static var repeatSection: String { TodoshiL10n.tr("recurrence.section") }
+    public static var doesNotRepeat: String { TodoshiL10n.tr("recurrence.none") }
+    public static var daily: String { TodoshiL10n.tr("recurrence.daily") }
+    public static var weekdays: String { TodoshiL10n.tr("recurrence.weekdays") }
+    public static var weekly: String { TodoshiL10n.tr("recurrence.weekly") }
+    public static var monthly: String { TodoshiL10n.tr("recurrence.monthly") }
+    public static var yearly: String { TodoshiL10n.tr("recurrence.yearly") }
+    public static var everyNDays: String { TodoshiL10n.tr("recurrence.everyNDays") }
+    public static var everyNWeeks: String { TodoshiL10n.tr("recurrence.everyNWeeks") }
+    public static var everyNMonths: String { TodoshiL10n.tr("recurrence.everyNMonths") }
     public static var everyNDaysFormat: String { "%lld" } // unused legacy; use summary()
     public static var everyNWeeksFormat: String { "%lld" }
     public static var everyNMonthsFormat: String { "%lld" }
-    public static var dueDateRequired: String { NexusL10n.tr("recurrence.dueRequired") }
-    public static var recurringTask: String { NexusL10n.tr("recurrence.task") }
-    public static var previousOccurrence: String { NexusL10n.tr("recurrence.previous") }
-    public static var nextOccurrence: String { NexusL10n.tr("recurrence.next") }
-    public static var thisOccurrenceOnly: String { NexusL10n.tr("recurrence.thisOnly") }
-    public static var importedFilesNotCopied: String { NexusL10n.tr("recurrence.filesNotCopied") }
-    public static var interval: String { NexusL10n.tr("recurrence.interval") }
-    public static var cannotRecurSubtask: String { NexusL10n.tr("recurrence.cannotSubtask") }
-    public static var stopRepeating: String { NexusL10n.tr("recurrence.stop") }
+    public static var dueDateRequired: String { TodoshiL10n.tr("recurrence.dueRequired") }
+    public static var recurringTask: String { TodoshiL10n.tr("recurrence.task") }
+    public static var previousOccurrence: String { TodoshiL10n.tr("recurrence.previous") }
+    public static var nextOccurrence: String { TodoshiL10n.tr("recurrence.next") }
+    public static var thisOccurrenceOnly: String { TodoshiL10n.tr("recurrence.thisOnly") }
+    public static var importedFilesNotCopied: String { TodoshiL10n.tr("recurrence.filesNotCopied") }
+    public static var interval: String { TodoshiL10n.tr("recurrence.interval") }
+    public static var cannotRecurSubtask: String { TodoshiL10n.tr("recurrence.cannotSubtask") }
+    public static var stopRepeating: String { TodoshiL10n.tr("recurrence.stop") }
 }
 
 public struct NextOccurrenceDraft: Hashable, Sendable {
@@ -307,15 +307,15 @@ public enum TaskRecurrenceValidationIssue: Equatable, Sendable {
     public func message(locale: Locale) -> String {
         switch self {
         case .dueDateRequired:
-            return NexusL10n.tr("recurrence.dueRequired", locale: locale)
+            return TodoshiL10n.tr("recurrence.dueRequired", locale: locale)
         case .invalidInterval:
-            return NexusL10n.format(
+            return TodoshiL10n.format(
                 "recurrence.invalidInterval",
                 locale: locale,
                 TaskRecurrencePolicy.maxInterval
             )
         case .subtaskCannotRecur:
-            return NexusL10n.tr("recurrence.cannotSubtask", locale: locale)
+            return TodoshiL10n.tr("recurrence.cannotSubtask", locale: locale)
         }
     }
 }

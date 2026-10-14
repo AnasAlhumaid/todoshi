@@ -1,7 +1,7 @@
 import Foundation
 import SwiftData
 import Testing
-@testable import NexusCore
+@testable import TodoshiCore
 
 @MainActor
 struct Phase3DashboardTests {
@@ -286,8 +286,8 @@ struct Phase3DashboardTests {
 
     @Test("Deep link quick add and invalid URLs")
     func deepLinks() {
-        #expect(NexusDeepLink(url: URL(string: "nexus://quick-add")!) == .quickAdd)
-        #expect(NexusDeepLink(url: URL(string: "https://example.com")!) == nil)
-        #expect(NexusDeepLink(url: URL(string: "nexus://nope")!) == nil)
+        #expect(TodoshiDeepLink(url: URL(string: "nexus://quick-add")!) == .quickAdd(projectID: nil))
+        #expect(TodoshiDeepLink(url: URL(string: "https://example.com")!) == nil)
+        #expect(TodoshiDeepLink(url: URL(string: "nexus://nope")!) == nil)
     }
 }

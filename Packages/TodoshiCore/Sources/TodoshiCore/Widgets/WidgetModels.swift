@@ -48,10 +48,14 @@ public struct WidgetTaskSnapshot: Hashable, Sendable {
     public let generatedAt: Date
     public let title: String
     public let tasks: [WidgetTaskItem]
+    /// Open tasks (Tasks) or remaining incomplete items (Checklist).
     public let totalCount: Int
+    /// Total root items in the project (includes completed checklist rows).
+    public let allRootCount: Int
     public let projectID: UUID?
     public let projectIcon: String?
     public let projectColorHex: String?
+    public let projectType: ProjectType
     public let projectAvailability: WidgetProjectAvailability
 
     public init(
@@ -59,18 +63,22 @@ public struct WidgetTaskSnapshot: Hashable, Sendable {
         title: String,
         tasks: [WidgetTaskItem],
         totalCount: Int,
+        allRootCount: Int? = nil,
         projectID: UUID? = nil,
         projectIcon: String? = nil,
         projectColorHex: String? = nil,
+        projectType: ProjectType = .tasks,
         projectAvailability: WidgetProjectAvailability = .available
     ) {
         self.generatedAt = generatedAt
         self.title = title
         self.tasks = tasks
         self.totalCount = totalCount
+        self.allRootCount = allRootCount ?? totalCount
         self.projectID = projectID
         self.projectIcon = projectIcon
         self.projectColorHex = projectColorHex
+        self.projectType = projectType
         self.projectAvailability = projectAvailability
     }
 
@@ -80,6 +88,7 @@ public struct WidgetTaskSnapshot: Hashable, Sendable {
             title: title,
             tasks: [],
             totalCount: 0,
+            allRootCount: 0,
             projectAvailability: .unavailable
         )
     }
@@ -87,9 +96,10 @@ public struct WidgetTaskSnapshot: Hashable, Sendable {
     public static func needsConfiguration(generatedAt: Date = .now) -> WidgetTaskSnapshot {
         WidgetTaskSnapshot(
             generatedAt: generatedAt,
-            title: NexusL10n.tr("common.project"),
+            title: TodoshiL10n.tr("common.project"),
             tasks: [],
             totalCount: 0,
+            allRootCount: 0,
             projectAvailability: .missingSelection
         )
     }
@@ -101,23 +111,32 @@ public struct WidgetProjectOption: Identifiable, Hashable, Sendable {
     public let icon: String
     public let colorHex: String
     public let position: Double
+    public let projectType: ProjectType
 
-    public init(id: UUID, name: String, icon: String, colorHex: String, position: Double) {
+    public init(
+        id: UUID,
+        name: String,
+        icon: String,
+        colorHex: String,
+        position: Double,
+        projectType: ProjectType = .tasks
+    ) {
         self.id = id
         self.name = name
         self.icon = icon
         self.colorHex = colorHex
         self.position = position
+        self.projectType = projectType
     }
 }
 
 /// Stable WidgetKit kind identifiers.
-public enum NexusWidgetKind: Sendable {
-    public static let today = "Nexus.TodayTasks"
-    public static let highPriority = "Nexus.HighPriority"
-    public static let project = "Nexus.ProjectTasks"
-    public static let quickAddAccessory = "Nexus.QuickAddAccessory"
-    public static let todayCountAccessory = "Nexus.TodayCountAccessory"
+public enum TodoshiWidgetKind: Sendable {
+    public static let today = "Todoshi.TodayTasks"
+    public static let highPriority = "Todoshi.HighPriority"
+    public static let project = "Todoshi.ProjectTasks"
+    public static let quickAddAccessory = "Todoshi.QuickAddAccessory"
+    public static let todayCountAccessory = "Todoshi.TodayCountAccessory"
 
     public static var allTaskListKinds: [String] {
         [today, highPriority, project, todayCountAccessory]

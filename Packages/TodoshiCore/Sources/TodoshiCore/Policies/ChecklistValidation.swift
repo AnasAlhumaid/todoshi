@@ -32,24 +32,24 @@ public enum ChecklistValidation: Sendable {
 }
 
 public enum ChecklistStrings: Sendable {
-    public static var checklist: String { NexusL10n.tr("checklist.title") }
-    public static var addItem: String { NexusL10n.tr("checklist.addItem") }
-    public static var editItem: String { NexusL10n.tr("checklist.editItem") }
-    public static var deleteItem: String { NexusL10n.tr("checklist.deleteItem") }
-    public static var markComplete: String { NexusL10n.tr("checklist.markComplete") }
-    public static var markIncomplete: String { NexusL10n.tr("checklist.markIncomplete") }
-    public static var completed: String { NexusL10n.tr("checklist.completed") }
-    public static var itemsCompleted: String { NexusL10n.tr("checklist.itemsCompleted") }
-    public static var noItems: String { NexusL10n.tr("checklist.noItems") }
-    public static var invalidItem: String { NexusL10n.tr("checklist.invalidItem") }
+    public static var checklist: String { TodoshiL10n.tr("checklist.title") }
+    public static var addItem: String { TodoshiL10n.tr("checklist.addItem") }
+    public static var editItem: String { TodoshiL10n.tr("checklist.editItem") }
+    public static var deleteItem: String { TodoshiL10n.tr("checklist.deleteItem") }
+    public static var markComplete: String { TodoshiL10n.tr("checklist.markComplete") }
+    public static var markIncomplete: String { TodoshiL10n.tr("checklist.markIncomplete") }
+    public static var completed: String { TodoshiL10n.tr("checklist.completed") }
+    public static var itemsCompleted: String { TodoshiL10n.tr("checklist.itemsCompleted") }
+    public static var noItems: String { TodoshiL10n.tr("checklist.noItems") }
+    public static var invalidItem: String { TodoshiL10n.tr("checklist.invalidItem") }
 
     public static var titleTooLong: String {
-        NexusL10n.format("checklist.titleTooLong", ChecklistValidation.maxTitleLength)
+        TodoshiL10n.format("checklist.titleTooLong", ChecklistValidation.maxTitleLength)
     }
 
-    public static var progressFormat: String { NexusL10n.tr("checklist.progress") }
+    public static var progressFormat: String { TodoshiL10n.tr("checklist.progress") }
 
     public static func progress(completed: Int, total: Int, locale: Locale = .autoupdatingCurrent) -> String {
-        NexusL10n.format("checklist.progress", locale: locale, completed, total)
+        TodoshiL10n.format("checklist.progress", locale: locale, completed, total)
     }
 }

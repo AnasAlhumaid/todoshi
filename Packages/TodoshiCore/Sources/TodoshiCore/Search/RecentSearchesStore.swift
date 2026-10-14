@@ -2,7 +2,7 @@ import Foundation
 
 /// Small in-memory/UserDefaults-backed recent search list logic.
 public enum RecentSearchesStore: Sendable {
-    public static let storageKey = "nexus.search.recentTerms"
+    public static let storageKey = "todoshi.search.recentTerms"
     public static let maxTerms = 5
 
     public static func normalizeTerm(_ raw: String) -> String? {
@@ -44,5 +44,5 @@ public enum RecentSearchesStore: Sendable {
 }
 
 public enum SearchPreferences: Sendable {
-    public static let includeArchivedKey = "nexus.search.includeArchived"
+    public static let includeArchivedKey = "todoshi.search.includeArchived"
 }

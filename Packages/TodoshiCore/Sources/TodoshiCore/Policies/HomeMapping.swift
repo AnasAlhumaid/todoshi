@@ -5,13 +5,21 @@ import SwiftData
 public enum HomeMapping {
     public static func projectSummaries(
         from projects: [Project],
+        collaborationUID: String? = nil,
         calendar: Calendar = .autoupdatingCurrent,
         now: Date = .now
     ) -> [HomeProjectSummary] {
         projects
             .filter { $0.status == .active }
+            .filter {
+                SharedProjectAccountIsolationPolicy.isVisible(
+                    sharingMode: $0.sharingMode,
+                    collaborationOwnerUID: $0.collaborationOwnerUID,
+                    currentUID: collaborationUID
+                )
+            }
             .sorted(by: areProjectsInOrder)
-            .map { mapProject($0, calendar: calendar, now: now) }
+            .map { mapProject($0, collaborationUID: collaborationUID, calendar: calendar, now: now) }
     }
 
     public static func areProjectsInOrder(_ lhs: Project, _ rhs: Project) -> Bool {
@@ -21,12 +29,22 @@ public enum HomeMapping {
 
     private static func mapProject(
         _ project: Project,
+        collaborationUID: String?,
         calendar: Calendar,
         now: Date
     ) -> HomeProjectSummary {
         let openTasks = (project.tasks ?? [])
-            .filter { $0.isRoot && $0.status != .done }
-            .map { taskSummary(from: $0, projectID: project.id, calendar: calendar, now: now) }
+            .filter { $0.isRoot && $0.status != .done && $0.deletedAt == nil }
+            .map {
+                taskSummary(
+                    from: $0,
+                    projectID: project.id,
+                    isShared: project.isShared,
+                    viewerUID: collaborationUID,
+                    calendar: calendar,
+                    now: now
+                )
+            }
         let sortedTasks = HomeTaskOrdering.sort(openTasks)
 
         return HomeProjectSummary(
@@ -38,6 +56,8 @@ public enum HomeMapping {
             position: project.position,
             createdAt: project.createdAt,
             openTaskCount: sortedTasks.count,
+            isShared: project.isShared,
+            projectType: project.projectType,
             tasks: sortedTasks
         )
     }
@@ -45,17 +65,31 @@ public enum HomeMapping {
     public static func taskSummary(
         from task: TaskItem,
         projectID: UUID,
+        isShared: Bool = false,
+        viewerUID: String? = nil,
         calendar: Calendar = .autoupdatingCurrent,
-        now: Date = .now
+        now: Date = .now,
+        assigneeDisplayName: String? = nil
     ) -> HomeTaskSummary {
-        mapTask(task, projectID: projectID, calendar: calendar, now: now)
+        mapTask(
+            task,
+            projectID: projectID,
+            isShared: isShared,
+            viewerUID: viewerUID,
+            calendar: calendar,
+            now: now,
+            assigneeDisplayName: assigneeDisplayName
+        )
     }
 
     private static func mapTask(
         _ task: TaskItem,
         projectID: UUID,
+        isShared: Bool,
+        viewerUID: String?,
         calendar: Calendar,
-        now: Date
+        now: Date,
+        assigneeDisplayName: String? = nil
     ) -> HomeTaskSummary {
         let checklist = ChecklistProgress.from(completedFlags: (task.checklist ?? []).map(\.isCompleted))
         let subtasks = SubtaskProgress.from(tasks: task.subtasks ?? [])
@@ -76,7 +110,20 @@ public enum HomeMapping {
             checklistProgress: checklist.hasProgress ? checklist : nil,
             subtaskProgress: subtasks.hasProgress ? subtasks : nil,
             labels: Array(labels),
-            isOverdue: TaskPredicates.isOverdue(task.dueDate, status: task.status, calendar: calendar, now: now)
+            isOverdue: TaskPredicates.isOverdue(task.dueDate, status: task.status, calendar: calendar, now: now),
+            assigneeDisplayName: assigneeDisplayName,
+            hasUnreadActivity: TaskCollaborationActivityPolicy.hasUnreadActivity(
+                isSharedProject: isShared,
+                lastActivityAt: task.lastActivityAt,
+                lastActivityByUID: task.lastActivityByUID,
+                viewerUID: viewerUID,
+                lastSeenAt: TaskActivitySeenStore.lastSeen(
+                    uid: viewerUID,
+                    projectID: projectID,
+                    rootTaskID: task.id
+                )
+            ),
+            columnID: task.columnIDRaw.flatMap(UUID.init(uuidString:))
         )
     }
 }

@@ -1,7 +1,7 @@
 import Foundation
 import SwiftData
 import Testing
-@testable import NexusCore
+@testable import TodoshiCore
 
 @MainActor
 struct Phase11RecurrenceTests {
@@ -33,10 +33,10 @@ struct Phase11RecurrenceTests {
 
     // MARK: - Schema
 
-    @Test("Schema V4 is current; recurrence defaults empty; Release policy non-destructive")
+    @Test("Schema V8 is current; recurrence defaults empty; Release policy non-destructive")
     func schemaV4() {
-        #expect(NexusSchema.currentVersion == NexusSchemaV4.versionIdentifier)
-        #expect(NexusSchemaMigrationPlan.schemas.count == 1)
+        #expect(TodoshiSchema.currentVersion == TodoshiSchemaV9.versionIdentifier)
+        #expect(TodoshiSchemaMigrationPlan.schemas.count == 1)
         #expect(StoreResetPolicy.allowsDestructiveAppGroupReset == {
             #if DEBUG
             true
@@ -47,7 +47,7 @@ struct Phase11RecurrenceTests {
 
         #expect(WidgetReloadClassifier.kinds(for: .recurrenceEnabled).isEmpty)
         #expect(WidgetReloadClassifier.shouldReconcileNotifications(for: .recurrenceEnabled) == false)
-        #expect(WidgetReloadClassifier.kinds(for: .recurringOccurrenceGenerated) == NexusWidgetKind.allTaskListKinds)
+        #expect(WidgetReloadClassifier.kinds(for: .recurringOccurrenceGenerated) == TodoshiWidgetKind.allTaskListKinds)
         #expect(WidgetReloadClassifier.shouldReconcileNotifications(for: .recurringOccurrenceGenerated))
         #expect(WidgetReloadClassifier.shouldReconcileNotifications(for: .resourceOrphanCleanupCompleted) == false)
     }

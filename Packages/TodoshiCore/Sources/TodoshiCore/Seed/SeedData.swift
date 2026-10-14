@@ -7,7 +7,7 @@ public enum SeedData {
     @discardableResult
     public static func populate(_ context: ModelContext) throws -> SeedResult {
         let project = Project(
-            name: "Nexus",
+            name: "Personal",
             icon: "shippingbox.fill",
             colorHex: "#5B8DEF",
             projectDescription: "Personal developer workspace"

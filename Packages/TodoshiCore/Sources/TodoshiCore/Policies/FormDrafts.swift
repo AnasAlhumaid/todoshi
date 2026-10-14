@@ -6,17 +6,21 @@ public struct ProjectDraft: Equatable {
     public var icon: String
     public var colorHex: String
     public var projectDescription: String
+    /// Selected once at creation; immutable afterward.
+    public var projectType: ProjectType
 
     public init(
         name: String = "",
         icon: String = ProjectIconCatalog.defaultSymbol,
         colorHex: String = ProjectColorCatalog.defaultHex,
-        projectDescription: String = ""
+        projectDescription: String = "",
+        projectType: ProjectType = .tasks
     ) {
         self.name = name
         self.icon = icon
         self.colorHex = colorHex
         self.projectDescription = projectDescription
+        self.projectType = projectType
     }
 
     public init(project: Project) {
@@ -24,6 +28,7 @@ public struct ProjectDraft: Equatable {
         self.icon = project.icon
         self.colorHex = project.colorHex
         self.projectDescription = project.projectDescription
+        self.projectType = project.projectType
     }
 
     public var isValid: Bool {

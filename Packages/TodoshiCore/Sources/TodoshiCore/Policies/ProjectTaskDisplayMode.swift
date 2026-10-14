@@ -9,11 +9,11 @@ public enum ProjectTaskDisplayMode: String, CaseIterable, Identifiable, Sendable
 
     public var title: String {
         switch self {
-        case .board: return NexusL10n.tr("display.board")
-        case .list: return NexusL10n.tr("display.list")
+        case .board: return TodoshiL10n.tr("display.board")
+        case .list: return TodoshiL10n.tr("display.list")
         }
     }
 
-    public static let storageKey = "nexus.projectTaskDisplayMode"
+    public static let storageKey = "todoshi.projectTaskDisplayMode"
     public static let `default`: ProjectTaskDisplayMode = .board
 }

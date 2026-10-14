@@ -35,6 +35,820 @@
         }
       }
     },
+    "account.continueWithGoogle": {
+      "extractionState": "stale",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "المتابعة باستخدام Google"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continue with Google"
+          }
+        }
+      }
+    },
+    "account.defaultLabel": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مسجّل الدخول"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Signed in"
+          }
+        }
+      }
+    },
+    "account.delete.cancel": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إلغاء"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancel"
+          }
+        }
+      }
+    },
+    "account.delete.confirmMessage": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "سيتم حذف حسابك وبياناتك المرتبطة به من Todoshi.\nلا يمكن التراجع عن هذا الإجراء."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your Todoshi account and associated data will be deleted.\nThis action cannot be undone."
+          }
+        }
+      }
+    },
+    "account.delete.confirmTitle": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "حذف حسابك نهائيًا؟"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete your account permanently?"
+          }
+        }
+      }
+    },
+    "account.delete.continue": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "متابعة حذف الحساب"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continue Deletion"
+          }
+        }
+      }
+    },
+    "account.delete.error": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعذر إكمال حذف الحساب. حاول مرة أخرى."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Account deletion couldn't be completed. Please try again."
+          }
+        }
+      }
+    },
+    "account.delete.failedTitle": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعذر حذف الحساب"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unable to Delete Account"
+          }
+        }
+      }
+    },
+    "account.delete.footer": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يحذف حساب Todoshi وبيانات التعاون السحابية المرتبطة به نهائيًا."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Permanently deletes your Todoshi account and associated cloud collaboration data."
+          }
+        }
+      }
+    },
+    "account.delete.ownedMessage": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "عند حذف حسابك سيتم حذف الـ %lld مشاريع المشتركة التي تملكها ومحتواها نهائيًا لجميع الأعضاء، لأنه لا يوجد نقل ملكية حاليًا."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deleting your account permanently deletes the %lld shared projects you own and their content for all members, because ownership transfer is not available yet."
+          }
+        }
+      }
+    },
+    "account.delete.ownedTitle": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "أنت مالك لـ %lld مشاريع مشتركة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You own %lld shared projects"
+          }
+        }
+      }
+    },
+    "account.delete.progress": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "جارٍ حذف الحساب…"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deleting account…"
+          }
+        }
+      }
+    },
+    "account.delete.progress.deletingAccount": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "جارٍ حذف الحساب…"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deleting account…"
+          }
+        }
+      }
+    },
+    "account.delete.progress.finishing": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "جارٍ الإنهاء…"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Finishing up…"
+          }
+        }
+      }
+    },
+    "account.delete.progress.leaving": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "جارٍ مغادرة المشاريع المشتركة…"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Leaving shared projects…"
+          }
+        }
+      }
+    },
+    "account.delete.progress.owned": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "جارٍ حذف المشاريع المملوكة…"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deleting owned projects…"
+          }
+        }
+      }
+    },
+    "account.delete.progress.preparing": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "جارٍ تجهيز حذف الحساب…"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preparing account deletion…"
+          }
+        }
+      }
+    },
+    "account.delete.progress.removing": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "جارٍ إزالة بيانات الحساب…"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Removing account data…"
+          }
+        }
+      }
+    },
+    "account.delete.reauthRequired": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "أكّد هويتك لمتابعة حذف حسابك."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Confirm your identity to continue deleting your account."
+          }
+        }
+      }
+    },
+    "account.delete.requiresRecentLogin": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لأسباب أمنية، يتطلب Firebase تسجيل دخول حديثًا. سجّل الخروج ثم سجّل الدخول مرة أخرى وحاول حذف الحساب."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "For security, Firebase requires a recent sign-in. Sign out, sign in again, then try deleting your account."
+          }
+        }
+      }
+    },
+    "account.delete.retry": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "حاول مرة أخرى"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Try Again"
+          }
+        }
+      }
+    },
+    "account.delete.revokeFailed": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعذر إكمال حذف الحساب. حاول مرة أخرى."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Account deletion couldn't be completed. Please try again."
+          }
+        }
+      }
+    },
+    "account.delete.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "حذف الحساب"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete Account"
+          }
+        }
+      }
+    },
+    "account.error.appleUnavailable": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تسجيل الدخول باستخدام Apple غير متاح."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign in with Apple is unavailable."
+          }
+        }
+      }
+    },
+    "account.error.cancelled": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تم إلغاء تسجيل الدخول."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign in was cancelled."
+          }
+        }
+      }
+    },
+    "account.error.googleSignInFailed": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعذر تسجيل الدخول باستخدام Google. حاول مرة أخرى."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unable to sign in with Google. Please try again."
+          }
+        }
+      }
+    },
+    "account.error.invalidCredential": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعذّر التحقق من تسجيل الدخول باستخدام Apple."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not verify your Apple sign-in."
+          }
+        }
+      }
+    },
+    "account.error.notSignedIn": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "سجّل الدخول للمتابعة."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign in to continue."
+          }
+        }
+      }
+    },
+    "account.error.profileSync": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تم تسجيل الدخول، لكن تعذر تحديث بيانات حسابك حاليًا."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You're signed in, but we couldn't update your account details yet."
+          }
+        }
+      }
+    },
+    "account.error.providerCollision": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "هذا البريد مرتبط بطريقة تسجيل دخول أخرى. سجّل الدخول باستخدام طريقتك الحالية أولًا."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This email is already associated with another sign-in method. Sign in using your existing method first."
+          }
+        }
+      }
+    },
+    "account.error.signInFailed": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعذر تسجيل الدخول. حاول مرة أخرى."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unable to sign in. Please try again."
+          }
+        }
+      }
+    },
+    "account.error.unavailable": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "التعاون غير متاح حاليًا."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Collaboration is unavailable right now."
+          }
+        }
+      }
+    },
+    "account.profileSyncWarning": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تم تسجيل الدخول، لكن تعذّر مزامنة ملفك الشخصي مع السحابة."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Signed in, but your profile could not sync to the cloud."
+          }
+        }
+      }
+    },
+    "account.section": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الحساب"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Account"
+          }
+        }
+      }
+    },
+    "account.sheet.message": {
+      "extractionState": "stale",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "اختر طريقة تسجيل الدخول للتعاون في المشاريع المشتركة."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose how you'd like to sign in to collaborate on shared projects."
+          }
+        }
+      }
+    },
+    "account.sheet.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مشاركة مشاريعك مع الآخرين"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Share your projects"
+          }
+        }
+      }
+    },
+    "account.signInWithApple": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تسجيل الدخول باستخدام Apple"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign in with Apple"
+          }
+        }
+      }
+    },
+    "account.signOut": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تسجيل الخروج"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign Out"
+          }
+        }
+      }
+    },
+    "account.signedOutDescription": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "استخدم حسابك فقط عند مشاركة المشاريع مع الآخرين."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "An account is only required when sharing projects with others."
+          }
+        }
+      }
+    },
+    "account.signingIn": {
+      "extractionState": "stale",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "جاري تسجيل الدخول…"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Signing in…"
+          }
+        }
+      }
+    },
+    "account.testAuthenticationSheet": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "اختبار تسجيل الدخول للتعاون"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Test Collaboration Sign-In"
+          }
+        }
+      }
+    },
+    "account.unavailable": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "التعاون السحابي غير متاح في هذا الإصدار. تستمر مهامك الشخصية محليًا."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cloud collaboration is unavailable in this build. Personal tasks continue to work locally."
+          }
+        }
+      }
+    },
+    "board.addTo": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "أضف مهمة إلى «%@»"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add task to “%@”"
+          }
+        }
+      }
+    },
+    "board.emptyLane": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ما فيه مهام هنا."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No tasks here yet."
+          }
+        }
+      }
+    },
+    "board.lane.doing": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "قيد العمل"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Doing"
+          }
+        }
+      }
+    },
+    "board.lane.done": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تمت"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Done"
+          }
+        }
+      }
+    },
+    "board.lane.todo": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "للعمل"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "To do"
+          }
+        }
+      }
+    },
+    "board.summary": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$d مهام · %2$d٪ منجز"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$d tasks · %2$d%% done"
+          }
+        }
+      }
+    },
     "calendar.a11yEmpty": {
       "extractionState": "stale",
       "localizations": {
@@ -398,24 +1212,6 @@
         "ar": {
           "variations": {
             "plural": {
-              "zero": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "لا مهام مفتوحة"
-                }
-              },
-              "one": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "مهمة واحدة مفتوحة"
-                }
-              },
-              "two": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "مهمتان مفتوحتان"
-                }
-              },
               "few": {
                 "stringUnit": {
                   "state": "translated",
@@ -428,10 +1224,28 @@
                   "value": "%lld مهمة مفتوحة"
                 }
               },
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "مهمة واحدة مفتوحة"
+                }
+              },
               "other": {
                 "stringUnit": {
                   "state": "translated",
                   "value": "%lld مهمة مفتوحة"
+                }
+              },
+              "two": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "مهمتان مفتوحتان"
+                }
+              },
+              "zero": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "لا مهام مفتوحة"
                 }
               }
             }
@@ -440,24 +1254,6 @@
         "en": {
           "variations": {
             "plural": {
-              "zero": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "No open tasks"
-                }
-              },
-              "one": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "1 open task"
-                }
-              },
-              "two": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "%lld open tasks"
-                }
-              },
               "few": {
                 "stringUnit": {
                   "state": "translated",
@@ -470,10 +1266,28 @@
                   "value": "%lld open tasks"
                 }
               },
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "1 open task"
+                }
+              },
               "other": {
                 "stringUnit": {
                   "state": "translated",
                   "value": "%lld open tasks"
+                }
+              },
+              "two": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld open tasks"
+                }
+              },
+              "zero": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "No open tasks"
                 }
               }
             }
@@ -1195,6 +2009,244 @@
         }
       }
     },
+    "column.kind.doing": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "قيد العمل"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In progress"
+          }
+        }
+      }
+    },
+    "column.kind.done": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "منتهية"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Finished"
+          }
+        }
+      }
+    },
+    "column.kind.todo": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لم تبدأ"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not started"
+          }
+        }
+      }
+    },
+    "columns.add": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إضافة عمود"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add column"
+          }
+        }
+      }
+    },
+    "columns.deleteMovesTasks": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مهام هذا العمود بتنتقل إلى «%@»."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tasks in this column move to “%@”."
+          }
+        }
+      }
+    },
+    "columns.edit": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعديل الأعمدة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Edit columns"
+          }
+        }
+      }
+    },
+    "columns.error.emptyName": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لازم يكون لكل عمود اسم."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Give every column a name."
+          }
+        }
+      }
+    },
+    "columns.error.missingKind": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لازم يبقى عمود واحد على الأقل من نوع «%@»."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keep at least one “%@” column."
+          }
+        }
+      }
+    },
+    "columns.error.tooMany": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الحد الأقصى %d عمود."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You can have up to %d columns."
+          }
+        }
+      }
+    },
+    "columns.kindFooter": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "كل عمود يُعتبر: لم تبدأ، أو قيد العمل، أو منتهية. على أساسها يعرف التطبيق متى المهمة منجزة أو متأخرة."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Each column counts as not started, in progress, or finished. That's how Todoshi knows when a task is done or overdue."
+          }
+        }
+      }
+    },
+    "columns.kindLabel": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يُعتبر"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Counts as"
+          }
+        }
+      }
+    },
+    "columns.namePlaceholder": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "اسم العمود"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Column name"
+          }
+        }
+      }
+    },
+    "columns.newColumn": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "عمود جديد"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New column"
+          }
+        }
+      }
+    },
+    "columns.sharedUnavailable": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الأعمدة المخصصة متاحة للمشاريع الشخصية."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Custom columns are available for personal projects."
+          }
+        }
+      }
+    },
     "common.add": {
       "extractionState": "manual",
       "localizations": {
@@ -1225,6 +2277,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Archived"
+          }
+        }
+      }
+    },
+    "common.back": {
+      "extractionState": "stale",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "رجوع"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Back"
           }
         }
       }
@@ -1756,6 +2825,23 @@
         }
       }
     },
+    "common.retry": {
+      "extractionState": "stale",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "حاول مجددًا"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Try Again"
+          }
+        }
+      }
+    },
     "common.save": {
       "extractionState": "manual",
       "localizations": {
@@ -2000,24 +3086,6 @@
         "ar": {
           "variations": {
             "plural": {
-              "zero": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "لا مهام"
-                }
-              },
-              "one": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "مهمة واحدة"
-                }
-              },
-              "two": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "مهمتان"
-                }
-              },
               "few": {
                 "stringUnit": {
                   "state": "translated",
@@ -2030,10 +3098,28 @@
                   "value": "%lld مهمة"
                 }
               },
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "مهمة واحدة"
+                }
+              },
               "other": {
                 "stringUnit": {
                   "state": "translated",
                   "value": "%lld مهمة"
+                }
+              },
+              "two": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "مهمتان"
+                }
+              },
+              "zero": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "لا مهام"
                 }
               }
             }
@@ -2779,13 +3865,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "تعذر على Nexus فتح مخزن البيانات المشترك. تأكد من ضبط مجموعات التطبيقات لهذا الإصدار ثم أعد فتح التطبيق."
+            "value": "تعذر على Todoshi فتح مخزن البيانات المشترك. تأكد من ضبط مجموعات التطبيقات لهذا الإصدار ثم أعد فتح التطبيق."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nexus could not open its shared data store. Check that App Groups are configured for this build, then reopen the app."
+            "value": "Todoshi could not open its shared data store. Check that App Groups are configured for this build, then reopen the app."
           }
         }
       }
@@ -2796,13 +3882,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "تعذر على Nexus فتح مخزن البيانات المحلي. أعد تثبيت التطبيق أو تواصل مع الدعم إن استمر الأمر. لم تُحذف بياناتك السابقة عن قصد."
+            "value": "تعذر على Todoshi فتح مخزن البيانات المحلي. أعد تثبيت التطبيق أو تواصل مع الدعم إن استمر الأمر. لم تُحذف بياناتك السابقة عن قصد."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nexus could not open its local data store. Please reinstall the app or contact support if this continues. Your previous data was not intentionally deleted."
+            "value": "Todoshi could not open its local data store. Please reinstall the app or contact support if this continues. Your previous data was not intentionally deleted."
           }
         }
       }
@@ -2875,6 +3961,329 @@
         }
       }
     },
+    "home.greeting.afternoon": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مساء الخير"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Good afternoon"
+          }
+        }
+      }
+    },
+    "home.greeting.evening": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مساء الخير"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Good evening"
+          }
+        }
+      }
+    },
+    "home.greeting.morning": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "صباح الخير"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Good morning"
+          }
+        }
+      }
+    },
+    "home.greeting.named": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@، %2$@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@, %2$@"
+          }
+        }
+      }
+    },
+    "home.newProject": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مشروع جديد"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New project"
+          }
+        }
+      }
+    },
+    "home.noProjects": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لا توجد مشاريع بعد"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No projects yet"
+          }
+        }
+      }
+    },
+    "home.noProjectsMessage": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "أنشئ مشروعك الأول وابدأ بتنظيم مهامك."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Create your first project and start organizing your work."
+          }
+        }
+      }
+    },
+    "home.projectActions": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إدارة المشاريع"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Project Actions"
+          }
+        }
+      }
+    },
+    "home.seeAll": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "عرض الكل"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "See all"
+          }
+        }
+      }
+    },
+    "home.subtitle": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "نظرة سريعة على مشاريعك ومهامك"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A quick look at your projects and tasks"
+          }
+        }
+      }
+    },
+    "home.today.empty": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ما عندك مهام اليوم. استمتع بيومك."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nothing due today. Enjoy your day."
+          }
+        }
+      }
+    },
+    "home.today.overdueSuffix": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%d متأخرة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%d overdue"
+          }
+        }
+      }
+    },
+    "home.today.progress": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$d من %2$d منجزة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$d of %2$d done"
+          }
+        }
+      }
+    },
+    "home.today.remaining": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "باقي %d"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%d left"
+          }
+        }
+      }
+    },
+    "home.today.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مهام اليوم"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today"
+          }
+        }
+      }
+    },
+    "home.yourProjects": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مشاريعك"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your projects"
+          }
+        }
+      }
+    },
+    "identity.todoshiId.hint": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "معرف ثابت وفريد لحسابك في Todoshi."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A permanent unique identifier for your Todoshi account."
+          }
+        }
+      }
+    },
+    "identity.todoshiId.label": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "معرف Todoshi"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Todoshi ID"
+          }
+        }
+      }
+    },
+    "identity.todoshiId.provisioningFailed": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعذر إعداد معرف Todoshi حاليًا. حاول مرة أخرى عند توفر اتصال بالإنترنت."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn't set up your Todoshi ID right now. Try again when you're online."
+          }
+        }
+      }
+    },
     "intent.addTask.desc": {
       "extractionState": "manual",
       "localizations": {
@@ -2887,7 +4296,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Create a basic todo in a selected Nexus project."
+            "value": "Create a basic todo in a selected Todoshi project."
           }
         }
       }
@@ -2898,13 +4307,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "إضافة مهمة إلى مشروع Nexus"
+            "value": "إضافة مهمة إلى مشروع Todoshi"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Add Task to Nexus Project"
+            "value": "Add Task to Todoshi Project"
           }
         }
       }
@@ -3017,13 +4426,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "افتح Nexus لإكمال الإعداد"
+            "value": "افتح Todoshi لإكمال الإعداد"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Open Nexus to finish setup"
+            "value": "Open Todoshi to finish setup"
           }
         }
       }
@@ -3136,13 +4545,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "اختر المشروع الذي يعرضه ويدجت Nexus."
+            "value": "اختر المشروع الذي يعرضه ويدجت Todoshi."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Choose the project shown in the Nexus widget."
+            "value": "Choose the project shown in the Todoshi widget."
           }
         }
       }
@@ -3278,7 +4687,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Show the previous or next active Nexus project in the widget."
+            "value": "Show the previous or next active Todoshi project in the widget."
           }
         }
       }
@@ -4530,13 +5939,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "يمكن لـ Nexus تذكيرك بالمهام في الأوقات التي تختارها. لا تُضمَّن الملاحظات أو الأوصاف."
+            "value": "يمكن لـ Todoshi تذكيرك بالمهام في الأوقات التي تختارها. لا تُضمَّن الملاحظات أو الأوصاف."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nexus can remind you about tasks at the times you choose. Task notes and descriptions are never included."
+            "value": "Todoshi can remind you about tasks at the times you choose. Task notes and descriptions are never included."
           }
         }
       }
@@ -4643,6 +6052,23 @@
         }
       }
     },
+    "notification.reminderDue": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ · مستحقة %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ · Due %@"
+          }
+        }
+      }
+    },
     "notification.reminders": {
       "extractionState": "manual",
       "localizations": {
@@ -4717,13 +6143,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nexus"
+            "value": "Todoshi"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nexus"
+            "value": "Todoshi"
           }
         }
       }
@@ -4859,7 +6285,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Widgets and reminders read from the same on-device App Group store used by Nexus."
+            "value": "Widgets and reminders read from the same on-device App Group store used by Todoshi."
           }
         }
       }
@@ -4870,13 +6296,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "قد يؤدي حذف التطبيق إلى إزالة بياناته المحلية وفق نُسخ iCloud الاحتياطية للجهاز. لا يوفّر Nexus تصديرًا سحابيًا أو استعادة بين الأجهزة."
+            "value": "قد يؤدي حذف التطبيق إلى إزالة بياناته المحلية وفق نُسخ iCloud الاحتياطية للجهاز. لا يوفّر Todoshi تصديرًا سحابيًا أو استعادة بين الأجهزة."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Removing Nexus may remove its local data, subject to device backups you have configured. Nexus does not currently provide encrypted cloud export or multi-device recovery."
+            "value": "Removing Todoshi may remove its local data, subject to device backups you have configured. Todoshi does not currently provide encrypted cloud export or multi-device recovery."
           }
         }
       }
@@ -4887,13 +6313,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "الملفات المستوردة المنسوخة إلى تخزين Nexus"
+            "value": "الملفات المستوردة المنسوخة إلى تخزين Todoshi"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Imported files copied into Nexus storage"
+            "value": "Imported files copied into Todoshi storage"
           }
         }
       }
@@ -4955,13 +6381,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "عند فتح رابط مرفق بمهمة، يفتحه iOS خارج Nexus (مثل Safari). لا يرسل Nexus محتوى عن بُعد."
+            "value": "عند فتح رابط مرفق بمهمة، يفتحه iOS خارج Todoshi (مثل Safari). لا يرسل Todoshi محتوى عن بُعد."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "When you open a link attached to a task, iOS opens it outside Nexus (for example Safari). Nexus does not proxy remote content."
+            "value": "When you open a link attached to a task, iOS opens it outside Todoshi (for example Safari). Todoshi does not proxy remote content."
           }
         }
       }
@@ -4972,13 +6398,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "تُنسخ الملفات المستوردة إلى تخزين Nexus المحلي على هذا الجهاز."
+            "value": "تُنسخ الملفات المستوردة إلى تخزين Todoshi المحلي على هذا الجهاز."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Imported files are copied into Nexus local storage on this device."
+            "value": "Imported files are copied into Todoshi local storage on this device."
           }
         }
       }
@@ -4989,13 +6415,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nexus تطبيق مهام محلي. تُحفظ بياناتك في قاعدة على هذا الجهاز، وفي مجموعة التطبيقات ليقرأها الويدجت."
+            "value": "Todoshi تطبيق مهام محلي. تُحفظ بياناتك في قاعدة على هذا الجهاز، وفي مجموعة التطبيقات ليقرأها الويدجت."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nexus is a local-first task app. Your work is stored in a database on this device (and in an App Group container so widgets can read the same data)."
+            "value": "Todoshi is a local-first task app. Your work is stored in a database on this device (and in an App Group container so widgets can read the same data)."
           }
         }
       }
@@ -5176,13 +6602,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "فتح المحتوى خارج Nexus"
+            "value": "فتح المحتوى خارج Todoshi"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Opening content outside Nexus"
+            "value": "Opening content outside Todoshi"
           }
         }
       }
@@ -5193,13 +6619,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "ما لا يفعله Nexus"
+            "value": "ما لا يفعله Todoshi"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "What Nexus does not do"
+            "value": "What Todoshi does not do"
           }
         }
       }
@@ -5234,6 +6660,244 @@
           "stringUnit": {
             "state": "translated",
             "value": "Privacy"
+          }
+        }
+      }
+    },
+    "profile.avatarAccessibility": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "صورة الملف الشخصي"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Profile photo"
+          }
+        }
+      }
+    },
+    "profile.displayName": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الاسم المعروض"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Display Name"
+          }
+        }
+      }
+    },
+    "profile.edit": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعديل الملف الشخصي"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Edit Profile"
+          }
+        }
+      }
+    },
+    "profile.email": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "البريد الإلكتروني"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Email"
+          }
+        }
+      }
+    },
+    "profile.error.loadFailed": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعذر تحميل ملفك الشخصي. حاول مرة أخرى."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn't load your profile. Please try again."
+          }
+        }
+      }
+    },
+    "profile.error.nameInvalid": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "أدخل اسمًا معروضًا."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enter a display name."
+          }
+        }
+      }
+    },
+    "profile.error.nameTooLong": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الاسم المعروض طويل جدًا."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Display name is too long."
+          }
+        }
+      }
+    },
+    "profile.error.updateFailed": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعذر تحديث ملفك الشخصي. حاول مرة أخرى."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn't update your profile. Please try again."
+          }
+        }
+      }
+    },
+    "profile.nameCompletion.message": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "سيظهر هذا الاسم لأعضاء المشاريع التي تشارك فيها."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This name will be visible to members of projects you collaborate on."
+          }
+        }
+      }
+    },
+    "profile.nameCompletion.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "أدخل اسمك"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enter your name"
+          }
+        }
+      }
+    },
+    "profile.openAccessibility": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "فتح الملف الشخصي"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open profile"
+          }
+        }
+      }
+    },
+    "profile.save": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "حفظ"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save"
+          }
+        }
+      }
+    },
+    "profile.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الملف الشخصي"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Profile"
+          }
+        }
+      }
+    },
+    "profile.unavailable": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعذر تحميل ملفك الشخصي الآن. المهام المحلية ما زالت تعمل."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your profile couldn't be loaded right now. Local tasks still work."
           }
         }
       }
@@ -5391,6 +7055,378 @@
         }
       }
     },
+    "project.checklist.addItem": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إضافة عنصر"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add Item"
+          }
+        }
+      }
+    },
+    "project.checklist.addPlaceholder": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "أضف عنصرًا…"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add an item…"
+          }
+        }
+      }
+    },
+    "project.checklist.allItems": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "كل العناصر"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All Items"
+          }
+        }
+      }
+    },
+    "project.checklist.assignedItems": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "العناصر المسندة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Assigned Items"
+          }
+        }
+      }
+    },
+    "project.checklist.completedBy": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "أنجزها %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Completed by %@"
+          }
+        }
+      }
+    },
+    "project.checklist.completedByLabel": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "أنجزها"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Completed by"
+          }
+        }
+      }
+    },
+    "project.checklist.completedCount": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مكتملة (%lld)"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Completed (%lld)"
+          }
+        }
+      }
+    },
+    "project.checklist.continue": {
+      "extractionState": "stale",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "متابعة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continue"
+          }
+        }
+      }
+    },
+    "project.checklist.emptyMessage": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "أضف أول عنصر إلى القائمة."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add your first item to the list."
+          }
+        }
+      }
+    },
+    "project.checklist.emptyTitle": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لا توجد عناصر بعد"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No items yet"
+          }
+        }
+      }
+    },
+    "project.checklist.markCompleted": {
+      "extractionState": "stale",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعيين مكتمل"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mark Completed"
+          }
+        }
+      }
+    },
+    "project.checklist.markInProgress": {
+      "extractionState": "stale",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعيين قيد التنفيذ"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mark In Progress"
+          }
+        }
+      }
+    },
+    "project.checklist.myItems": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "عناصري"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "My Items"
+          }
+        }
+      }
+    },
+    "project.checklist.noEdit": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ليس لديك صلاحية لتعديل هذا العنصر"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You don't have permission to edit this item."
+          }
+        }
+      }
+    },
+    "project.checklist.openItemsCount": {
+      "localizations": {
+        "ar": {
+          "variations": {
+            "plural": {
+              "few": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld عناصر متبقية"
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld عنصرًا متبقيًا"
+                }
+              },
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "عنصر واحد متبقٍ"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld عناصر متبقية"
+                }
+              },
+              "two": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "عنصران متبقيان"
+                }
+              },
+              "zero": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "لا عناصر متبقية"
+                }
+              }
+            }
+          }
+        },
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld remaining"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld remaining"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "project.checklist.reopen": {
+      "extractionState": "stale",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إعادة فتح"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reopen"
+          }
+        }
+      }
+    },
+    "project.checklist.status.done": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مكتمل"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Completed"
+          }
+        }
+      }
+    },
+    "project.checklist.status.inProgress": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "قيد التنفيذ"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In Progress"
+          }
+        }
+      }
+    },
+    "project.checklist.status.todo": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لم يبدأ"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not Started"
+          }
+        }
+      }
+    },
+    "project.checklist.summary": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld متبقية · %lld قيد التنفيذ · %lld مكتملة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld remaining · %lld in progress · %lld completed"
+          }
+        }
+      }
+    },
     "project.create": {
       "extractionState": "stale",
       "localizations": {
@@ -5527,6 +7563,286 @@
         }
       }
     },
+    "project.invite.acceptFailed": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعذّر الانضمام إلى المشروع. حاول مرة أخرى."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn't join the project. Try again."
+          }
+        }
+      }
+    },
+    "project.invite.alreadyUsed": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تم استخدام هذه الدعوة مسبقًا."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This invitation has already been used."
+          }
+        }
+      }
+    },
+    "project.invite.cancelInvitation": {
+      "extractionState": "stale",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إلغاء الدعوة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancel Invitation"
+          }
+        }
+      }
+    },
+    "project.invite.createFailed": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعذّر إنشاء الدعوة. حاول مرة أخرى."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn't create the invitation. Try again."
+          }
+        }
+      }
+    },
+    "project.invite.expired": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "انتهت صلاحية هذه الدعوة.\nاطلب من مالك المشروع إرسال دعوة جديدة."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This invitation has expired.\nAsk the project owner to send a new invite."
+          }
+        }
+      }
+    },
+    "project.invite.invalid": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "رابط الدعوة غير صالح."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This invitation link is invalid."
+          }
+        }
+      }
+    },
+    "project.invite.join": {
+      "extractionState": "stale",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الانضمام للمشروع"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Join Project"
+          }
+        }
+      }
+    },
+    "project.invite.joinedNoTaskSync": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تم الانضمام إلى المشروع.\nمزامنة المهام المشتركة ستتوفر في المرحلة التالية."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You've joined this project.\nShared task synchronization is not enabled yet."
+          }
+        }
+      }
+    },
+    "project.invite.joining": {
+      "extractionState": "stale",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "جارٍ الانضمام…"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Joining…"
+          }
+        }
+      }
+    },
+    "project.invite.loading": {
+      "extractionState": "stale",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "جارٍ تحميل الدعوة…"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Loading invitation…"
+          }
+        }
+      }
+    },
+    "project.invite.member": {
+      "extractionState": "stale",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "دعوة عضو"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Invite Member"
+          }
+        }
+      }
+    },
+    "project.invite.ownerOnly": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يمكن لمالك المشروع فقط دعوة الأعضاء."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Only the project owner can invite members."
+          }
+        }
+      }
+    },
+    "project.invite.previewMessage": {
+      "extractionState": "stale",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "دعاك %@ للانضمام إلى هذا المشروع في Todoshi."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ invited you to join this project on Todoshi."
+          }
+        }
+      }
+    },
+    "project.invite.previewMessageAnonymous": {
+      "extractionState": "stale",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "دُعيت للانضمام إلى هذا المشروع في Todoshi."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You've been invited to join this project on Todoshi."
+          }
+        }
+      }
+    },
+    "project.invite.previewTitle": {
+      "extractionState": "stale",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "دعوة إلى مشروع"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Project Invitation"
+          }
+        }
+      }
+    },
+    "project.invite.revoked": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تم إلغاء هذه الدعوة."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This invitation has been revoked."
+          }
+        }
+      }
+    },
+    "project.invite.shareMessage": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "انضم إلى مشروعي في Todoshi:\n%@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Join my project on Todoshi:\n%@"
+          }
+        }
+      }
+    },
     "project.layoutA11y": {
       "extractionState": "stale",
       "localizations": {
@@ -5540,6 +7856,305 @@
           "stringUnit": {
             "state": "translated",
             "value": "Task layout"
+          }
+        }
+      }
+    },
+    "project.members": {
+      "extractionState": "stale",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الأعضاء"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Members"
+          }
+        }
+      }
+    },
+    "project.members.accessLost": {
+      "extractionState": "stale",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تمت إزالة وصولك إلى هذا المشروع."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You no longer have access to this project."
+          }
+        }
+      }
+    },
+    "project.members.empty": {
+      "extractionState": "stale",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لا يوجد أعضاء بعد."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No members yet."
+          }
+        }
+      }
+    },
+    "project.members.leave": {
+      "extractionState": "stale",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مغادرة المشروع"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Leave Project"
+          }
+        }
+      }
+    },
+    "project.members.leaveConfirmMessage": {
+      "extractionState": "stale",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ستفقد الوصول إلى المشروع، وستصبح المهام المسندة إليك غير مسندة."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You will lose access to this project and tasks assigned to you will become unassigned."
+          }
+        }
+      }
+    },
+    "project.members.leaveConfirmTitle": {
+      "extractionState": "stale",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مغادرة المشروع؟"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Leave this project?"
+          }
+        }
+      }
+    },
+    "project.members.leaveFailed": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعذّرت المغادرة. حاول مرة أخرى."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Leave failed. Please try again."
+          }
+        }
+      }
+    },
+    "project.members.loadFailed": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعذّر تحميل الأعضاء. حاول مجددًا."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn't load members. Try again."
+          }
+        }
+      }
+    },
+    "project.members.member": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "عضو"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Member"
+          }
+        }
+      }
+    },
+    "project.members.owner": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "المالك"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Owner"
+          }
+        }
+      }
+    },
+    "project.members.profile.permissions": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الصلاحيات"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Permissions"
+          }
+        }
+      }
+    },
+    "project.members.profile.title": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الملف الشخصي للعضو"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Member Profile"
+          }
+        }
+      }
+    },
+    "project.members.remove": {
+      "extractionState": "stale",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إزالة من المشروع"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove from Project"
+          }
+        }
+      }
+    },
+    "project.members.removeConfirmMessage": {
+      "extractionState": "stale",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "سيتم إلغاء إسناد مهامه وإزالة صلاحياته على المهام. ستبقى تعليقاته وسجل إنجازاته محفوظة."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Their task assignments will be cleared and task permissions removed. Their comments and completion history will be preserved."
+          }
+        }
+      }
+    },
+    "project.members.removeConfirmTitle": {
+      "extractionState": "stale",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إزالة %@ من المشروع؟"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove %@ from the project?"
+          }
+        }
+      }
+    },
+    "project.members.removeFailed": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعذّرت الإزالة. حاول مرة أخرى."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Removal failed. Please try again."
+          }
+        }
+      }
+    },
+    "project.members.title": {
+      "extractionState": "stale",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "أعضاء المشروع"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Project Members"
+          }
+        }
+      }
+    },
+    "project.members.unnamed": {
+      "extractionState": "stale",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "عضو"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Member"
           }
         }
       }
@@ -5629,6 +8244,102 @@
         }
       }
     },
+    "project.permissions.allowedTasks": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "المهام المسموح بها"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allowed Tasks"
+          }
+        }
+      }
+    },
+    "project.permissions.fullAccess": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "صلاحية كاملة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Full Access"
+          }
+        }
+      }
+    },
+    "project.permissions.fullAccessHint": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يمكنه تعديل جميع المهام"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Can edit all tasks"
+          }
+        }
+      }
+    },
+    "project.permissions.selectedHint": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يمكنه تعديل المهام المحددة فقط"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Can edit selected tasks only"
+          }
+        }
+      }
+    },
+    "project.permissions.selectedTasksOnly": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مهام محددة فقط"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Selected Tasks Only"
+          }
+        }
+      }
+    },
+    "project.permissions.taskAccess": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "صلاحيات المهام"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Task Permissions"
+          }
+        }
+      }
+    },
     "project.restore": {
       "extractionState": "stale",
       "localizations": {
@@ -5659,6 +8370,334 @@
           "stringUnit": {
             "state": "translated",
             "value": "Restore"
+          }
+        }
+      }
+    },
+    "project.share": {
+      "extractionState": "stale",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مشاركة المشروع"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Share Project"
+          }
+        }
+      }
+    },
+    "project.share.alreadyShared": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "هذا المشروع مشترك بالفعل."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This project is already shared."
+          }
+        }
+      }
+    },
+    "project.share.authContinue": {
+      "extractionState": "stale",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "سجّل الدخول لمتابعة مشاركة هذا المشروع."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign in to continue sharing this project."
+          }
+        }
+      }
+    },
+    "project.share.binaryResourceDeferred": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مزامنة الملفات المشتركة ستتوفر لاحقًا."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shared file sync is coming later."
+          }
+        }
+      }
+    },
+    "project.share.confirmMessage": {
+      "extractionState": "stale",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "سيصبح هذا المشروع جاهزًا للمشاركة مع الآخرين.\nلن تتم دعوة أي شخص حتى تختار ذلك لاحقًا."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This project will become ready to share with others.\nNo one will be invited until you choose to invite them later."
+          }
+        }
+      }
+    },
+    "project.share.confirmTitle": {
+      "extractionState": "stale",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مشاركة المشروع"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Share Project"
+          }
+        }
+      }
+    },
+    "project.share.conflict": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعذّرت مشاركة هذا المشروع لأن مشروعًا مشتركًا متعارضًا موجود بالفعل."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn't share this project because a conflicting shared project already exists."
+          }
+        }
+      }
+    },
+    "project.share.continue": {
+      "extractionState": "stale",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "متابعة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continue"
+          }
+        }
+      }
+    },
+    "project.share.failed": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعذّرت مشاركة هذا المشروع. تحقق من الاتصال وحاول مجددًا."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn't share this project. Check your connection and try again."
+          }
+        }
+      }
+    },
+    "project.share.localSaveFailed": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تم إنشاء المشروع المشترك عبر الإنترنت، لكن فشل الحفظ محليًا. حاول مشاركة المشروع مجددًا لإصلاح الحالة."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The shared project was created online, but saving locally failed. Try Share Project again to repair."
+          }
+        }
+      }
+    },
+    "project.share.progress": {
+      "extractionState": "stale",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "جاري مشاركة المشروع…"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sharing project…"
+          }
+        }
+      }
+    },
+    "project.share.syncUnavailable": {
+      "extractionState": "stale",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعذّر الوصول إلى هذا المشروع المشترك. سجّل الدخول مجددًا أو اطلب دعوة جديدة."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This shared project is unavailable. Sign in again or ask for a new invite."
+          }
+        }
+      }
+    },
+    "project.share.syncingContent": {
+      "extractionState": "stale",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "جارٍ مزامنة محتوى المشروع…"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Syncing project content…"
+          }
+        }
+      }
+    },
+    "project.share.unavailable": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مشاركة المشاريع غير متاحة الآن. حاول لاحقًا."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Project sharing isn't available right now. Try again later."
+          }
+        }
+      }
+    },
+    "project.sharedA11y": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مشروع مشترك"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shared project"
+          }
+        }
+      }
+    },
+    "project.type.checklist": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تشيك ليست"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Checklist"
+          }
+        }
+      }
+    },
+    "project.type.checklist.subtitle": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "قائمة بسيطة وسريعة للطلبات والمهام اليومية."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A simple shared list for everyday items and tasks."
+          }
+        }
+      }
+    },
+    "project.type.chooseTitle": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "اختر نوع المشروع"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose Project Type"
+          }
+        }
+      }
+    },
+    "project.type.tasks": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مهام"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tasks"
+          }
+        }
+      }
+    },
+    "project.type.tasks.subtitle": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لإدارة المهام والمراحل والتقدم والتفاصيل."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Manage tasks, workflow stages, progress, and details."
           }
         }
       }
@@ -5833,6 +8872,74 @@
         }
       }
     },
+    "projects.filter.all": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الكل"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All"
+          }
+        }
+      }
+    },
+    "projects.filter.checklists": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "قوائم"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lists"
+          }
+        }
+      }
+    },
+    "projects.filter.shared": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مشتركة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shared"
+          }
+        }
+      }
+    },
+    "projects.filter.tasks": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مهام"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tasks"
+          }
+        }
+      }
+    },
     "projects.list": {
       "extractionState": "manual",
       "localizations": {
@@ -5846,6 +8953,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "List"
+          }
+        }
+      }
+    },
+    "projects.listProgress": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "قائمة · %1$d من %2$d"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "List · %1$d of %2$d"
           }
         }
       }
@@ -5918,6 +9042,40 @@
         }
       }
     },
+    "projects.openCount": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%d مفتوحة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%d open"
+          }
+        }
+      }
+    },
+    "projects.overdueCount": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%d متأخرة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%d overdue"
+          }
+        }
+      }
+    },
     "projects.restore": {
       "extractionState": "manual",
       "localizations": {
@@ -5952,6 +9110,108 @@
         }
       }
     },
+    "quickAdd.date.label": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "التاريخ"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Date"
+          }
+        }
+      }
+    },
+    "quickAdd.date.nextWeek": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الأسبوع الجاي"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Next week"
+          }
+        }
+      }
+    },
+    "quickAdd.date.none": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "بدون تاريخ"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No date"
+          }
+        }
+      }
+    },
+    "quickAdd.date.pick": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تاريخ آخر…"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pick a date…"
+          }
+        }
+      }
+    },
+    "quickAdd.date.today": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "اليوم"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today"
+          }
+        }
+      }
+    },
+    "quickAdd.date.tomorrow": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "بكرة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tomorrow"
+          }
+        }
+      }
+    },
     "quickAdd.noProjects": {
       "extractionState": "manual",
       "localizations": {
@@ -5982,6 +9242,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Create a project before capturing tasks."
+          }
+        }
+      }
+    },
+    "quickAdd.placeholder": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "وش تبي تسوي؟"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "What needs doing?"
+          }
+        }
+      }
+    },
+    "quickAdd.priority.label": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الأولوية"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Priority"
           }
         }
       }
@@ -6867,13 +10161,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "تُنسخ الأوامر فقط. لا يشغّلها Nexus."
+            "value": "تُنسخ الأوامر فقط. لا يشغّلها Todoshi."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Commands are copied only. Nexus never runs them."
+            "value": "Commands are copied only. Todoshi never runs them."
           }
         }
       }
@@ -7275,13 +10569,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "تُنسخ الملفات إلى تخزين Nexus المحلي على هذا الجهاز."
+            "value": "تُنسخ الملفات إلى تخزين Todoshi المحلي على هذا الجهاز."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Files are copied into Nexus local storage on this device."
+            "value": "Files are copied into Todoshi local storage on this device."
           }
         }
       }
@@ -7881,19 +11175,104 @@
         }
       }
     },
+    "settings.language": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لغة التطبيق"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App Language"
+          }
+        }
+      }
+    },
+    "settings.language.arabic": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "العربية"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "العربية"
+          }
+        }
+      }
+    },
+    "settings.language.english": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "English"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "English"
+          }
+        }
+      }
+    },
+    "settings.language.rowLabel": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "اللغة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Language"
+          }
+        }
+      }
+    },
+    "settings.language.system": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لغة الجهاز"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "System Language"
+          }
+        }
+      }
+    },
     "settings.localFirst": {
       "extractionState": "manual",
       "localizations": {
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "يخزّن Nexus البيانات محليًا على هذا الجهاز. لا يلزم حساب ولا مزامنة سحابية في هذا الإصدار."
+            "value": "يخزّن Todoshi البيانات محليًا على هذا الجهاز. لا يلزم حساب ولا مزامنة سحابية في هذا الإصدار."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nexus stores data locally on this device. No account or cloud sync is required or used in this release."
+            "value": "Todoshi stores data locally on this device. No account or cloud sync is required or used in this release."
           }
         }
       }
@@ -8091,13 +11470,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "تعذر فتح بيانات Nexus"
+            "value": "تعذر فتح بيانات Todoshi"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Can’t Open Nexus Data"
+            "value": "Can’t Open Todoshi Data"
           }
         }
       }
@@ -8533,24 +11912,6 @@
         "ar": {
           "variations": {
             "plural": {
-              "zero": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "لا مهام مجدولة لليوم"
-                }
-              },
-              "one": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "مهمة مجدولة لليوم"
-                }
-              },
-              "two": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "مهمتان مجدولتان لليوم"
-                }
-              },
               "few": {
                 "stringUnit": {
                   "state": "translated",
@@ -8563,10 +11924,28 @@
                   "value": "%lld مهمة مجدولة لليوم"
                 }
               },
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "مهمة مجدولة لليوم"
+                }
+              },
               "other": {
                 "stringUnit": {
                   "state": "translated",
                   "value": "%lld مهمة مجدولة لليوم"
+                }
+              },
+              "two": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "مهمتان مجدولتان لليوم"
+                }
+              },
+              "zero": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "لا مهام مجدولة لليوم"
                 }
               }
             }
@@ -8598,24 +11977,6 @@
         "ar": {
           "variations": {
             "plural": {
-              "zero": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "لا مهام بأولوية عالية"
-                }
-              },
-              "one": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "مهمة بأولوية عالية"
-                }
-              },
-              "two": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "مهمتان بأولوية عالية"
-                }
-              },
               "few": {
                 "stringUnit": {
                   "state": "translated",
@@ -8628,10 +11989,28 @@
                   "value": "%lld مهمة بأولوية عالية"
                 }
               },
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "مهمة بأولوية عالية"
+                }
+              },
               "other": {
                 "stringUnit": {
                   "state": "translated",
                   "value": "%lld مهمة بأولوية عالية"
+                }
+              },
+              "two": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "مهمتان بأولوية عالية"
+                }
+              },
+              "zero": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "لا مهام بأولوية عالية"
                 }
               }
             }
@@ -8728,24 +12107,6 @@
         "ar": {
           "variations": {
             "plural": {
-              "zero": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "لا مهام متأخرة"
-                }
-              },
-              "one": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "مهمة متأخرة"
-                }
-              },
-              "two": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "مهمتان متأخرتان"
-                }
-              },
               "few": {
                 "stringUnit": {
                   "state": "translated",
@@ -8758,10 +12119,28 @@
                   "value": "%lld مهمة متأخرة"
                 }
               },
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "مهمة متأخرة"
+                }
+              },
               "other": {
                 "stringUnit": {
                   "state": "translated",
                   "value": "%lld مهمة متأخرة"
+                }
+              },
+              "two": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "مهمتان متأخرتان"
+                }
+              },
+              "zero": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "لا مهام متأخرة"
                 }
               }
             }
@@ -8783,6 +12162,23 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "tab.add": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إضافة مهمة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add task"
           }
         }
       }
@@ -8906,6 +12302,232 @@
         }
       }
     },
+    "task.activity.new": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "جديد"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New"
+          }
+        }
+      }
+    },
+    "task.assignment.aclGuard": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "هذا العضو مسؤول عن المهمة. ألغِ إسناد المهمة أولًا أو غيّر المسؤول."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This member is assigned to the task. Unassign or change the assignee first."
+          }
+        }
+      }
+    },
+    "task.assignment.allTasks": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "كل المهام"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All Tasks"
+          }
+        }
+      }
+    },
+    "task.assignment.assign": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إسناد المهمة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Assign Task"
+          }
+        }
+      }
+    },
+    "task.assignment.assignedTasks": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "المهام المسندة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Assigned Tasks"
+          }
+        }
+      }
+    },
+    "task.assignment.assignee": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "المسؤول"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Assignee"
+          }
+        }
+      }
+    },
+    "task.assignment.autoGrantFooter": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "سيتم منح هذا العضو صلاحية تعديل المهمة تلقائيًا."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This member will also receive edit access to the task."
+          }
+        }
+      }
+    },
+    "task.assignment.change": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تغيير المسؤول"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Change Assignee"
+          }
+        }
+      }
+    },
+    "task.assignment.myTasks": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مهامي"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "My Tasks"
+          }
+        }
+      }
+    },
+    "task.assignment.sectionTitle": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "المسؤول عن المهمة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Assignee"
+          }
+        }
+      }
+    },
+    "task.assignment.total": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الإجمالي"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Total"
+          }
+        }
+      }
+    },
+    "task.assignment.unassignAction": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إلغاء الإسناد"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unassign"
+          }
+        }
+      }
+    },
+    "task.assignment.unassigned": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "غير مسندة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unassigned"
+          }
+        }
+      }
+    },
+    "task.changeStatus": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تغيير الحالة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Change status"
+          }
+        }
+      }
+    },
     "task.chooseActiveProject": {
       "extractionState": "stale",
       "localizations": {
@@ -8936,6 +12558,159 @@
           "stringUnit": {
             "state": "translated",
             "value": "Choose a project."
+          }
+        }
+      }
+    },
+    "task.comments": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "التعليقات"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Comments"
+          }
+        }
+      }
+    },
+    "task.comments.deleteConfirm": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "حذف هذا التعليق؟"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete this comment?"
+          }
+        }
+      }
+    },
+    "task.comments.editTitle": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعديل التعليق"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Edit Comment"
+          }
+        }
+      }
+    },
+    "task.comments.empty": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لا توجد تعليقات بعد"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No comments yet"
+          }
+        }
+      }
+    },
+    "task.comments.error.empty": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لا يمكن أن يكون التعليق فارغًا."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Comment cannot be empty."
+          }
+        }
+      }
+    },
+    "task.comments.error.postFailed": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعذر نشر التعليق."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn’t post comment."
+          }
+        }
+      }
+    },
+    "task.comments.error.tooLong": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "التعليق طويل جدًا."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Comment is too long."
+          }
+        }
+      }
+    },
+    "task.comments.placeholder": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "أضف تعليقًا…"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add a comment…"
+          }
+        }
+      }
+    },
+    "task.comments.send": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إرسال"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Send"
           }
         }
       }
@@ -9004,6 +12779,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Created"
+          }
+        }
+      }
+    },
+    "task.createdLine": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "أُنشئت %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Created %@"
           }
         }
       }
@@ -9110,6 +12902,40 @@
         }
       }
     },
+    "task.detail.sectionPicker": {
+      "extractionState": "stale",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "قسم التفاصيل"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Task section"
+          }
+        }
+      }
+    },
+    "task.detail.tab.details": {
+      "extractionState": "stale",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "التفاصيل"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Details"
+          }
+        }
+      }
+    },
     "task.details": {
       "extractionState": "manual",
       "localizations": {
@@ -9161,6 +12987,91 @@
         }
       }
     },
+    "task.markDone": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعليم كمنجزة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mark as done"
+          }
+        }
+      }
+    },
+    "task.more.attachment": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مرفق"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Attach"
+          }
+        }
+      }
+    },
+    "task.more.label": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تصنيف"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Label"
+          }
+        }
+      }
+    },
+    "task.more.reminder": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تذكير"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remind"
+          }
+        }
+      }
+    },
+    "task.more.repeat": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تكرار"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Repeat"
+          }
+        }
+      }
+    },
     "task.moveToStatus": {
       "extractionState": "manual",
       "localizations": {
@@ -9191,6 +13102,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "New Task"
+          }
+        }
+      }
+    },
+    "task.noDueDate": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "بدون تاريخ"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No date"
           }
         }
       }
@@ -9242,6 +13170,102 @@
           "stringUnit": {
             "state": "translated",
             "value": "Notes"
+          }
+        }
+      }
+    },
+    "task.permissions.alwaysOwner": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "المالك — صلاحية دائمة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Owner — always allowed"
+          }
+        }
+      }
+    },
+    "task.permissions.hasFullAccess": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "صلاحية كاملة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Full Access"
+          }
+        }
+      }
+    },
+    "task.permissions.noEdit": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ليس لديك صلاحية لتعديل هذه المهمة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You don't have permission to edit this task."
+          }
+        }
+      }
+    },
+    "task.permissions.readOnly": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "للقراءة فقط"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Read Only"
+          }
+        }
+      }
+    },
+    "task.permissions.revoked": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لم تعد لديك صلاحية لتعديل هذه المهمة."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You no longer have permission to edit this task."
+          }
+        }
+      }
+    },
+    "task.permissions.title": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "صلاحيات المهمة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Task Permissions"
           }
         }
       }
@@ -9314,6 +13338,125 @@
         }
       }
     },
+    "task.statusControl.a11y": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "حالة المهمة: %@. اضغط لتغيير الحالة."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Task status: %@. Double tap to change status."
+          }
+        }
+      }
+    },
+    "task.statusControl.hint": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يفتح قائمة الحالات"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Opens the status menu"
+          }
+        }
+      }
+    },
+    "task.statusShortcut.complete": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إكمال المهمة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Complete task"
+          }
+        }
+      }
+    },
+    "task.statusShortcut.moveToReady": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "نقل إلى جاهزة للبدء"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Move to ready"
+          }
+        }
+      }
+    },
+    "task.statusShortcut.reopen": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إعادة فتح المهمة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reopen task"
+          }
+        }
+      }
+    },
+    "task.statusShortcut.sendForReview": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إرسال للمراجعة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Send for review"
+          }
+        }
+      }
+    },
+    "task.statusShortcut.startWork": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "بدء العمل"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start work"
+          }
+        }
+      }
+    },
     "task.subtask": {
       "extractionState": "stale",
       "localizations": {
@@ -9382,6 +13525,23 @@
         }
       }
     },
+    "task.urgent": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "عاجل"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Urgent"
+          }
+        }
+      }
+    },
     "widget.a11yHighPriority": {
       "extractionState": "manual",
       "localizations": {
@@ -9446,6 +13606,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Today, %lld open tasks"
+          }
+        }
+      }
+    },
+    "widget.addItem": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إضافة عنصر"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add Item"
+          }
+        }
+      }
+    },
+    "widget.addItemTo": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إضافة عنصر إلى %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add item to %@"
           }
         }
       }
@@ -9636,6 +13830,71 @@
         }
       }
     },
+    "widget.itemsRemainingCount": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "variations": {
+            "plural": {
+              "few": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld عناصر متبقية"
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld عنصرًا متبقيًا"
+                }
+              },
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "عنصر واحد متبقٍ"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld عناصر متبقية"
+                }
+              },
+              "two": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "عنصران متبقيان"
+                }
+              },
+              "zero": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "لا عناصر متبقية"
+                }
+              }
+            }
+          }
+        },
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "1 item remaining"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld items remaining"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "widget.moreTasks": {
       "extractionState": "stale",
       "localizations": {
@@ -9693,13 +13952,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "افتح Nexus لإنشاء مشروع"
+            "value": "افتح Todoshi لإنشاء مشروع"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Open Nexus to create a project"
+            "value": "Open Todoshi to create a project"
           }
         }
       }
@@ -9717,6 +13976,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "No high-priority tasks"
+          }
+        }
+      }
+    },
+    "widget.noItems": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لا توجد عناصر"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No items"
+          }
+        }
+      }
+    },
+    "widget.noItemsHint": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "أضف أول عنصر إلى القائمة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add your first item to the list"
           }
         }
       }
@@ -9772,19 +14065,19 @@
         }
       }
     },
-    "widget.openNexus": {
+    "widget.openList": {
       "extractionState": "manual",
       "localizations": {
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "افتح Nexus لإكمال الإعداد"
+            "value": "فتح القائمة"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Open Nexus to finish setup"
+            "value": "Open List"
           }
         }
       }
@@ -9829,24 +14122,6 @@
         "ar": {
           "variations": {
             "plural": {
-              "zero": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "لا مهام مفتوحة"
-                }
-              },
-              "one": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "مهمة واحدة مفتوحة"
-                }
-              },
-              "two": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "مهمتان مفتوحتان"
-                }
-              },
               "few": {
                 "stringUnit": {
                   "state": "translated",
@@ -9859,10 +14134,28 @@
                   "value": "%lld مهمة مفتوحة"
                 }
               },
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "مهمة واحدة مفتوحة"
+                }
+              },
               "other": {
                 "stringUnit": {
                   "state": "translated",
                   "value": "%lld مهمة مفتوحة"
+                }
+              },
+              "two": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "مهمتان مفتوحتان"
+                }
+              },
+              "zero": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "لا مهام مفتوحة"
                 }
               }
             }
@@ -9871,24 +14164,6 @@
         "en": {
           "variations": {
             "plural": {
-              "zero": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "No open tasks"
-                }
-              },
-              "one": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "1 open task"
-                }
-              },
-              "two": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "%lld open tasks"
-                }
-              },
               "few": {
                 "stringUnit": {
                   "state": "translated",
@@ -9901,13 +14176,48 @@
                   "value": "%lld open tasks"
                 }
               },
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "1 open task"
+                }
+              },
               "other": {
                 "stringUnit": {
                   "state": "translated",
                   "value": "%lld open tasks"
                 }
+              },
+              "two": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld open tasks"
+                }
+              },
+              "zero": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "No open tasks"
+                }
               }
             }
+          }
+        }
+      }
+    },
+    "widget.openTodoshi": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "افتح Todoshi لإكمال الإعداد"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open Todoshi to finish setup"
           }
         }
       }
@@ -10162,210 +14472,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Unable to identify widget"
-          }
-        }
-      }
-    },
-    "home.subtitle": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "A quick look at your projects and tasks"
-          }
-        },
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "نظرة سريعة على مشاريعك ومهامك"
-          }
-        }
-      }
-    },
-    "home.projectActions": {
-      "extractionState": "manual",
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "إدارة المشاريع"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Project Actions"
-          }
-        }
-      }
-    },
-    "home.noProjects": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "No projects yet"
-          }
-        },
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "لا توجد مشاريع بعد"
-          }
-        }
-      }
-    },
-    "home.noProjectsMessage": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Create your first project and start organizing your work."
-          }
-        },
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "أنشئ مشروعك الأول وابدأ بتنظيم مهامك."
-          }
-        }
-      }
-    },
-    "task.changeStatus": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Change status"
-          }
-        },
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "تغيير الحالة"
-          }
-        }
-      }
-    },
-    "task.statusControl.a11y": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Task status: %@. Double tap to change status."
-          }
-        },
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "حالة المهمة: %@. اضغط لتغيير الحالة."
-          }
-        }
-      }
-    },
-    "task.statusControl.hint": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Opens the status menu"
-          }
-        },
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "يفتح قائمة الحالات"
-          }
-        }
-      }
-    },
-    "task.statusShortcut.startWork": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Start work"
-          }
-        },
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "بدء العمل"
-          }
-        }
-      }
-    },
-    "task.statusShortcut.sendForReview": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Send for review"
-          }
-        },
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "إرسال للمراجعة"
-          }
-        }
-      }
-    },
-    "task.statusShortcut.complete": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Complete task"
-          }
-        },
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "إكمال المهمة"
-          }
-        }
-      }
-    },
-    "task.statusShortcut.reopen": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Reopen task"
-          }
-        },
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "إعادة فتح المهمة"
-          }
-        }
-      }
-    },
-    "task.statusShortcut.moveToReady": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Move to ready"
-          }
-        },
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "نقل إلى جاهزة للبدء"
           }
         }
       }

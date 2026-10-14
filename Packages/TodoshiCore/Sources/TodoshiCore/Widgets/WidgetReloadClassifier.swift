@@ -41,13 +41,13 @@ public enum WidgetReloadClassifier: Sendable {
         switch event {
         case .taskCreated, .taskContentChanged, .taskCompletedOrReopened, .taskDeleted, .subtaskPromoted,
                 .recurringOccurrenceGenerated, .widgetTaskCreated:
-            return NexusWidgetKind.allTaskListKinds
+            return TodoshiWidgetKind.allTaskListKinds
         case .widgetProjectSelectionChanged:
-            return [NexusWidgetKind.project]
+            return [TodoshiWidgetKind.project]
         case .taskDueDateChanged:
-            return [NexusWidgetKind.today, NexusWidgetKind.todayCountAccessory, NexusWidgetKind.project, NexusWidgetKind.highPriority]
+            return [TodoshiWidgetKind.today, TodoshiWidgetKind.todayCountAccessory, TodoshiWidgetKind.project, TodoshiWidgetKind.highPriority]
         case .taskPriorityChanged:
-            return [NexusWidgetKind.highPriority, NexusWidgetKind.project, NexusWidgetKind.today]
+            return [TodoshiWidgetKind.highPriority, TodoshiWidgetKind.project, TodoshiWidgetKind.today]
         case .taskReminderChanged, .taskLabelsChanged, .labelListChanged, .labelContentChanged, .labelDeleted,
                 .checklistUpdated, .checklistItemToggled,
                 .subtaskCreated, .subtaskUpdated, .subtaskCompletedOrReopened, .subtaskReordered,
@@ -55,9 +55,9 @@ public enum WidgetReloadClassifier: Sendable {
                 .recurrenceEnabled, .recurrenceUpdated, .recurrenceDisabled:
             return []
         case .projectStructureChanged:
-            return [NexusWidgetKind.project, NexusWidgetKind.today, NexusWidgetKind.highPriority, NexusWidgetKind.todayCountAccessory]
+            return [TodoshiWidgetKind.project, TodoshiWidgetKind.today, TodoshiWidgetKind.highPriority, TodoshiWidgetKind.todayCountAccessory]
         case .projectArchiveStateChanged, .projectDeleted, .projectListChanged:
-            return NexusWidgetKind.allKinds
+            return TodoshiWidgetKind.allKinds
         }
     }
 

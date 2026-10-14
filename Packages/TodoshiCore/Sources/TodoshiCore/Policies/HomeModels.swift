@@ -25,6 +25,12 @@ public struct HomeTaskSummary: Equatable, Sendable, Identifiable {
     public let subtaskProgress: SubtaskProgress?
     public let labels: [HomeLabelSummary]
     public let isOverdue: Bool
+    /// Shared-project responsibility, resolved to a membership display name. Nil when unassigned.
+    public let assigneeDisplayName: String?
+    /// Shared projects only: another member caused activity since this device last opened the task.
+    public let hasUnreadActivity: Bool
+    /// Stored board column (`TaskItem.columnIDRaw`); resolve with `ProjectColumnsPolicy`.
+    public let columnID: UUID?
 
     public init(
         id: UUID,
@@ -38,7 +44,10 @@ public struct HomeTaskSummary: Equatable, Sendable, Identifiable {
         checklistProgress: ChecklistProgress? = nil,
         subtaskProgress: SubtaskProgress? = nil,
         labels: [HomeLabelSummary] = [],
-        isOverdue: Bool = false
+        isOverdue: Bool = false,
+        assigneeDisplayName: String? = nil,
+        hasUnreadActivity: Bool = false,
+        columnID: UUID? = nil
     ) {
         self.id = id
         self.projectID = projectID
@@ -52,15 +61,18 @@ public struct HomeTaskSummary: Equatable, Sendable, Identifiable {
         self.subtaskProgress = subtaskProgress
         self.labels = labels
         self.isOverdue = isOverdue
+        self.assigneeDisplayName = assigneeDisplayName
+        self.hasUnreadActivity = hasUnreadActivity
+        self.columnID = columnID
     }
 
-    public func accessibilityLabel(locale: Locale = .autoupdatingCurrent) -> String {
+    public func accessibilityLabel(locale: Locale = AppLanguageStore.resolvedLocale) -> String {
         var parts = [title, status.displayName(locale: locale)]
         if priority != .none {
-            parts.append(NexusL10n.format("task.priorityA11y", locale: locale, priority.displayName(locale: locale)))
+            parts.append(TodoshiL10n.format("task.priorityA11y", locale: locale, priority.displayName(locale: locale)))
         }
         if isOverdue {
-            parts.append(NexusL10n.tr("common.overdue", locale: locale))
+            parts.append(TodoshiL10n.tr("common.overdue", locale: locale))
         }
         if !labels.isEmpty {
             parts.append(labels.map(\.name).joined(separator: ", "))
@@ -84,6 +96,8 @@ public struct HomeProjectSummary: Equatable, Sendable, Identifiable {
     public let position: Double
     public let createdAt: Date
     public let openTaskCount: Int
+    public let isShared: Bool
+    public let projectType: ProjectType
     public let tasks: [HomeTaskSummary]
 
     public init(
@@ -95,6 +109,8 @@ public struct HomeProjectSummary: Equatable, Sendable, Identifiable {
         position: Double,
         createdAt: Date,
         openTaskCount: Int,
+        isShared: Bool = false,
+        projectType: ProjectType = .tasks,
         tasks: [HomeTaskSummary]
     ) {
         self.id = id
@@ -105,6 +121,8 @@ public struct HomeProjectSummary: Equatable, Sendable, Identifiable {
         self.position = position
         self.createdAt = createdAt
         self.openTaskCount = openTaskCount
+        self.isShared = isShared
+        self.projectType = projectType
         self.tasks = tasks
     }
 }

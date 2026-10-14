@@ -2,27 +2,27 @@
 import PackageDescription
 
 let package = Package(
-    name: "NexusCore",
+    name: "TodoshiCore",
     defaultLocalization: "en",
     platforms: [
         .iOS(.v17),
         .macOS(.v14)
     ],
     products: [
-        .library(name: "NexusCore", targets: ["NexusCore"])
+        .library(name: "TodoshiCore", targets: ["TodoshiCore"])
     ],
     targets: [
         .target(
-            name: "NexusCore",
-            path: "Sources/NexusCore",
+            name: "TodoshiCore",
+            path: "Sources/TodoshiCore",
             resources: [
                 .process("L10n")
             ]
         ),
         .testTarget(
-            name: "NexusCoreTests",
-            dependencies: ["NexusCore"],
-            path: "Tests/NexusCoreTests"
+            name: "TodoshiCoreTests",
+            dependencies: ["TodoshiCore"],
+            path: "Tests/TodoshiCoreTests"
         )
     ]
 )

@@ -31,7 +31,7 @@ public final class TaskRepository {
     public func fetchRootTasks(projectID: UUID) throws -> [TaskItem] {
         let all = try context.fetch(FetchDescriptor<TaskItem>())
         return all
-            .filter { $0.project?.id == projectID && $0.isRoot }
+            .filter { $0.project?.id == projectID && $0.isRoot && $0.deletedAt == nil }
             .sorted(by: Self.rootSort)
     }
 
@@ -72,10 +72,16 @@ public final class TaskRepository {
         labelIDs: Set<UUID> = [],
         recurrenceRule: TaskRecurrenceRule? = nil,
         at date: Date = .now,
-        announcement: CreateAnnouncement = .standard
+        announcement: CreateAnnouncement = .standard,
+        completionActor: TaskCompletionActor? = nil
     ) throws -> TaskItem {
         guard let trimmedTitle = FieldValidation.requiredName(title) else {
             throw RepositoryValidationError.emptyName
+        }
+
+        let projectType = project.projectType
+        guard ProjectTypeCapabilities.allowsStatus(status, for: projectType) else {
+            throw RepositoryValidationError.invalidTaskStatusForProjectType
         }
 
         if let issue = TaskRecurrencePolicy.validationIssue(
@@ -93,10 +99,11 @@ public final class TaskRepository {
         let position = try nextPosition(projectID: project.id, status: status)
         let encoded = TaskRecurrencePolicy.encode(recurrenceRule)
         let seriesID = recurrenceRule == nil ? nil : UUID()
+        // Start non-done so applyStatus sees a true transition into Done for attribution.
         let task = TaskItem(
             title: trimmedTitle,
             taskDescription: FieldValidation.trimmed(taskDescription),
-            status: status,
+            status: status == .done ? .todo : status,
             priority: priority,
             dueDate: dueDate,
             reminderDate: resolvedReminder,
@@ -111,7 +118,7 @@ public final class TaskRepository {
             recurrenceGeneration: 0
         )
         if status == .done {
-            task.applyStatus(.done, at: date)
+            task.applyStatus(.done, at: date, completionActor: completionActor)
         }
         if !labelIDs.isEmpty {
             let labels = try LabelRepository(context: context).fetchAll()
@@ -132,22 +139,26 @@ public final class TaskRepository {
 
         switch announcement {
         case .widget:
-            NexusDataChangeCenter.post(.widgetTaskCreated)
+            TodoshiDataChangeCenter.post(.widgetTaskCreated)
         case .standard:
             if generated {
-                NexusDataChangeCenter.post(.recurringOccurrenceGenerated)
+                TodoshiDataChangeCenter.post(.recurringOccurrenceGenerated)
             } else {
-                NexusDataChangeCenter.post(.taskCreated)
+                TodoshiDataChangeCenter.post(.taskCreated)
                 if resolvedReminder != nil {
-                    NexusDataChangeCenter.post(.taskReminderChanged)
+                    TodoshiDataChangeCenter.post(.taskReminderChanged)
                 }
                 if !labelIDs.isEmpty {
-                    NexusDataChangeCenter.post(.taskLabelsChanged)
+                    TodoshiDataChangeCenter.post(.taskLabelsChanged)
                 }
                 if recurrenceRule != nil {
-                    NexusDataChangeCenter.post(.recurrenceEnabled)
+                    TodoshiDataChangeCenter.post(.recurrenceEnabled)
                 }
             }
+        }
+        emitSharedTaskMutation(project: project, taskID: task.id)
+        if generated, let nextID = task.nextOccurrenceID {
+            emitSharedTaskMutation(project: project, taskID: nextID)
         }
         return task
     }
@@ -164,7 +175,8 @@ public final class TaskRepository {
         labelIDs: Set<UUID>? = nil,
         recurrenceRule: TaskRecurrenceRule? = nil,
         updateRecurrence: Bool = false,
-        at date: Date = .now
+        at date: Date = .now,
+        completionActor: TaskCompletionActor? = nil
     ) throws {
         guard let trimmedTitle = FieldValidation.requiredName(title) else {
             throw RepositoryValidationError.emptyName
@@ -219,16 +231,17 @@ public final class TaskRepository {
 
         if status != previousStatus {
             if task.isRoot {
-                try appendToColumn(task, status: status, at: date)
+                try appendToColumn(task, status: status, at: date, completionActor: completionActor)
             } else {
                 // Subtask status is independent of Kanban columns; position stays in parent list.
-                task.applyStatus(status, at: date)
+                task.applyStatus(status, at: date, completionActor: completionActor)
                 if status == .done {
                     task.reminderDate = nil
                 }
                 task.parentTask?.updatedAt = date
             }
         } else {
+            // Done→Done field edits must not rewrite completion attribution.
             task.updatedAt = date
             if !task.isRoot {
                 task.parentTask?.updatedAt = date
@@ -247,47 +260,90 @@ public final class TaskRepository {
         try context.save()
 
         if generated {
-            NexusDataChangeCenter.post(.recurringOccurrenceGenerated)
+            TodoshiDataChangeCenter.post(.recurringOccurrenceGenerated)
+            emitSharedTaskMutation(project: task.project, taskID: task.id)
+            if let nextID = task.nextOccurrenceID {
+                emitSharedTaskMutation(project: task.project, taskID: nextID)
+            }
             return
         }
 
         let isSubtask = task.parentTask != nil
         if previousReminder != task.reminderDate {
-            NexusDataChangeCenter.post(.taskReminderChanged)
+            TodoshiDataChangeCenter.post(.taskReminderChanged)
         }
         if labelsChanged {
-            NexusDataChangeCenter.post(.taskLabelsChanged)
+            TodoshiDataChangeCenter.post(.taskLabelsChanged)
         }
         if updateRecurrence {
             if previousRule == nil, task.recurrenceRule != nil {
-                NexusDataChangeCenter.post(.recurrenceEnabled)
+                TodoshiDataChangeCenter.post(.recurrenceEnabled)
             } else if previousRule != nil, task.recurrenceRule == nil {
-                NexusDataChangeCenter.post(.recurrenceDisabled)
+                TodoshiDataChangeCenter.post(.recurrenceDisabled)
             } else if previousRule != task.recurrenceRule {
-                NexusDataChangeCenter.post(.recurrenceUpdated)
+                TodoshiDataChangeCenter.post(.recurrenceUpdated)
             }
         }
         if previousDue != dueDate {
-            NexusDataChangeCenter.post(isSubtask ? .subtaskUpdated : .taskDueDateChanged)
+            TodoshiDataChangeCenter.post(isSubtask ? .subtaskUpdated : .taskDueDateChanged)
             if isSubtask {
-                NexusDataChangeCenter.post(.taskReminderChanged)
+                TodoshiDataChangeCenter.post(.taskReminderChanged)
             }
         } else if previousPriority != priority {
-            NexusDataChangeCenter.post(isSubtask ? .subtaskUpdated : .taskPriorityChanged)
+            TodoshiDataChangeCenter.post(isSubtask ? .subtaskUpdated : .taskPriorityChanged)
         } else if previousStatus != status {
-            NexusDataChangeCenter.post(isSubtask ? .subtaskCompletedOrReopened : .taskCompletedOrReopened)
+            TodoshiDataChangeCenter.post(isSubtask ? .subtaskCompletedOrReopened : .taskCompletedOrReopened)
         } else if previousReminder == task.reminderDate && !labelsChanged && !updateRecurrence {
-            NexusDataChangeCenter.post(isSubtask ? .subtaskUpdated : .taskContentChanged)
+            TodoshiDataChangeCenter.post(isSubtask ? .subtaskUpdated : .taskContentChanged)
         }
+        emitSharedTaskMutation(project: task.project, taskID: task.id)
     }
 
     /// Moves a root task to a status column, appending at the end by default.
     public func moveToStatus(
         _ task: TaskItem,
         _ status: TaskStatus,
-        at date: Date = .now
+        at date: Date = .now,
+        completionActor: TaskCompletionActor? = nil
     ) throws {
-        try move(taskID: task.id, to: status, before: nil, at: date)
+        try move(taskID: task.id, to: status, before: nil, at: date, completionActor: completionActor)
+    }
+
+    /// Moves a root task into a board column. The stored status only changes when the column's
+    /// kind differs (so "Review" stays "Review" when moved between two Doing columns); status
+    /// changes go through `move(taskID:to:before:)` to keep completion side effects intact.
+    @discardableResult
+    public func move(
+        taskID: UUID,
+        toColumn column: ProjectColumn,
+        at date: Date = .now,
+        completionActor: TaskCompletionActor? = nil
+    ) throws -> Bool {
+        guard let task = try fetchTask(id: taskID) else {
+            throw RepositoryValidationError.missingTask
+        }
+        var changed = false
+        if ProjectColumnKind.kind(for: task.status) != column.kind {
+            changed = try move(
+                taskID: taskID,
+                to: column.kind.status,
+                before: nil,
+                at: date,
+                completionActor: completionActor
+            )
+        }
+        let raw = column.id.uuidString
+        if task.columnIDRaw != raw {
+            task.columnIDRaw = raw
+            task.updatedAt = date
+            try context.save()
+            TodoshiDataChangeCenter.post(.taskContentChanged)
+            if let project = task.project, project.isShared {
+                SharedProjectMutationHook.emit(.taskColumn(projectID: project.id, taskID: task.id))
+            }
+            changed = true
+        }
+        return changed
     }
 
     /// Kanban move: place `taskID` into `status` before `targetTaskID`, or at the end when `targetTaskID` is nil.
@@ -297,7 +353,8 @@ public final class TaskRepository {
         taskID: UUID,
         to status: TaskStatus,
         before targetTaskID: UUID?,
-        at date: Date = .now
+        at date: Date = .now,
+        completionActor: TaskCompletionActor? = nil
     ) throws -> Bool {
         guard let task = try fetchTask(id: taskID) else {
             throw RepositoryValidationError.missingTask
@@ -307,6 +364,10 @@ public final class TaskRepository {
         }
         guard let projectID = task.project?.id else {
             throw RepositoryValidationError.missingProject
+        }
+        if let projectType = task.project?.projectType,
+           !ProjectTypeCapabilities.allowsStatus(status, for: projectType) {
+            throw RepositoryValidationError.invalidTaskStatusForProjectType
         }
 
         if let targetTaskID, targetTaskID == taskID {
@@ -340,7 +401,7 @@ public final class TaskRepository {
         let upper = insertIndex < destinationPeers.count ? destinationPeers[insertIndex].position : nil
         let newPosition = FractionalPosition.between(lower: lower, upper: upper)
 
-        task.applyStatus(status, at: date)
+        task.applyStatus(status, at: date, completionActor: completionActor)
         task.position = newPosition
         if status == .done {
             task.reminderDate = nil
@@ -361,12 +422,18 @@ public final class TaskRepository {
 
         try context.save()
         if generated {
-            NexusDataChangeCenter.post(.recurringOccurrenceGenerated)
+            TodoshiDataChangeCenter.post(.recurringOccurrenceGenerated)
+            emitSharedTaskMutation(project: task.project, taskID: task.id)
+            if let nextID = task.nextOccurrenceID {
+                emitSharedTaskMutation(project: task.project, taskID: nextID)
+            }
         } else if previousStatus != status, status == .done || previousStatus == .done {
-            NexusDataChangeCenter.post(.taskCompletedOrReopened)
-            NexusDataChangeCenter.post(.taskReminderChanged)
+            TodoshiDataChangeCenter.post(.taskCompletedOrReopened)
+            TodoshiDataChangeCenter.post(.taskReminderChanged)
+            emitSharedTaskMutation(project: task.project, taskID: task.id)
         } else {
-            NexusDataChangeCenter.post(.taskContentChanged)
+            TodoshiDataChangeCenter.post(.taskContentChanged)
+            emitSharedTaskMutation(project: task.project, taskID: task.id)
         }
         return true
     }
@@ -408,9 +475,10 @@ public final class TaskRepository {
         to status: TaskStatus,
         lowerNeighbor: Double?,
         upperNeighbor: Double?,
-        at date: Date = .now
+        at date: Date = .now,
+        completionActor: TaskCompletionActor? = nil
     ) {
-        task.applyStatus(status, at: date)
+        task.applyStatus(status, at: date, completionActor: completionActor)
         task.position = FractionalPosition.between(lower: lowerNeighbor, upper: upperNeighbor)
     }
 
@@ -444,11 +512,15 @@ public final class TaskRepository {
     }
 
     /// Marks a task Done. Roots move to the Done column; subtasks update status only.
-    public func complete(_ task: TaskItem, at date: Date = .now) throws {
+    public func complete(
+        _ task: TaskItem,
+        at date: Date = .now,
+        completionActor: TaskCompletionActor? = nil
+    ) throws {
         if task.isRoot {
-            try move(taskID: task.id, to: .done, before: nil, at: date)
+            try move(taskID: task.id, to: .done, before: nil, at: date, completionActor: completionActor)
         } else {
-            try applySubtaskStatus(task, .done, at: date)
+            try applySubtaskStatus(task, .done, at: date, completionActor: completionActor)
         }
     }
 
@@ -492,6 +564,7 @@ public final class TaskRepository {
             throw RepositoryValidationError.missingTask
         }
         return TaskHierarchyPolicy.orderedSubtasks(parent.subtasks ?? [])
+            .filter { $0.deletedAt == nil }
     }
 
     public func subtaskProgress(parentTaskID: UUID) throws -> SubtaskProgress {
@@ -521,6 +594,9 @@ public final class TaskRepository {
         guard let project = parent.project else {
             throw RepositoryValidationError.missingProject
         }
+        guard ProjectTypeCapabilities.supportsSubtasks(project.projectType) else {
+            throw RepositoryValidationError.subtasksNotSupportedForProjectType
+        }
 
         let validation = TaskHierarchyPolicy.validateAttach(
             childID: UUID(),
@@ -547,7 +623,7 @@ public final class TaskRepository {
         let task = TaskItem(
             title: trimmedTitle,
             taskDescription: FieldValidation.trimmed(taskDescription),
-            status: status,
+            status: status == .done ? .todo : status,
             priority: priority,
             dueDate: dueDate,
             reminderDate: resolvedReminder,
@@ -559,7 +635,7 @@ public final class TaskRepository {
             parentTask: parent
         )
         if status == .done {
-            task.applyStatus(.done, at: date)
+            task.applyStatus(.done, at: date, completionActor: nil)
         }
         if !labelIDs.isEmpty {
             let labels = try LabelRepository(context: context).fetchAll()
@@ -570,13 +646,14 @@ public final class TaskRepository {
         parent.updatedAt = date
         try context.save()
 
-        NexusDataChangeCenter.post(.subtaskCreated)
+        TodoshiDataChangeCenter.post(.subtaskCreated)
         if resolvedReminder != nil {
-            NexusDataChangeCenter.post(.taskReminderChanged)
+            TodoshiDataChangeCenter.post(.taskReminderChanged)
         }
         if !labelIDs.isEmpty {
-            NexusDataChangeCenter.post(.taskLabelsChanged)
+            TodoshiDataChangeCenter.post(.taskLabelsChanged)
         }
+        emitSharedTaskMutation(project: project, taskID: task.id)
         return task
     }
 
@@ -616,7 +693,8 @@ public final class TaskRepository {
         child.updatedAt = date
         parent.updatedAt = date
         try context.save()
-        NexusDataChangeCenter.post(.subtaskUpdated)
+        TodoshiDataChangeCenter.post(.subtaskUpdated)
+        emitSharedTaskMutation(project: child.project, taskID: child.id)
     }
 
     public func promoteToRoot(taskID: UUID, at date: Date = .now) throws {
@@ -641,10 +719,11 @@ public final class TaskRepository {
         normalizeIfNeeded(column)
 
         try context.save()
-        NexusDataChangeCenter.post(.subtaskPromoted)
+        TodoshiDataChangeCenter.post(.subtaskPromoted)
         if child.reminderDate != nil {
-            NexusDataChangeCenter.post(.taskReminderChanged)
+            TodoshiDataChangeCenter.post(.taskReminderChanged)
         }
+        emitSharedTaskMutation(project: project, taskID: child.id)
     }
 
     @discardableResult
@@ -691,7 +770,8 @@ public final class TaskRepository {
         normalizeSubtaskPositionsIfNeeded(without, at: date)
         parent.updatedAt = date
         try context.save()
-        NexusDataChangeCenter.post(.subtaskReordered)
+        TodoshiDataChangeCenter.post(.subtaskReordered)
+        emitSharedTaskMutation(project: task.project, taskID: task.id)
         return true
     }
 
@@ -702,21 +782,27 @@ public final class TaskRepository {
         try delete(task, mode: mode)
     }
 
-    private func applySubtaskStatus(_ task: TaskItem, _ status: TaskStatus, at date: Date) throws {
+    private func applySubtaskStatus(
+        _ task: TaskItem,
+        _ status: TaskStatus,
+        at date: Date,
+        completionActor: TaskCompletionActor? = nil
+    ) throws {
         let previous = task.status
         let previousReminder = task.reminderDate
-        task.applyStatus(status, at: date)
+        task.applyStatus(status, at: date, completionActor: completionActor)
         if status == .done {
             task.reminderDate = nil
         }
         task.parentTask?.updatedAt = date
         try context.save()
         if previous != status {
-            NexusDataChangeCenter.post(.subtaskCompletedOrReopened)
+            TodoshiDataChangeCenter.post(.subtaskCompletedOrReopened)
         }
         if previousReminder != task.reminderDate {
-            NexusDataChangeCenter.post(.taskReminderChanged)
+            TodoshiDataChangeCenter.post(.taskReminderChanged)
         }
+        emitSharedTaskMutation(project: task.project, taskID: task.id)
     }
 
     private func normalizeSubtaskPositionsIfNeeded(_ items: [TaskItem], at date: Date) {
@@ -775,7 +861,17 @@ public final class TaskRepository {
         }
 
         let position = try nextPosition(projectID: project.id, status: .todo)
+        let successorID = SharedRecurrenceSuccessorIdentity.successorID(
+            seriesID: draft.seriesID,
+            generation: draft.generation
+        )
+        if let existing = try fetchTask(id: successorID) {
+            task.nextOccurrenceID = existing.id
+            task.updatedAt = date
+            return true
+        }
         let next = TaskItem(
+            id: successorID,
             title: task.title,
             taskDescription: task.taskDescription,
             status: .todo,
@@ -793,6 +889,9 @@ public final class TaskRepository {
             recurrenceGeneration: draft.generation,
             previousOccurrenceID: task.id
         )
+        // Responsibility and task ACL carry forward to the next occurrence.
+        next.assigneeUID = task.assigneeUID
+        next.editorUIDs = task.editorUIDs
         next.labels = task.labels ?? []
 
         // Checklist: titles and order; all incomplete; new IDs. Do not share models.
@@ -858,10 +957,11 @@ public final class TaskRepository {
     private func appendToColumn(
         _ task: TaskItem,
         status: TaskStatus,
-        at date: Date
+        at date: Date,
+        completionActor: TaskCompletionActor? = nil
     ) throws {
         let projectID = task.project?.id
-        task.applyStatus(status, at: date)
+        task.applyStatus(status, at: date, completionActor: completionActor)
         if let projectID {
             let peers = try fetchRootTasks(projectID: projectID, status: status)
                 .filter { $0.id != task.id }
@@ -878,6 +978,25 @@ public final class TaskRepository {
         let descendants = collectDescendants(of: task)
         var doomed: [TaskItem] = descendants
         doomed.append(task)
+        let project = task.project
+        let now = Date.now
+
+        if project?.isShared == true {
+            for item in doomed {
+                item.deletedAt = now
+                item.updatedAt = now
+            }
+            if let parent {
+                parent.updatedAt = now
+            }
+            try context.save()
+            for item in doomed {
+                emitSharedTaskSoftDelete(project: project, taskID: item.id)
+            }
+            TodoshiDataChangeCenter.post(.taskDeleted)
+            return
+        }
+
         let plan = TaskResourceRepository(context: context).managedPaths(forTasks: doomed)
 
         for leaf in descendants.reversed() {
@@ -889,7 +1008,7 @@ public final class TaskRepository {
         }
         try context.save()
         TaskResourceRepository(context: context).applyFileCleanup(plan)
-        NexusDataChangeCenter.post(.taskDeleted)
+        TodoshiDataChangeCenter.post(.taskDeleted)
     }
 
     private func promoteChildrenAndDelete(_ task: TaskItem) throws {
@@ -901,7 +1020,7 @@ public final class TaskRepository {
             context.delete(task)
             try context.save()
             TaskResourceRepository(context: context).applyFileCleanup(plan)
-            NexusDataChangeCenter.post(.taskDeleted)
+            TodoshiDataChangeCenter.post(.taskDeleted)
             return
         }
 
@@ -924,9 +1043,9 @@ public final class TaskRepository {
         context.delete(task)
         try context.save()
         TaskResourceRepository(context: context).applyFileCleanup(plan)
-        NexusDataChangeCenter.post(.taskDeleted)
+        TodoshiDataChangeCenter.post(.taskDeleted)
         if !children.isEmpty {
-            NexusDataChangeCenter.post(.subtaskPromoted)
+            TodoshiDataChangeCenter.post(.subtaskPromoted)
         }
     }
 
@@ -949,5 +1068,15 @@ public final class TaskRepository {
             return lhs.position < rhs.position
         }
         return lhs.createdAt < rhs.createdAt
+    }
+
+    private func emitSharedTaskMutation(project: Project?, taskID: UUID) {
+        guard let project, project.isShared else { return }
+        SharedProjectMutationHook.emit(.taskUpsert(projectID: project.id, taskID: taskID))
+    }
+
+    private func emitSharedTaskSoftDelete(project: Project?, taskID: UUID) {
+        guard let project, project.isShared else { return }
+        SharedProjectMutationHook.emit(.taskSoftDelete(projectID: project.id, taskID: taskID))
     }
 }

@@ -4,6 +4,8 @@ import Foundation
 public enum ProjectIconCatalog: Sendable {
     public static let symbols: [String] = [
         "folder.fill",
+        "checklist",
+        "checkmark.circle.fill",
         "shippingbox.fill",
         "hammer.fill",
         "desktopcomputer",

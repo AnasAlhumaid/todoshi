@@ -1,6 +1,6 @@
 import Foundation
 import Testing
-@testable import NexusCore
+@testable import TodoshiCore
 
 struct Phase4SearchTests {
     private let locale = Locale(identifier: "en_US_POSIX")

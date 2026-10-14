@@ -1,7 +1,7 @@
 import Foundation
 import SwiftData
 import Testing
-@testable import NexusCore
+@testable import TodoshiCore
 
 @MainActor
 struct Phase6NotificationTests {
@@ -267,7 +267,7 @@ struct Phase6NotificationTests {
             calendar: calendar
         )
         #expect(request != nil)
-        #expect(request?.content.deepLinkURL == NexusDeepLink.dashboard.url)
+        #expect(request?.content.deepLinkURL == TodoshiDeepLink.dashboard.url)
         #expect(request?.content.body.contains("Secret") == false)
         #expect(request?.content.body.contains("due today") == true)
         #expect(request?.content.body.contains("overdue") == true)
@@ -290,13 +290,13 @@ struct Phase6NotificationTests {
     @Test("Notification deep links and stable identifiers")
     func deepLinksAndIDs() {
         let id = UUID()
-        #expect(NotificationIdentifier.taskReminder(taskID: id) == "nexus.task.\(id.uuidString)")
+        #expect(NotificationIdentifier.taskReminder(taskID: id) == "todoshi.task.\(id.uuidString)")
         #expect(NotificationIdentifier.taskID(from: NotificationIdentifier.taskReminder(taskID: id)) == id)
-        #expect(NotificationIdentifier.isNexusOwned(NotificationIdentifier.dailySummary))
-        #expect(NotificationIdentifier.isNexusOwned("other") == false)
-        #expect(NexusDeepLink(url: NexusDeepLink.task(id).url) == .task(id))
-        #expect(NexusDeepLink(url: NexusDeepLink.dashboard.url) == .dashboard)
-        #expect(NexusDeepLink(url: URL(string: "nexus://task/bad")!) == nil)
+        #expect(NotificationIdentifier.isTodoshiOwned(NotificationIdentifier.dailySummary))
+        #expect(NotificationIdentifier.isTodoshiOwned("other") == false)
+        #expect(TodoshiDeepLink(url: TodoshiDeepLink.task(id).url) == .task(id))
+        #expect(TodoshiDeepLink(url: TodoshiDeepLink.dashboard.url) == .dashboard)
+        #expect(TodoshiDeepLink(url: URL(string: "nexus://task/bad")!) == nil)
     }
 
     // MARK: - Schema / mapping
@@ -328,7 +328,7 @@ struct Phase6NotificationTests {
         #expect(task.status == .done)
         #expect(task.reminderDate == nil)
 
-        #expect(NexusSchema.currentVersion == NexusSchemaV4.versionIdentifier)
+        #expect(TodoshiSchema.currentVersion == TodoshiSchemaV9.versionIdentifier)
     }
 
     @Test("Draft maps reminder fields from model")

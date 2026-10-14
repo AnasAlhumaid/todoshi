@@ -14,18 +14,14 @@ public enum WidgetStoreAccess {
         guard let storeURL = AppGroupConstants.storeURL else {
             throw ModelContainerError.appGroupUnavailable
         }
-        let schema = NexusSchema.makeSchema()
+        let schema = TodoshiSchema.makeSchema()
         let configuration = ModelConfiguration(
             schema: schema,
             url: storeURL,
             cloudKitDatabase: .none
         )
         do {
-            return try ModelContainer(
-                for: schema,
-                migrationPlan: NexusSchemaMigrationPlan.self,
-                configurations: [configuration]
-            )
+            return try ModelContainerFactory.openPreservingData(schema: schema, configuration: configuration)
         } catch {
             throw ModelContainerError.appGroupOpenFailed(underlying: String(describing: error))
         }
@@ -51,7 +47,8 @@ public enum WidgetStoreAccess {
                     name: $0.name,
                     icon: $0.icon,
                     colorHex: $0.colorHex,
-                    position: $0.position
+                    position: $0.position,
+                    projectType: $0.projectType
                 )
             }
     }
@@ -101,7 +98,7 @@ public enum WidgetStoreAccess {
         guard let project = projects.first(where: { $0.id == projectID }) else {
             return WidgetTaskSnapshot(
                 generatedAt: now,
-                title: NexusL10n.tr("common.project"),
+                title: TodoshiL10n.tr("common.project"),
                 tasks: [],
                 totalCount: 0,
                 projectID: projectID,
@@ -115,6 +112,7 @@ public enum WidgetStoreAccess {
             projectIcon: project.icon,
             projectColorHex: project.colorHex,
             projectIsActive: project.status == .active,
+            projectType: project.projectType,
             tasks: tasks,
             limit: limit,
             calendar: calendar,

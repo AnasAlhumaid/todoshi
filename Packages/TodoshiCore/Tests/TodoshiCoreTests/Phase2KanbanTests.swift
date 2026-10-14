@@ -1,7 +1,7 @@
 import Foundation
 import SwiftData
 import Testing
-@testable import NexusCore
+@testable import TodoshiCore
 
 @MainActor
 struct Phase2KanbanTests {
@@ -211,7 +211,7 @@ struct Phase2KanbanTests {
 
     @Test("Board display preference defaults and storage key")
     func displayPreference() {
-        #expect(ProjectTaskDisplayMode.storageKey == "nexus.projectTaskDisplayMode")
+        #expect(ProjectTaskDisplayMode.storageKey == "todoshi.projectTaskDisplayMode")
         #expect(ProjectTaskDisplayMode.default == .board)
         #expect(ProjectTaskDisplayMode(rawValue: "list") == .list)
         #expect(ProjectTaskDisplayMode.board.title == "Board")

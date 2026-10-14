@@ -1,7 +1,7 @@
 import Foundation
 import SwiftData
 import Testing
-@testable import NexusCore
+@testable import TodoshiCore
 
 @MainActor
 struct Phase12CalendarTests {
@@ -241,12 +241,12 @@ struct Phase12CalendarTests {
         let sources = CalendarMapping.taskSources(projects: [project])
         #expect(CalendarScheduleBuilder.unscheduledSources(tasks: sources).contains { $0.id == unscheduled.id })
 
-        #expect(WidgetReloadClassifier.kinds(for: .taskDueDateChanged).contains(NexusWidgetKind.today))
+        #expect(WidgetReloadClassifier.kinds(for: .taskDueDateChanged).contains(TodoshiWidgetKind.today))
         #expect(WidgetReloadClassifier.shouldReconcileNotifications(for: .taskDueDateChanged))
     }
 
-    @Test("Schema unchanged at V4")
+    @Test("Schema current version is V8")
     func schemaUnchanged() {
-        #expect(NexusSchema.currentVersion == NexusSchemaV4.versionIdentifier)
+        #expect(TodoshiSchema.currentVersion == TodoshiSchemaV9.versionIdentifier)
     }
 }

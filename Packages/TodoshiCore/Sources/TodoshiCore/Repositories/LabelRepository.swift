@@ -61,7 +61,7 @@ public final class LabelRepository {
         )
         context.insert(label)
         try context.save()
-        NexusDataChangeCenter.post(.labelListChanged)
+        TodoshiDataChangeCenter.post(.labelListChanged)
         return label
     }
 
@@ -91,7 +91,7 @@ public final class LabelRepository {
         label.colorHex = color
         label.updatedAt = date
         try context.save()
-        NexusDataChangeCenter.post(.labelContentChanged)
+        TodoshiDataChangeCenter.post(.labelContentChanged)
     }
 
     public func delete(labelID: UUID, at date: Date = .now) throws {
@@ -107,7 +107,7 @@ public final class LabelRepository {
         }
         context.delete(label)
         try context.save()
-        NexusDataChangeCenter.post(.labelDeleted)
+        TodoshiDataChangeCenter.post(.labelDeleted)
     }
 
     public func assign(labelID: UUID, to taskID: UUID, at date: Date = .now) throws {
@@ -126,7 +126,7 @@ public final class LabelRepository {
         task.updatedAt = date
         label.updatedAt = date
         try context.save()
-        NexusDataChangeCenter.post(.taskLabelsChanged)
+        TodoshiDataChangeCenter.post(.taskLabelsChanged)
     }
 
     public func remove(labelID: UUID, from taskID: UUID, at date: Date = .now) throws {
@@ -143,7 +143,7 @@ public final class LabelRepository {
             label.updatedAt = date
         }
         try context.save()
-        NexusDataChangeCenter.post(.taskLabelsChanged)
+        TodoshiDataChangeCenter.post(.taskLabelsChanged)
     }
 
     public func replaceLabels(
@@ -166,7 +166,7 @@ public final class LabelRepository {
             label.updatedAt = date
         }
         try context.save()
-        NexusDataChangeCenter.post(.taskLabelsChanged)
+        TodoshiDataChangeCenter.post(.taskLabelsChanged)
     }
 
     public func rootTaskRows(

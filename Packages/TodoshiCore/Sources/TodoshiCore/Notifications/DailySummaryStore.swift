@@ -2,9 +2,9 @@ import Foundation
 
 /// UserDefaults-backed daily summary configuration.
 public enum DailySummaryStore {
-    public static let enabledKey = "nexus.dailySummary.enabled"
-    public static let hourKey = "nexus.dailySummary.hour"
-    public static let minuteKey = "nexus.dailySummary.minute"
+    public static let enabledKey = "todoshi.dailySummary.enabled"
+    public static let hourKey = "todoshi.dailySummary.hour"
+    public static let minuteKey = "todoshi.dailySummary.minute"
 
     public static func load(from defaults: UserDefaults = .standard) -> DailySummaryPreferences {
         DailySummaryPreferences(
@@ -32,6 +32,13 @@ public enum NotificationAuthorizationState: String, Equatable, Sendable {
 }
 
 public enum NotificationUserInfoKey {
-    public static let deepLink = "nexusDeepLink"
+    public static let deepLink = "todoshiDeepLink"
+    /// Legacy notification payload key for pending notifications from pre-Todoshi builds.
+    public static let legacyDeepLink = "nexusDeepLink"
     public static let taskID = "taskID"
+}
+
+public enum NotificationCategoryIdentifier {
+    public static let taskReminder = "TODOSHI_TASK_REMINDER"
+    public static let dailySummary = "TODOSHI_DAILY_SUMMARY"
 }

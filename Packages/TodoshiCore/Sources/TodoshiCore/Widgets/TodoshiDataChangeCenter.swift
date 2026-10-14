@@ -1,8 +1,8 @@
 import Foundation
 
 /// Broadcast after successful SwiftData writes so the app can reload WidgetKit timelines.
-public enum NexusDataChangeCenter {
-    public static let notification = Notification.Name("com.anashamad.Nexus.dataDidChange")
+public enum TodoshiDataChangeCenter {
+    public static let notification = Notification.Name("com.anashamad.Todoshi.dataDidChange")
 
     public static func post(_ event: WidgetReloadClassifier.Event) {
         NotificationCenter.default.post(

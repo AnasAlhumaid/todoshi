@@ -1,6 +1,6 @@
 import Foundation
 
-/// Pure reconcile plan between expected Nexus reminders and pending system request IDs.
+/// Pure reconcile plan between expected Todoshi reminders and pending system request IDs.
 public struct NotificationReconcilePlan: Equatable, Sendable {
     public let toSchedule: [TaskReminderRequest]
     public let toCancel: Set<String>
@@ -22,7 +22,7 @@ public struct NotificationReconcilePlan: Equatable, Sendable {
 
 public enum NotificationReconcilePlanner: Sendable {
     /// `pendingIdentifiers` should include only currently pending request IDs from the system.
-    /// Foreign (non-Nexus) IDs are never cancelled.
+    /// Foreign (non-Todoshi) IDs are never cancelled.
     public static func plan(
         tasks: [TaskReminderInput],
         pendingIdentifiers: Set<String>,
@@ -35,11 +35,11 @@ public enum NotificationReconcilePlanner: Sendable {
         let expectedByID = Dictionary(uniqueKeysWithValues: expectedRequests.map { ($0.identifier, $0) })
         let expectedIDs = Set(expectedByID.keys)
 
-        let pendingNexusTaskIDs = pendingIdentifiers.filter {
+        let pendingTodoshiTaskIDs = pendingIdentifiers.filter {
             NotificationIdentifier.taskID(from: $0) != nil
         }
 
-        let stale = pendingNexusTaskIDs.subtracting(expectedIDs)
+        let stale = pendingTodoshiTaskIDs.subtracting(expectedIDs)
 
         // Schedule missing or always re-queue expected (caller may de-dupe identical content).
         // We include all expected so title/date changes reschedule after cancel of same id.

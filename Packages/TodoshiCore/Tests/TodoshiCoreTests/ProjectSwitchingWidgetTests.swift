@@ -1,7 +1,7 @@
 import Foundation
 import SwiftData
 import Testing
-@testable import NexusCore
+@testable import TodoshiCore
 
 @MainActor
 struct ProjectSwitchingWidgetTests {
@@ -128,7 +128,7 @@ struct ProjectSwitchingWidgetTests {
 
     @Test("Per-base selection store does not use a single global key")
     func selectionStorePerBase() {
-        let suiteName = "group.com.anashamad.Nexus.widgetSelectionTest.\(UUID().uuidString)"
+        let suiteName = "group.com.anashamad.Todoshi.widgetSelectionTest.\(UUID().uuidString)"
         guard let suite = UserDefaults(suiteName: suiteName) else {
             Issue.record("Could not create test suite")
             return
@@ -377,27 +377,27 @@ struct ProjectSwitchingWidgetTests {
     @Test("Arabic Project widget empty-state and gallery keys")
     func arabicProjectWidgetKeys() {
         let ar = Locale(identifier: "ar")
-        #expect(NexusL10n.tr("widget.projectTasks", locale: ar) == "مهام المشروع")
-        #expect(NexusL10n.tr("widget.today", locale: ar) == "مهام اليوم")
-        #expect(NexusL10n.tr("widget.noOpenTasks", locale: ar) == "لا توجد مهام مفتوحة")
-        #expect(NexusL10n.tr("widget.noOpenTasksHint", locale: ar) == "أضف مهمة للبدء بالعمل على هذا المشروع")
-        #expect(NexusL10n.tr("widget.chooseProject", locale: ar) == "اختر مشروعًا")
-        #expect(NexusL10n.tr("widget.chooseProjectHint", locale: ar).contains("تحرير") ||
-                NexusL10n.tr("widget.chooseProjectHint", locale: ar).contains("تعديل"))
-        #expect(NexusL10n.tr("widget.openProject", locale: ar) == "فتح المشروع")
-        #expect(NexusL10n.tr("widget.selectProject", locale: ar) == "اختيار المشروع")
-        #expect(NexusL10n.tr("intent.selectProject.title", locale: ar) == "اختيار المشروع")
-        #expect(NexusL10n.tr("intent.unableChangeProject", locale: ar) == "تعذر تغيير المشروع")
-        #expect(NexusL10n.tr("intent.projectUnavailable", locale: ar) == "المشروع غير متاح")
-        #expect(NexusL10n.tr("widget.addTask", locale: ar) == "إضافة مهمة")
-        #expect(NexusL10n.tr("widget.noActiveProjects", locale: ar) == "لا توجد مشاريع نشطة")
+        #expect(TodoshiL10n.tr("widget.projectTasks", locale: ar) == "مهام المشروع")
+        #expect(TodoshiL10n.tr("widget.today", locale: ar) == "مهام اليوم")
+        #expect(TodoshiL10n.tr("widget.noOpenTasks", locale: ar) == "لا توجد مهام مفتوحة")
+        #expect(TodoshiL10n.tr("widget.noOpenTasksHint", locale: ar) == "أضف مهمة للبدء بالعمل على هذا المشروع")
+        #expect(TodoshiL10n.tr("widget.chooseProject", locale: ar) == "اختر مشروعًا")
+        #expect(TodoshiL10n.tr("widget.chooseProjectHint", locale: ar).contains("تحرير") ||
+                TodoshiL10n.tr("widget.chooseProjectHint", locale: ar).contains("تعديل"))
+        #expect(TodoshiL10n.tr("widget.openProject", locale: ar) == "فتح المشروع")
+        #expect(TodoshiL10n.tr("widget.selectProject", locale: ar) == "اختيار المشروع")
+        #expect(TodoshiL10n.tr("intent.selectProject.title", locale: ar) == "اختيار المشروع")
+        #expect(TodoshiL10n.tr("intent.unableChangeProject", locale: ar) == "تعذر تغيير المشروع")
+        #expect(TodoshiL10n.tr("intent.projectUnavailable", locale: ar) == "المشروع غير متاح")
+        #expect(TodoshiL10n.tr("widget.addTask", locale: ar) == "إضافة مهمة")
+        #expect(TodoshiL10n.tr("widget.noActiveProjects", locale: ar) == "لا توجد مشاريع نشطة")
     }
 
     // MARK: - Hamburger selector override applier
 
     @Test("Project selector override persists per base key; rejects deleted/inactive")
     func selectorOverrideApplier() {
-        let suiteName = "group.com.anashamad.Nexus.selectorTest.\(UUID().uuidString)"
+        let suiteName = "group.com.anashamad.Todoshi.selectorTest.\(UUID().uuidString)"
         guard let suite = UserDefaults(suiteName: suiteName) else {
             Issue.record("Could not create test suite")
             return
@@ -420,7 +420,7 @@ struct ProjectSwitchingWidgetTests {
         #expect(WidgetProjectSelectionStore.overrideID(forBase: base, suite: suite) == b.id)
         #expect(
             WidgetProjectSelectionStore.storageKey(forBase: base)
-                == "nexus.widget.project.override.\(base.uuidString)"
+                == "todoshi.widget.project.override.\(base.uuidString)"
         )
 
         // Different bases stay isolated
@@ -484,19 +484,19 @@ struct ProjectSwitchingWidgetTests {
 
     @Test("Widget selection change reloads only Project Tasks kind")
     func selectorReloadScope() {
-        #expect(WidgetReloadClassifier.kinds(for: .widgetProjectSelectionChanged) == [NexusWidgetKind.project])
-        #expect(NexusWidgetKind.project == "Nexus.ProjectTasks")
+        #expect(WidgetReloadClassifier.kinds(for: .widgetProjectSelectionChanged) == [TodoshiWidgetKind.project])
+        #expect(TodoshiWidgetKind.project == "Todoshi.ProjectTasks")
     }
 
     @Test("English and Arabic select-project intent metadata keys")
     func selectProjectIntentL10n() {
         let en = Locale(identifier: "en")
         let ar = Locale(identifier: "ar")
-        #expect(NexusL10n.tr("intent.selectProject.title", locale: en) == "Select Project")
-        #expect(NexusL10n.tr("intent.selectProject.prompt", locale: en) == "Choose a Project")
-        #expect(NexusL10n.tr("intent.unableChangeProject", locale: en) == "Unable to Change Project")
-        #expect(NexusL10n.tr("intent.selectProject.title", locale: ar) == "اختيار المشروع")
-        #expect(NexusL10n.tr("intent.selectProject.prompt", locale: ar) == "اختر مشروعًا")
+        #expect(TodoshiL10n.tr("intent.selectProject.title", locale: en) == "Select Project")
+        #expect(TodoshiL10n.tr("intent.selectProject.prompt", locale: en) == "Choose a Project")
+        #expect(TodoshiL10n.tr("intent.unableChangeProject", locale: en) == "Unable to Change Project")
+        #expect(TodoshiL10n.tr("intent.selectProject.title", locale: ar) == "اختيار المشروع")
+        #expect(TodoshiL10n.tr("intent.selectProject.prompt", locale: ar) == "اختر مشروعًا")
     }
 
     @Test("Archived projects excluded from configuration list")
@@ -568,9 +568,9 @@ struct ProjectSwitchingWidgetTests {
 
     @Test("Widget quick-add announcement reloads task list widgets without notification reconcile")
     func widgetAnnouncementClassifier() {
-        #expect(WidgetReloadClassifier.kinds(for: .widgetTaskCreated) == NexusWidgetKind.allTaskListKinds)
+        #expect(WidgetReloadClassifier.kinds(for: .widgetTaskCreated) == TodoshiWidgetKind.allTaskListKinds)
         #expect(WidgetReloadClassifier.shouldReconcileNotifications(for: .widgetTaskCreated) == false)
-        #expect(WidgetReloadClassifier.kinds(for: .widgetProjectSelectionChanged) == [NexusWidgetKind.project])
+        #expect(WidgetReloadClassifier.kinds(for: .widgetProjectSelectionChanged) == [TodoshiWidgetKind.project])
         #expect(WidgetReloadClassifier.shouldReconcileNotifications(for: .widgetProjectSelectionChanged) == false)
     }
 
@@ -583,40 +583,40 @@ struct ProjectSwitchingWidgetTests {
     @Test("Widget project picker deep link with baseProjectID")
     func widgetProjectPickerDeepLink() {
         let base = UUID()
-        let url = NexusDeepLink.widgetProjectPicker(baseProjectID: base).url
-        #expect(url.scheme == "nexus")
+        let url = TodoshiDeepLink.widgetProjectPicker(baseProjectID: base).url
+        #expect(url.scheme == "todoshi")
         #expect(url.host == "widget")
         #expect(url.path.contains("project-picker"))
-        #expect(NexusDeepLink(url: url) == .widgetProjectPicker(baseProjectID: base))
+        #expect(TodoshiDeepLink(url: url) == .widgetProjectPicker(baseProjectID: base))
 
         let missingBase = URL(string: "nexus://widget/project-picker")!
-        #expect(NexusDeepLink(url: missingBase) == .widgetProjectPicker(baseProjectID: nil))
+        #expect(TodoshiDeepLink(url: missingBase) == .widgetProjectPicker(baseProjectID: nil))
 
         let badUUID = URL(string: "nexus://widget/project-picker?baseProjectID=not-a-uuid")!
-        #expect(NexusDeepLink(url: badUUID) == .widgetProjectPicker(baseProjectID: nil))
+        #expect(TodoshiDeepLink(url: badUUID) == .widgetProjectPicker(baseProjectID: nil))
 
         let wrongPath = URL(string: "nexus://widget/other")!
-        #expect(NexusDeepLink(url: wrongPath) == nil)
+        #expect(TodoshiDeepLink(url: wrongPath) == nil)
 
-        #expect(WidgetReloadClassifier.kinds(for: .widgetProjectSelectionChanged) == [NexusWidgetKind.project])
+        #expect(WidgetReloadClassifier.kinds(for: .widgetProjectSelectionChanged) == [TodoshiWidgetKind.project])
     }
 
     @Test("Arabic keys for picker failure and selection")
     func pickerArabicKeys() {
         let ar = Locale(identifier: "ar")
-        #expect(NexusL10n.tr("widget.selectProject", locale: ar) == "اختيار المشروع")
-        #expect(NexusL10n.tr("widgetPicker.unableIdentify", locale: ar) == "تعذر تحديد الويدجت")
-        #expect(NexusL10n.tr("widget.noActiveProjects", locale: ar) == "لا توجد مشاريع نشطة")
-        #expect(NexusL10n.tr("widget.projectUnavailable", locale: ar) == "المشروع غير متاح")
+        #expect(TodoshiL10n.tr("widget.selectProject", locale: ar) == "اختيار المشروع")
+        #expect(TodoshiL10n.tr("widgetPicker.unableIdentify", locale: ar) == "تعذر تحديد الويدجت")
+        #expect(TodoshiL10n.tr("widget.noActiveProjects", locale: ar) == "لا توجد مشاريع نشطة")
+        #expect(TodoshiL10n.tr("widget.projectUnavailable", locale: ar) == "المشروع غير متاح")
         let en = Locale(identifier: "en")
-        #expect(NexusL10n.tr("widgetPicker.unableIdentify", locale: en) == "Unable to identify widget")
-        #expect(NexusL10n.tr("widget.selectProject", locale: en) == "Select Project")
+        #expect(TodoshiL10n.tr("widgetPicker.unableIdentify", locale: en) == "Unable to identify widget")
+        #expect(TodoshiL10n.tr("widget.selectProject", locale: en) == "Select Project")
     }
 
     @Test("Full editor deep link still works")
     func fullEditorDeepLink() {
-        #expect(NexusDeepLink.quickAdd.url.absoluteString == "nexus://quick-add")
-        #expect(NexusDeepLink(url: NexusDeepLink.quickAdd.url) == .quickAdd)
-        #expect(NexusDeepLink.projects.url.absoluteString == "nexus://projects")
+        #expect(TodoshiDeepLink.quickAdd().url.absoluteString == "todoshi://quick-add")
+        #expect(TodoshiDeepLink(url: TodoshiDeepLink.quickAdd().url) == .quickAdd(projectID: nil))
+        #expect(TodoshiDeepLink.projects.url.absoluteString == "todoshi://projects")
     }
 }

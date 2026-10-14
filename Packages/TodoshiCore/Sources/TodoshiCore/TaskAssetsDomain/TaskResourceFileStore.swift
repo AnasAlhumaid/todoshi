@@ -59,6 +59,10 @@ public enum TaskResourceFilePath: Sendable {
         return resolved
     }
 
+    /// Legacy Application Support folder retained for one-time resource migration.
+    private static let legacyApplicationSupportFolderName = "Nexus"
+    private static let applicationSupportFolderName = "Todoshi"
+
     public static func defaultApplicationSupportRoot() throws -> URL {
         let appSupport = try FileManager.default.url(
             for: .applicationSupportDirectory,
@@ -66,9 +70,22 @@ public enum TaskResourceFilePath: Sendable {
             appropriateFor: nil,
             create: true
         )
-        return appSupport
-            .appendingPathComponent("Nexus", isDirectory: true)
+        let legacyRoot = appSupport
+            .appendingPathComponent(legacyApplicationSupportFolderName, isDirectory: true)
             .appendingPathComponent(resourcesDirectoryName, isDirectory: true)
+        let currentRoot = appSupport
+            .appendingPathComponent(applicationSupportFolderName, isDirectory: true)
+            .appendingPathComponent(resourcesDirectoryName, isDirectory: true)
+        migrateLegacyResourceRootIfNeeded(from: legacyRoot, to: currentRoot)
+        return currentRoot
+    }
+
+    private static func migrateLegacyResourceRootIfNeeded(from legacy: URL, to current: URL) {
+        let fm = FileManager.default
+        guard fm.fileExists(atPath: legacy.path),
+              fm.fileExists(atPath: current.path) == false else { return }
+        try? fm.createDirectory(at: current.deletingLastPathComponent(), withIntermediateDirectories: true)
+        try? fm.moveItem(at: legacy, to: current)
     }
 }
 
@@ -135,7 +152,7 @@ public final class TaskResourceFileStore: TaskResourceFileStoring, @unchecked Se
 
     public static let shared: TaskResourceFileStore = {
         let root = (try? TaskResourceFilePath.defaultApplicationSupportRoot())
-            ?? FileManager.default.temporaryDirectory.appendingPathComponent("NexusResources", isDirectory: true)
+            ?? FileManager.default.temporaryDirectory.appendingPathComponent("TodoshiResources", isDirectory: true)
         return TaskResourceFileStore(rootURL: root)
     }()
 

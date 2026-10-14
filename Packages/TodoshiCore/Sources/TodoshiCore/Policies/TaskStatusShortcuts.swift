@@ -10,7 +10,7 @@ public struct TaskStatusShortcut: Equatable, Sendable {
     }
 
     public func label(locale: Locale = .autoupdatingCurrent) -> String {
-        NexusL10n.tr(localizationKey, locale: locale)
+        TodoshiL10n.tr(localizationKey, locale: locale)
     }
 }
 

@@ -1,28 +1,20 @@
 import Foundation
 
-/// Locale-aware string access for NexusCore (String Catalog in module resources).
+/// Locale-aware string access for TodoshiCore (String Catalog in module resources).
 ///
 /// Xcode app builds can resolve catalogs via Foundation. SPM package tests often ship the raw
 /// `.xcstrings` file, so this helper also reads the catalog JSON from `Bundle.module`.
-public enum NexusL10n: Sendable {
-    public static func tr(_ key: String, locale: Locale = .autoupdatingCurrent) -> String {
-        let primary = String(localized: String.LocalizationValue(key), bundle: .module, locale: locale)
-        if primary != key {
-            return primary
-        }
-        return catalogValue(key: key, locale: locale, count: nil) ?? primary
+public enum TodoshiL10n: Sendable {
+    public static func tr(_ key: String, locale: Locale = AppLanguageStore.resolvedLocale) -> String {
+        resolve(key: key, locale: locale, count: nil)
     }
 
     public static func format(
         _ key: String,
-        locale: Locale = .autoupdatingCurrent,
+        locale: Locale = AppLanguageStore.resolvedLocale,
         _ arguments: CVarArg...
     ) -> String {
-        let template = catalogValue(key: key, locale: locale, count: nil)
-            ?? {
-                let primary = String(localized: String.LocalizationValue(key), bundle: .module, locale: locale)
-                return primary
-            }()
+        let template = resolve(key: key, locale: locale, count: nil)
         return String(format: template, locale: locale, arguments: arguments)
     }
 
@@ -30,13 +22,22 @@ public enum NexusL10n: Sendable {
     public static func plural(
         _ key: String,
         count: Int,
-        locale: Locale = .autoupdatingCurrent
+        locale: Locale = AppLanguageStore.resolvedLocale
     ) -> String {
         let template = catalogValue(key: key, locale: locale, count: count)
-            ?? catalogValue(key: key, locale: locale, count: nil)
-            ?? String(localized: String.LocalizationValue(key), bundle: .module, locale: locale)
+            ?? resolve(key: key, locale: locale, count: nil)
         // Pass count as a direct CVarArg — packing `[count]` often fails to format.
         return String(format: template, locale: locale, count)
+    }
+
+    private static func resolve(key: String, locale: Locale, count: Int?) -> String {
+        if let catalog = catalogValue(key: key, locale: locale, count: count) {
+            return catalog
+        }
+        if let bundled = bundleLocalizedValue(key: key, locale: locale) {
+            return bundled
+        }
+        return String(localized: String.LocalizationValue(key), bundle: .module, locale: locale)
     }
 
     public static func resource(_ key: String.LocalizationValue) -> LocalizedStringResource {
@@ -85,15 +86,44 @@ public enum NexusL10n: Sendable {
         return nil
     }
 
+  /// Language identifiers to try for catalog JSON and compiled `.lproj` bundles.
     private static func localeCandidates(for locale: Locale) -> [String] {
         var ids: [String] = []
         if let language = locale.language.languageCode?.identifier {
             ids.append(language)
         }
-        ids.append(locale.identifier.replacingOccurrences(of: "_", with: "-"))
+        let normalized = locale.identifier.replacingOccurrences(of: "_", with: "-")
+        if !normalized.isEmpty {
+            ids.append(normalized)
+            if let base = normalized.split(separator: "-").first.map(String.init) {
+                ids.append(base)
+            }
+        }
+        // System preference uses `.autoupdatingCurrent`; ensure the live device language is tried.
+        if locale == .autoupdatingCurrent,
+           let deviceLanguage = Locale.autoupdatingCurrent.language.languageCode?.identifier {
+            ids.append(deviceLanguage)
+        }
         ids.append("en")
         var seen = Set<String>()
-        return ids.filter { seen.insert($0).inserted }
+        return ids.filter { !$0.isEmpty && seen.insert($0).inserted }
+    }
+
+    /// Resolves via compiled `ar.lproj` / `en.lproj` bundles (device/Xcode builds).
+    /// SPM tests may ship the raw `.xcstrings` file instead; catalog JSON handles that path.
+    private static func bundleLocalizedValue(key: String, locale: Locale) -> String? {
+        let bundle = Bundle.module
+        for languageID in localeCandidates(for: locale) {
+            guard let lprojPath = bundle.path(forResource: languageID, ofType: "lproj"),
+                  let localizedBundle = Bundle(path: lprojPath) else {
+                continue
+            }
+            let value = localizedBundle.localizedString(forKey: key, value: nil, table: "Localizable")
+            if value != key {
+                return value
+            }
+        }
+        return nil
     }
 
     private static func pluralCategory(count: Int, language: String) -> String {

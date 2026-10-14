@@ -95,7 +95,7 @@ public final class TaskResourceRepository {
         context.insert(resource)
         task.updatedAt = date
         try context.save()
-        NexusDataChangeCenter.post(.resourcesUpdated)
+        TodoshiDataChangeCenter.post(.resourcesUpdated)
         return resource
     }
 
@@ -125,7 +125,7 @@ public final class TaskResourceRepository {
         context.insert(resource)
         task.updatedAt = date
         try context.save()
-        NexusDataChangeCenter.post(.resourcesUpdated)
+        TodoshiDataChangeCenter.post(.resourcesUpdated)
         return resource
     }
 
@@ -175,7 +175,7 @@ public final class TaskResourceRepository {
             fileStore.deleteIfExists(at: importedFile.relativePath)
             throw error
         }
-        NexusDataChangeCenter.post(.resourcesUpdated)
+        TodoshiDataChangeCenter.post(.resourcesUpdated)
         return resource
     }
 
@@ -219,7 +219,7 @@ public final class TaskResourceRepository {
         resource.updatedAt = date
         resource.task?.updatedAt = date
         try context.save()
-        NexusDataChangeCenter.post(.resourcesUpdated)
+        TodoshiDataChangeCenter.post(.resourcesUpdated)
     }
 
     @discardableResult
@@ -235,7 +235,7 @@ public final class TaskResourceRepository {
         if let path {
             fileStore.deleteIfExists(at: path)
         }
-        NexusDataChangeCenter.post(.resourcesUpdated)
+        TodoshiDataChangeCenter.post(.resourcesUpdated)
         return TaskResourceDeletionPlan(relativePaths: path.map { [$0] } ?? [])
     }
 
@@ -282,7 +282,7 @@ public final class TaskResourceRepository {
         normalizeIfNeeded(without, at: date)
         task.updatedAt = date
         try context.save()
-        NexusDataChangeCenter.post(.resourcesUpdated)
+        TodoshiDataChangeCenter.post(.resourcesUpdated)
         return true
     }
 
@@ -321,7 +321,7 @@ public final class TaskResourceRepository {
         for path in pathsToDelete {
             fileStore.deleteIfExists(at: path)
         }
-        NexusDataChangeCenter.post(.resourcesUpdated)
+        TodoshiDataChangeCenter.post(.resourcesUpdated)
     }
 
     /// Removes unmanaged files older than `olderThan` that are not referenced.
@@ -343,7 +343,7 @@ public final class TaskResourceRepository {
             }
         }
         if removed > 0 {
-            NexusDataChangeCenter.post(.resourceOrphanCleanupCompleted)
+            TodoshiDataChangeCenter.post(.resourceOrphanCleanupCompleted)
         }
         return removed
     }

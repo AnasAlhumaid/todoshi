@@ -44,8 +44,8 @@ public struct QuickAddDraft: Equatable, Sendable {
 }
 
 public enum QuickAddPreferences: Sendable {
-    public static let lastProjectIDKey = "nexus.quickAdd.lastProjectID"
-    public static let showsOptionalFieldsKey = "nexus.quickAdd.showsOptionalFields"
+    public static let lastProjectIDKey = "todoshi.quickAdd.lastProjectID"
+    public static let showsOptionalFieldsKey = "todoshi.quickAdd.showsOptionalFields"
 
     /// Returns the stored UUID only when it is still active.
     public static func resolvedProjectID(

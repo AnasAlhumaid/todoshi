@@ -12,7 +12,7 @@ public enum ModelContainerFactory {
     }
 
     public static func makeContainer(kind: StoreKind) throws -> ModelContainer {
-        let schema = NexusSchema.makeSchema()
+        let schema = TodoshiSchema.makeSchema()
 
         switch kind {
         case .appGroup:
@@ -31,11 +31,7 @@ public enum ModelContainerFactory {
                 url: url,
                 cloudKitDatabase: .none
             )
-            return try ModelContainer(
-                for: schema,
-                migrationPlan: NexusSchemaMigrationPlan.self,
-                configurations: [configuration]
-            )
+            return try openPreservingData(schema: schema, configuration: configuration)
         case .inMemory:
             let configuration = ModelConfiguration(
                 schema: schema,
@@ -44,7 +40,7 @@ public enum ModelContainerFactory {
             )
             return try ModelContainer(
                 for: schema,
-                migrationPlan: NexusSchemaMigrationPlan.self,
+                migrationPlan: TodoshiSchemaMigrationPlan.self,
                 configurations: [configuration]
             )
         }
@@ -57,11 +53,7 @@ public enum ModelContainerFactory {
         storeURL: URL
     ) throws -> ModelContainer {
         do {
-            return try ModelContainer(
-                for: schema,
-                migrationPlan: NexusSchemaMigrationPlan.self,
-                configurations: [configuration]
-            )
+            return try openPreservingData(schema: schema, configuration: configuration)
         } catch {
             guard StoreResetPolicy.allowsDestructiveAppGroupReset else {
                 throw ModelContainerError.appGroupOpenFailed(underlying: String(describing: error))
@@ -69,9 +61,27 @@ public enum ModelContainerFactory {
             destroyStoreFiles(at: storeURL)
             return try ModelContainer(
                 for: schema,
-                migrationPlan: NexusSchemaMigrationPlan.self,
+                migrationPlan: TodoshiSchemaMigrationPlan.self,
                 configurations: [configuration]
             )
+        }
+    }
+
+    /// Opens with the versioned migration plan, then retries without it.
+    ///
+    /// The plan registers a single version with no stages, so SwiftData rejects a store whose
+    /// model gained additive optional attributes ("store version hashes didn't migrate").
+    /// Opening without the plan lets Core Data infer a lightweight migration for those
+    /// additive changes, preserving user data instead of failing (Release) or wiping (Debug).
+    static func openPreservingData(schema: Schema, configuration: ModelConfiguration) throws -> ModelContainer {
+        do {
+            return try ModelContainer(
+                for: schema,
+                migrationPlan: TodoshiSchemaMigrationPlan.self,
+                configurations: [configuration]
+            )
+        } catch {
+            return try ModelContainer(for: schema, configurations: [configuration])
         }
     }
 
@@ -91,6 +101,7 @@ public enum ModelContainerFactory {
     /// Production container: prefers App Group, falls back to default application support store
     /// when the group container is unavailable (e.g. simulator without entitlements applied).
     public static func makeProductionContainer() throws -> ModelContainer {
+        AppGroupMigration.migrateIfNeeded()
         if AppGroupConstants.storeURL != nil {
             do {
                 return try makeContainer(kind: .appGroup)
@@ -106,17 +117,13 @@ public enum ModelContainerFactory {
             }
         }
 
-        let schema = NexusSchema.makeSchema()
+        let schema = TodoshiSchema.makeSchema()
         let configuration = ModelConfiguration(
             schema: schema,
             isStoredInMemoryOnly: false,
             cloudKitDatabase: .none
         )
-        return try ModelContainer(
-            for: schema,
-            migrationPlan: NexusSchemaMigrationPlan.self,
-            configurations: [configuration]
-        )
+        return try openPreservingData(schema: schema, configuration: configuration)
     }
 }
 

@@ -96,19 +96,19 @@ public enum TaskResourceValidation: Sendable {
     public static func message(for issue: Issue, locale: Locale = .autoupdatingCurrent) -> String {
         switch issue {
         case .emptyContent, .emptyBody:
-            return NexusL10n.tr("resource.empty", locale: locale)
+            return TodoshiL10n.tr("resource.empty", locale: locale)
         case .titleTooLong:
-            return NexusL10n.tr("resource.titleTooLong", locale: locale)
+            return TodoshiL10n.tr("resource.titleTooLong", locale: locale)
         case .bodyTooLong:
-            return NexusL10n.tr("resource.bodyTooLong", locale: locale)
+            return TodoshiL10n.tr("resource.bodyTooLong", locale: locale)
         case .invalidURL, .unsupportedURLScheme:
-            return NexusL10n.tr("resource.unsupportedURL", locale: locale)
+            return TodoshiL10n.tr("resource.unsupportedURL", locale: locale)
         case .missingFilePath:
-            return NexusL10n.tr("resource.fileUnavailable", locale: locale)
+            return TodoshiL10n.tr("resource.fileUnavailable", locale: locale)
         case .emptyFile:
-            return NexusL10n.tr("resource.emptyFile", locale: locale)
+            return TodoshiL10n.tr("resource.emptyFile", locale: locale)
         case .fileTooLarge:
-            return NexusL10n.tr("resource.fileTooLarge", locale: locale)
+            return TodoshiL10n.tr("resource.fileTooLarge", locale: locale)
         }
     }
 

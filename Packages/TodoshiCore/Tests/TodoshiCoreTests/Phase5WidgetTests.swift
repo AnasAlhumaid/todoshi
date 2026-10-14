@@ -1,7 +1,7 @@
 import Foundation
 import SwiftData
 import Testing
-@testable import NexusCore
+@testable import TodoshiCore
 
 @MainActor
 struct Phase5WidgetTests {
@@ -246,18 +246,18 @@ struct Phase5WidgetTests {
     func deepLinks() {
         let taskID = UUID()
         let projectID = UUID()
-        #expect(NexusDeepLink.quickAdd.url.absoluteString == "nexus://quick-add")
-        #expect(NexusDeepLink.dashboard.url.absoluteString == "nexus://dashboard")
-        #expect(NexusDeepLink.projects.url.absoluteString == "nexus://projects")
-        #expect(NexusDeepLink.task(taskID).url.absoluteString == "nexus://task/\(taskID.uuidString)")
-        #expect(NexusDeepLink.project(projectID).url.absoluteString == "nexus://project/\(projectID.uuidString)")
+        #expect(TodoshiDeepLink.quickAdd().url.absoluteString == "todoshi://quick-add")
+        #expect(TodoshiDeepLink.dashboard.url.absoluteString == "todoshi://dashboard")
+        #expect(TodoshiDeepLink.projects.url.absoluteString == "todoshi://projects")
+        #expect(TodoshiDeepLink.task(taskID).url.absoluteString == "todoshi://task/\(taskID.uuidString)")
+        #expect(TodoshiDeepLink.project(projectID).url.absoluteString == "todoshi://project/\(projectID.uuidString)")
 
-        #expect(NexusDeepLink(url: NexusDeepLink.task(taskID).url) == .task(taskID))
-        #expect(NexusDeepLink(url: NexusDeepLink.project(projectID).url) == .project(projectID))
-        #expect(NexusDeepLink(url: NexusDeepLink.dashboard.url) == .dashboard)
-        #expect(NexusDeepLink(url: NexusDeepLink.projects.url) == .projects)
-        #expect(NexusDeepLink(url: URL(string: "nexus://task/not-a-uuid")!) == nil)
-        #expect(NexusDeepLink(url: URL(string: "nexus://project/zzzz")!) == nil)
+        #expect(TodoshiDeepLink(url: TodoshiDeepLink.task(taskID).url) == .task(taskID))
+        #expect(TodoshiDeepLink(url: TodoshiDeepLink.project(projectID).url) == .project(projectID))
+        #expect(TodoshiDeepLink(url: TodoshiDeepLink.dashboard.url) == .dashboard)
+        #expect(TodoshiDeepLink(url: TodoshiDeepLink.projects.url) == .projects)
+        #expect(TodoshiDeepLink(url: URL(string: "nexus://task/not-a-uuid")!) == nil)
+        #expect(TodoshiDeepLink(url: URL(string: "nexus://project/zzzz")!) == nil)
     }
 
     // MARK: - Active projects config list via store
@@ -295,30 +295,30 @@ struct Phase5WidgetTests {
     @Test("Reload classifier maps write events to expected widget kinds")
     func reloadClassifier() {
         let taskKinds = Set(WidgetReloadClassifier.kinds(for: .taskCreated))
-        #expect(taskKinds == Set(NexusWidgetKind.allTaskListKinds))
+        #expect(taskKinds == Set(TodoshiWidgetKind.allTaskListKinds))
 
         let due = WidgetReloadClassifier.kinds(for: .taskDueDateChanged)
-        #expect(due.contains(NexusWidgetKind.today))
-        #expect(due.contains(NexusWidgetKind.todayCountAccessory))
-        #expect(due.contains(NexusWidgetKind.highPriority) == false || due.contains(NexusWidgetKind.highPriority))
+        #expect(due.contains(TodoshiWidgetKind.today))
+        #expect(due.contains(TodoshiWidgetKind.todayCountAccessory))
+        #expect(due.contains(TodoshiWidgetKind.highPriority) == false || due.contains(TodoshiWidgetKind.highPriority))
         // Due date changes affect Today primarily; classifier includes list widgets.
 
         let priority = Set(WidgetReloadClassifier.kinds(for: .taskPriorityChanged))
-        #expect(priority.contains(NexusWidgetKind.highPriority))
-        #expect(priority.contains(NexusWidgetKind.quickAddAccessory) == false)
+        #expect(priority.contains(TodoshiWidgetKind.highPriority))
+        #expect(priority.contains(TodoshiWidgetKind.quickAddAccessory) == false)
 
         let archive = Set(WidgetReloadClassifier.kinds(for: .projectArchiveStateChanged))
-        #expect(archive == Set(NexusWidgetKind.allKinds))
+        #expect(archive == Set(TodoshiWidgetKind.allKinds))
 
         let structure = Set(WidgetReloadClassifier.kinds(for: .projectStructureChanged))
-        #expect(structure.contains(NexusWidgetKind.project))
-        #expect(structure.contains(NexusWidgetKind.quickAddAccessory) == false)
+        #expect(structure.contains(TodoshiWidgetKind.project))
+        #expect(structure.contains(TodoshiWidgetKind.quickAddAccessory) == false)
     }
 
     @Test("Data change center encodes events")
     func dataChangeCenter() {
         let exp = WidgetReloadClassifier.Event.taskDueDateChanged
-        #expect(NexusDataChangeCenter.event(from: [NexusDataChangeCenter.UserInfoKey.event: exp.rawValue]) == exp)
-        #expect(NexusDataChangeCenter.event(from: [:]) == nil)
+        #expect(TodoshiDataChangeCenter.event(from: [TodoshiDataChangeCenter.UserInfoKey.event: exp.rawValue]) == exp)
+        #expect(TodoshiDataChangeCenter.event(from: [:]) == nil)
     }
 }

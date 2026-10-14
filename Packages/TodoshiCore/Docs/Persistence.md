@@ -6,7 +6,7 @@
 |------|-----|
 | In-memory | Unit tests and SwiftUI previews |
 | File URL | Widget/read-path tests, isolated probes |
-| App Group (`group.com.anashamad.Nexus`) | Production app + widgets |
+| App Group (`group.com.anashamad.Todoshi`) | Production app + widgets |
 | Application Support (default ModelConfiguration) | Fallback when App Group is unavailable (e.g. some simulators) |
 
 ## Schema versions
@@ -17,10 +17,15 @@
 | **V2** | Optional `TaskItem.reminderDate` |
 | **V3** | TaskResource attachments + relationship on TaskItem |
 | **V4** | Optional recurrence metadata on `TaskItem` (rule, interval, series ID, generation, next/previous occurrence IDs) |
+| **V5** | Optional Project sharing metadata (`sharingModeRaw`, `remoteProjectID`, `sharedAt`) |
 
-`NexusSchemaMigrationPlan` currently registers **V4 only** as the active versioned schema. Listing identical `@Model` types across multiple versions triggers SwiftData’s “Duplicate version checksums” crash. New optional attributes open existing stores non-destructively when the active sole version advances and models remain compatible. Release never runs destructive reset.
+`TodoshiSchemaMigrationPlan` currently registers **V5 only** as the active versioned schema. Listing identical `@Model` types across multiple versions triggers SwiftData’s “Duplicate version checksums” crash. New optional attributes open existing stores non-destructively when the active sole version advances and models remain compatible. Release never runs destructive reset.
 
-Widgets and the main app share the same `NexusSchema` / migration plan. The widget path **never** deletes store files.
+### Phase 2 migration decision
+
+Sharing fields are **optional** on `Project`. Existing stores open under V5 without reset; nil `sharingModeRaw` maps to `.personal`. No historical multi-version stage chain is registered (avoids checksum collisions). Widgets continue using the same App Group store; no Firebase in WidgetKit.
+
+Widgets and the main app share the same `TodoshiSchema` / migration plan. The widget path **never** deletes store files.
 
 ### V4 recurrence fields (optional; default = no recurrence)
 
@@ -37,7 +42,7 @@ Invalid / unknown raw values parse as **no active recurrence**.
 
 ## App Group schema failures
 
-`ModelContainerFactory` opens the App Group SQLite store with the current schema (V4).
+`ModelContainerFactory` opens the App Group SQLite store with the current schema (V5).
 
 If the store cannot be opened (e.g. pre-release model drift):
 
@@ -48,9 +53,9 @@ If the store cannot be opened (e.g. pre-release model drift):
 
 ## Local notifications
 
-- Task reminders use identifiers `nexus.task.<UUID>`.
-- Optional daily summary uses `nexus.dailySummary` with **count-only** content.
-- Scheduling lives in the app target (`LocalNotificationScheduler`); pure policy lives in `NexusCore`.
+- Task reminders use identifiers `todoshi.task.<UUID>`.
+- Optional daily summary uses `todoshi.dailySummary` with **count-only** content.
+- Scheduling lives in the app target (`LocalNotificationScheduler`); pure policy lives in `TodoshiCore`.
 - Recurring tasks use one-time reminders on each occurrence (no repeating UNCalendar triggers).
 
 ## Labels / checklists / subtasks / resources
@@ -77,4 +82,4 @@ Read-only schedule over `dueDate`. No additional persisted models. Archived proj
 
 ## Release log policy
 
-Release builds must not log task titles, notes, descriptions, labels, resource paths, code, commands, filenames, or notification bodies. Diagnostics use coarse categories in Debug only (`NexusDiagnostics`).
+Release builds must not log task titles, notes, descriptions, labels, resource paths, code, commands, filenames, or notification bodies. Diagnostics use coarse categories in Debug only (`TodoshiDiagnostics`).

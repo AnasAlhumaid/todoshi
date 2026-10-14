@@ -28,13 +28,13 @@ public enum TaskResourceKind: String, Codable, CaseIterable, Sendable {
 
     public func displayName(locale: Locale) -> String {
         switch self {
-        case .link: return NexusL10n.tr("resource.link", locale: locale)
-        case .file: return NexusL10n.tr("resource.file", locale: locale)
-        case .image: return NexusL10n.tr("resource.image", locale: locale)
-        case .pdf: return NexusL10n.tr("resource.pdf", locale: locale)
-        case .codeSnippet: return NexusL10n.tr("resource.code", locale: locale)
-        case .terminalCommand: return NexusL10n.tr("resource.command", locale: locale)
-        case .text: return NexusL10n.tr("resource.text", locale: locale)
+        case .link: return TodoshiL10n.tr("resource.link", locale: locale)
+        case .file: return TodoshiL10n.tr("resource.file", locale: locale)
+        case .image: return TodoshiL10n.tr("resource.image", locale: locale)
+        case .pdf: return TodoshiL10n.tr("resource.pdf", locale: locale)
+        case .codeSnippet: return TodoshiL10n.tr("resource.code", locale: locale)
+        case .terminalCommand: return TodoshiL10n.tr("resource.command", locale: locale)
+        case .text: return TodoshiL10n.tr("resource.text", locale: locale)
         }
     }
 

@@ -8,16 +8,16 @@ public enum TaskPriority: String, Codable, CaseIterable, Sendable {
     case urgent
 
     public var displayName: String {
-        displayName(locale: .autoupdatingCurrent)
+        displayName(locale: AppLanguageStore.resolvedLocale)
     }
 
     public func displayName(locale: Locale) -> String {
         switch self {
-        case .none: return NexusL10n.tr("priority.none", locale: locale)
-        case .low: return NexusL10n.tr("priority.low", locale: locale)
-        case .medium: return NexusL10n.tr("priority.medium", locale: locale)
-        case .high: return NexusL10n.tr("priority.high", locale: locale)
-        case .urgent: return NexusL10n.tr("priority.urgent", locale: locale)
+        case .none: return TodoshiL10n.tr("priority.none", locale: locale)
+        case .low: return TodoshiL10n.tr("priority.low", locale: locale)
+        case .medium: return TodoshiL10n.tr("priority.medium", locale: locale)
+        case .high: return TodoshiL10n.tr("priority.high", locale: locale)
+        case .urgent: return TodoshiL10n.tr("priority.urgent", locale: locale)
         }
     }
 
