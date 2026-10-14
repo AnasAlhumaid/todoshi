@@ -1,4 +1,4 @@
-# QA Matrix — Nexus 0.1.0
+# QA Matrix — Todoshi 0.1.0
 
 ## Environments
 
@@ -21,8 +21,8 @@ Fill D1 after install:
 
 | Check | Result | Notes |
 |-------|--------|--------|
-| NexusCore unit tests (129+) | Pass (this phase) | Fixed calendar/timezone |
-| Nexus scheme build Debug-sim | Pass | Embeds widgets |
+| TodoshiCore unit tests (129+) | Pass (this phase) | Fixed calendar/timezone |
+| Todoshi scheme build Debug-sim | Pass | Embeds widgets |
 | Store reset policy tests | Pass | DEBUG vs RELEASE compile gates |
 
 ## Feature regression (manual)

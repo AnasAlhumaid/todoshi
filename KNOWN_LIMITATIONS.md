@@ -1,11 +1,13 @@
-# Known Limitations — Nexus 0.1.0
+# Known Limitations — Todoshi 0.1.0
 
 Intentional product boundaries for the local-first MVP. These are not accidental bugs.
 
 ## Platform & accounts
 
-- Local only; no CloudKit, iCloud Drive sync, or multi-device merge  
-- No accounts, collaboration, or sharing  
+- Personal projects remain local-first; no account required for normal use  
+- Sign in with Apple unlocks future collaboration only; **project sharing is not implemented yet**  
+- No CloudKit, iCloud Drive sync, or multi-device merge for personal projects  
+- Account deletion is available in-app from Settings → Profile → Delete Account  
 - No analytics, crash SDKs, or advertising identifiers  
 
 ## Scheduling

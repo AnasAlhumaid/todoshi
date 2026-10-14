@@ -1,6 +1,6 @@
 # Architecture
 
-Nexus is a local-first SwiftUI + SwiftData iOS app with an embedded WidgetKit extension. Both share `NexusCore` for models, policies, and read helpers.
+Todoshi is a local-first SwiftUI + SwiftData iOS app with an embedded WidgetKit extension. Both share `TodoshiCore` for models, policies, and read helpers.
 
 ## Source of truth
 
@@ -8,54 +8,55 @@ Nexus is a local-first SwiftUI + SwiftData iOS app with an embedded WidgetKit ex
 
 - Views and widgets never invent parallel stores.
 - Widgets open the App Group store **read-focused** and never destructively reset it.
-- Managed file bytes live outside SwiftData under Application Support `Nexus/Resources/…`.
+- Managed file bytes live outside SwiftData under Application Support `Todoshi/Resources/…`.
 
 ## Layers
 
 | Layer | Location | Responsibility |
 |-------|----------|----------------|
-| UI | `Nexus/Features/*` | SwiftUI screens, sheets, accessibility |
+| UI | `Todoshi/Features/*` | SwiftUI screens, sheets, accessibility |
 | ViewModels | App target | Thin orchestration, drafts, permission explainer |
-| Repositories | `NexusCore` | Writes, validation, fractional positions, cascade rules |
-| Policies | `NexusCore` | Pure date/status/recurrence/search/calendar/widget classification |
-| Models | `NexusCore` | `@Model` types shared by app + widgets |
+| Repositories | `TodoshiCore` | Writes, validation, fractional positions, cascade rules |
+| Policies | `TodoshiCore` | Pure date/status/recurrence/search/calendar/widget classification |
+| Models | `TodoshiCore` | `@Model` types shared by app + widgets |
 | Notifications | App target | UserNotifications scheduling & reconcile |
-| Widgets | `NexusWidgets` + `NexusCore` loaders | Timeline entries, deep links |
+| Widgets | `TodoshiWidgets` + `TodoshiCore` loaders | Timeline entries, deep links |
 
 ## Write path
 
 1. UI / ViewModel collects draft values  
 2. Repository validates and mutates models  
 3. Single logical `context.save()` where expected  
-4. `NexusDataChangeCenter.post(event)`  
+4. `TodoshiDataChangeCenter.post(event)`  
 5. App reloads widgets / may reconcile notifications based on `WidgetReloadClassifier`
 
 Views must not call `ModelContext.save()` for product mutations outside repositories.
 
 ## Schema strategy
 
-Single active versioned schema: **V4** (`NexusSchemaV4`).
+Single active versioned schema: **V5** (`TodoshiSchemaV5`).
 
 - Multi-version listings of identical `@Model` graphs are avoided (duplicate checksum crashes).
 - Optional new attributes open existing stores non-destructively when models remain compatible.
 - **Release:** `StoreResetPolicy.allowsDestructiveAppGroupReset == false`  
 - **Debug:** may wipe incompatible App Group store after open failure  
 
-See `Packages/NexusCore/Docs/Persistence.md`.
+See `Packages/TodoshiCore/Docs/Persistence.md`.
 
 ## App Group
 
 | Target | Bundle ID | Group |
 |--------|-----------|--------|
-| Nexus | `com.anashamad.Nexus` | `group.com.anashamad.Nexus` |
-| NexusWidgets | `com.anashamad.Nexus.widgets` | same |
+| Todoshi | `com.anashamad.Todoshi` | `group.com.anashamad.Todoshi` |
+| TodoshiWidgets | `com.anashamad.Todoshi.widgets` | same |
 
-Store URL: app group container `/Library/Application Support/Nexus/Nexus.store`.
+Store file: `Todoshi.store` in the App Group container (migrated once from legacy `Nexus.store` / `group.com.anashamad.Nexus`).
 
 ## Notifications
 
-- Identifiers: `nexus.task.<UUID>`, `nexus.dailySummary`
-- Policy/planning in `NexusCore`; scheduling in app
+- Identifiers: `todoshi.task.<UUID>`, `todoshi.dailySummary`
+- Legacy cancellation compatibility: `nexus.task.*`, `nexus.dailySummary`
+- Policy/planning in `TodoshiCore`; scheduling in app
 - No remote push
 
 ## Resources
@@ -75,19 +76,28 @@ Presentation layer over existing due dates (`CalendarScheduleBuilder`). No Event
 
 ## Deep links
 
-Shared parser: `NexusDeepLink`
+Shared parser: `TodoshiDeepLink`
+
+Canonical scheme:
 
 ```text
-nexus://dashboard
-nexus://projects
-nexus://quick-add
-nexus://task/{UUID}
-nexus://project/{UUID}
+todoshi://dashboard
+todoshi://projects
+todoshi://quick-add
+todoshi://task/{UUID}
+todoshi://project/{UUID}
+todoshi://widget/project-picker?baseProjectID={UUID}
+```
+
+Legacy compatibility (parser only; new URLs must use `todoshi://`):
+
+```text
+nexus://…
 ```
 
 ## Navigation
 
-`AppRouter` + per-tab `NavigationStack` paths. Tabs: Dashboard, Projects, Calendar, Search, Settings.
+`AppRouter` + per-tab `NavigationStack` paths. Tabs: Home, Calendar, Search, Settings.
 
 ## Product boundaries (MVP)
 

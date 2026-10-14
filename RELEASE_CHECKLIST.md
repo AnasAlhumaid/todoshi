@@ -1,4 +1,4 @@
-# Release Checklist — Nexus 0.1.0 (build 1)
+# Release Checklist — Todoshi 0.1.0 (build 1)
 
 Use for internal candidates and TestFlight. Do not ship unlisted items as “done.”
 
@@ -6,16 +6,16 @@ Use for internal candidates and TestFlight. Do not ship unlisted items as “don
 
 - [ ] Marketing version `0.1.0`
 - [ ] Build number `1` (or incremented for successive builds)
-- [ ] Display name **Nexus**
-- [ ] Bundle ID `com.anashamad.Nexus`
-- [ ] Widget bundle ID `com.anashamad.Nexus.widgets`
-- [ ] App Group `group.com.anashamad.Nexus` on app + widget
-- [ ] URL scheme `nexus`
+- [ ] Display name **Todoshi**
+- [ ] Bundle ID `com.anashamad.Todoshi`
+- [ ] Widget bundle ID `com.anashamad.Todoshi.widgets`
+- [ ] App Group `group.com.anashamad.Todoshi` on app + widget
+- [ ] URL schemes `todoshi` (+ legacy `nexus` parser registered in Info.plist)
 - [ ] Development Team set for both targets
 
 ## Build & tests
 
-- [ ] `cd Packages/NexusCore && swift test` — all green  
+- [ ] `cd Packages/TodoshiCore && swift test` — all green  
 - [ ] Debug build (simulator) succeeds  
 - [ ] Release build (simulator or device) succeeds  
 - [ ] Widget extension embeds in the app product  

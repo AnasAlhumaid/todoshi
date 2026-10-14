@@ -1,8 +1,10 @@
-# Nexus
+# Todoshi
 
 Local-first iOS task manager for projects, Kanban, dashboard focus, search, calendar, labels, checklists, subtasks, attachments, recurrence, Home Screen / Lock Screen widgets, and local notifications.
 
 **Version:** 0.1.0 (build 1) — internal release candidate (MVP)
+
+Repository: [https://github.com/AnasAlhumaid/todoshi](https://github.com/AnasAlhumaid/todoshi)
 
 ## Features (frozen MVP)
 
@@ -27,14 +29,14 @@ Local-first iOS task manager for projects, Kanban, dashboard focus, search, cale
 - Xcode 16+ recommended (iOS 17 deployment target)
 - iPhone (iOS 17.0+)
 - Apple Developer Team for physical device App Groups / notifications
-- App Group: `group.com.anashamad.Nexus`
+- App Group: `group.com.anashamad.Todoshi`
 
 ## Project layout
 
 ```text
-Nexus/                    # App target (SwiftUI features)
-NexusWidgets/             # WidgetKit extension
-Packages/NexusCore/       # Shared domain, SwiftData models, pure policies
+Todoshi/                    # App target (SwiftUI features)
+TodoshiWidgets/             # WidgetKit extension
+Packages/TodoshiCore/       # Shared domain, SwiftData models, pure policies
 scripts/generate_xcodeproj.py
 ```
 
@@ -44,34 +46,34 @@ scripts/generate_xcodeproj.py
 # Regenerate Xcode project after adding app source files
 python3 scripts/generate_xcodeproj.py
 
-# Unit tests (NexusCore)
-cd Packages/NexusCore && swift test
+# Unit tests (TodoshiCore)
+cd Packages/TodoshiCore && swift test
 
 # Simulator build
-xcodebuild -scheme Nexus \
+xcodebuild -scheme Todoshi \
   -destination 'platform=iOS Simulator,name=iPhone 16' \
   build
 ```
 
-Open `Nexus.xcodeproj` in Xcode for signing, schemes, and archive.
+Open `Todoshi.xcodeproj` in Xcode for signing, schemes, and archive.
 
 ## Signing & App Group
 
-1. Select **Nexus** target → Signing & Capabilities  
+1. Select **Todoshi** target → Signing & Capabilities  
 2. Enable **Automatically manage signing** and choose your **Team**  
-3. Confirm capability **App Groups** includes `group.com.anashamad.Nexus`  
-4. Select **NexusWidgets** target → same Team and same App Group  
+3. Confirm capability **App Groups** includes `group.com.anashamad.Todoshi`  
+4. Select **TodoshiWidgets** target → same Team and same App Group  
 5. Bundle IDs:  
-   - App: `com.anashamad.Nexus`  
-   - Widgets: `com.anashamad.Nexus.widgets`  
+   - App: `com.anashamad.Todoshi`  
+   - Widgets: `com.anashamad.Todoshi.widgets`  
 6. Install on a **signed physical device** (simulator App Group behavior can differ)  
 
-Deep link scheme: `nexus://` (see ARCHITECTURE.md).
+Deep link scheme: `todoshi://` (legacy `nexus://` links still parse; see ARCHITECTURE.md).
 
 ## Tests
 
 ```bash
-cd Packages/NexusCore && swift test
+cd Packages/TodoshiCore && swift test
 ```
 
 Tests use fixed calendars/timezones and in-memory SwiftData. Widget/store App Group tests open the group only when available.
@@ -82,7 +84,7 @@ Tests use fixed calendars/timezones and in-memory SwiftData. Widget/store App Gr
 - [RELEASE_CHECKLIST.md](RELEASE_CHECKLIST.md)
 - [QA_MATRIX.md](QA_MATRIX.md)
 - [KNOWN_LIMITATIONS.md](KNOWN_LIMITATIONS.md)
-- [Packages/NexusCore/Docs/Persistence.md](Packages/NexusCore/Docs/Persistence.md)
+- [Packages/TodoshiCore/Docs/Persistence.md](Packages/TodoshiCore/Docs/Persistence.md)
 
 ## Privacy (summary)
 
