@@ -438,9 +438,15 @@ struct HomeProjectTile: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: TodoshiSpacing.xs) {
-            Image(systemName: project.projectType == .checklist ? "checklist" : project.icon)
-                .font(.title3.weight(.semibold))
-                .foregroundStyle(tint)
+            HStack(alignment: .center, spacing: TodoshiSpacing.xs) {
+                Image(systemName: project.projectType == .checklist ? "checklist" : project.icon)
+                    .font(.title3.weight(.semibold))
+                    .foregroundStyle(tint)
+                if project.isShared {
+                    SharedMembersAvatarStack(projectID: project.id, tint: tint, size: 24)
+                }
+                Spacer(minLength: 0)
+            }
             Spacer(minLength: TodoshiSpacing.xs)
             Text(project.name)
                 .font(.headline)
@@ -461,6 +467,80 @@ struct HomeProjectTile: View {
         project.projectType == .checklist
             ? ProjectTerminologyPolicy.openItemsCount(project.openTaskCount)
             : TodoshiL10n.plural("widget.openTasksCount", count: project.openTaskCount)
+    }
+}
+
+/// Overlapping member initials for a shared project, with a shared glyph as the
+/// fallback while members load (or when signed out / offline).
+struct SharedMembersAvatarStack: View {
+    let projectID: UUID
+    let tint: Color
+    var size: CGFloat = 24
+    var maxVisible: Int = 3
+
+    @State private var names: [String] = []
+
+    private static let cache = SharedMembersNameCache()
+
+    var body: some View {
+        HStack(spacing: -size * 0.3) {
+            if names.isEmpty {
+                Image(systemName: SharedProjectPresentation.indicatorSystemImage)
+                    .font(.system(size: size * 0.5, weight: .semibold))
+                    .foregroundStyle(tint)
+                    .frame(width: size, height: size)
+                    .background(TodoshiBrand.cardBackground, in: Circle())
+            } else {
+                ForEach(Array(names.prefix(maxVisible).enumerated()), id: \.offset) { _, name in
+                    TodoshiInitialAvatar(name: name, size: size)
+                        .background(TodoshiBrand.cardBackground, in: Circle())
+                        .overlay(Circle().strokeBorder(TodoshiBrand.cardBackground, lineWidth: 2))
+                }
+                if names.count > maxVisible {
+                    Text("+\(names.count - maxVisible)")
+                        .font(.system(size: size * 0.4, weight: .semibold, design: .rounded))
+                        .foregroundStyle(.secondary)
+                        .frame(width: size, height: size)
+                        .background(TodoshiBrand.cardBackground, in: Circle())
+                }
+            }
+        }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(
+            names.isEmpty
+                ? TodoshiL10n.tr("project.sharedBadge")
+                : TodoshiL10n.format("project.membersCount", names.count)
+        )
+        .task(id: projectID) {
+            if let cached = Self.cache.names(for: projectID) { names = cached }
+            guard SharedProjectMembersService.shared.isConfigured,
+                  let members = try? await SharedProjectMembersService.shared.fetchMembers(projectID: projectID)
+            else { return }
+            // Owner first, then by join date, so the stack is stable between launches.
+            let ordered = members.sorted {
+                if ($0.role == .owner) != ($1.role == .owner) { return $0.role == .owner }
+                return ($0.joinedAt ?? .distantPast) < ($1.joinedAt ?? .distantPast)
+            }
+            let fetched = ordered.map { TaskAssignmentPresentation.memberDisplayName($0.displayName) }
+            Self.cache.store(fetched, for: projectID)
+            names = fetched
+        }
+    }
+}
+
+/// In-memory member names so Home doesn't flash the fallback glyph on every appearance.
+final class SharedMembersNameCache: @unchecked Sendable {
+    private let lock = NSLock()
+    private var storage: [UUID: [String]] = [:]
+
+    func names(for id: UUID) -> [String]? {
+        lock.lock(); defer { lock.unlock() }
+        return storage[id]
+    }
+
+    func store(_ names: [String], for id: UUID) {
+        lock.lock(); defer { lock.unlock() }
+        storage[id] = names
     }
 }
 
@@ -604,18 +684,15 @@ struct ProjectOverviewCard: View {
                             .font(.headline)
                             .foregroundStyle(.primary)
                             .lineLimit(1)
-                        if project.isShared {
-                            Image(systemName: SharedProjectPresentation.indicatorSystemImage)
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                                .accessibilityLabel(SharedProjectPresentation.accessibilityLabel())
-                        }
                     }
                     subtitle
                         .font(.footnote)
                         .lineLimit(1)
                 }
                 Spacer(minLength: 0)
+                if project.isShared {
+                    SharedMembersAvatarStack(projectID: project.id, tint: tint, size: 28)
+                }
             }
             ProgressView(value: fraction)
                 .tint(tint)
