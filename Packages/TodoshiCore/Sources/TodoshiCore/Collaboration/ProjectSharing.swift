@@ -87,13 +87,13 @@ public enum SharedProjectBootstrapPolicy: Sendable {
 public enum SharedProjectPresentation: Sendable {
     public static let indicatorSystemImage = "person.2"
 
-    public static func accessibilityLabel(locale: Locale = .autoupdatingCurrent) -> String {
+    public static func accessibilityLabel(locale: Locale = AppLanguageStore.resolvedLocale) -> String {
         TodoshiL10n.tr("project.sharedA11y", locale: locale)
     }
 
     public static func memberRoleLabel(
         _ role: ProjectMemberRole,
-        locale: Locale = .autoupdatingCurrent
+        locale: Locale = AppLanguageStore.resolvedLocale
     ) -> String {
         switch role {
         case .owner:

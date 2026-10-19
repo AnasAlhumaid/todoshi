@@ -21,15 +21,15 @@ public enum SubtaskStrings: Sendable {
     public static var deleteTaskTitle: String { TodoshiL10n.tr("subtasks.deleteTitle") }
     public static var newSubtaskTitle: String { TodoshiL10n.tr("subtasks.new") }
 
-    public static func progress(completed: Int, total: Int, locale: Locale = .autoupdatingCurrent) -> String {
+    public static func progress(completed: Int, total: Int, locale: Locale = AppLanguageStore.resolvedLocale) -> String {
         TodoshiL10n.format("subtasks.progress", locale: locale, completed, total)
     }
 
-    public static func deleteWithDescendantsMessage(count: Int, locale: Locale = .autoupdatingCurrent) -> String {
+    public static func deleteWithDescendantsMessage(count: Int, locale: Locale = AppLanguageStore.resolvedLocale) -> String {
         TodoshiL10n.format("subtasks.deleteDescendants", locale: locale, count)
     }
 
-    public static func deleteWithPromotionMessage(count: Int, locale: Locale = .autoupdatingCurrent) -> String {
+    public static func deleteWithPromotionMessage(count: Int, locale: Locale = AppLanguageStore.resolvedLocale) -> String {
         TodoshiL10n.format("subtasks.deletePromote", locale: locale, count)
     }
 

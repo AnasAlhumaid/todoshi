@@ -49,7 +49,7 @@ public enum ProjectInviteURLBuilder: Sendable {
         return components.url
     }
 
-    public static func shareMessage(url: URL, locale: Locale = .autoupdatingCurrent) -> String {
+    public static func shareMessage(url: URL, locale: Locale = AppLanguageStore.resolvedLocale) -> String {
         TodoshiL10n.format("project.invite.shareMessage", locale: locale, url.absoluteString)
     }
 }
@@ -78,7 +78,7 @@ public enum ProjectInviteStatusPolicy: Sendable {
 
     public static func userMessage(
         for status: ProjectInviteStatus,
-        locale: Locale = .autoupdatingCurrent
+        locale: Locale = AppLanguageStore.resolvedLocale
     ) -> String {
         switch status {
         case .valid:

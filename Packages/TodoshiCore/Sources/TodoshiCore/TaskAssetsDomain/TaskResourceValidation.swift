@@ -93,7 +93,7 @@ public enum TaskResourceValidation: Sendable {
         return nil
     }
 
-    public static func message(for issue: Issue, locale: Locale = .autoupdatingCurrent) -> String {
+    public static func message(for issue: Issue, locale: Locale = AppLanguageStore.resolvedLocale) -> String {
         switch issue {
         case .emptyContent, .emptyBody:
             return TodoshiL10n.tr("resource.empty", locale: locale)

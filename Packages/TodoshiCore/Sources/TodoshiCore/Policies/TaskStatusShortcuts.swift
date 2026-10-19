@@ -9,7 +9,7 @@ public struct TaskStatusShortcut: Equatable, Sendable {
         self.localizationKey = localizationKey
     }
 
-    public func label(locale: Locale = .autoupdatingCurrent) -> String {
+    public func label(locale: Locale = AppLanguageStore.resolvedLocale) -> String {
         TodoshiL10n.tr(localizationKey, locale: locale)
     }
 }

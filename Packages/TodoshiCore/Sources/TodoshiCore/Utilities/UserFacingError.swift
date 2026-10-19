@@ -35,7 +35,7 @@ public enum UserFacingError: Sendable {
     }
 
     /// Maps repository / container errors to safe presentation text.
-    public static func message(for error: Error, locale: Locale = .autoupdatingCurrent) -> String {
+    public static func message(for error: Error, locale: Locale = AppLanguageStore.resolvedLocale) -> String {
         if let container = error as? ModelContainerError {
             switch container {
             case .appGroupUnavailable:

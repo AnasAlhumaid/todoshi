@@ -49,7 +49,7 @@ public enum ChecklistStrings: Sendable {
 
     public static var progressFormat: String { TodoshiL10n.tr("checklist.progress") }
 
-    public static func progress(completed: Int, total: Int, locale: Locale = .autoupdatingCurrent) -> String {
+    public static func progress(completed: Int, total: Int, locale: Locale = AppLanguageStore.resolvedLocale) -> String {
         TodoshiL10n.format("checklist.progress", locale: locale, completed, total)
     }
 }

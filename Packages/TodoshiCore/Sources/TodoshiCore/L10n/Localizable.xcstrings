@@ -8159,6 +8159,23 @@
         }
       }
     },
+    "project.membersCount": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%d أعضاء"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%d members"
+          }
+        }
+      }
+    },
     "project.nameRequired": {
       "extractionState": "stale",
       "localizations": {
@@ -8618,6 +8635,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Shared project"
+          }
+        }
+      }
+    },
+    "project.sharedBadge": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مشترك"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shared"
           }
         }
       }

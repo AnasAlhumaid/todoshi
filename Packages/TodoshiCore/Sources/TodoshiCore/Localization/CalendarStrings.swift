@@ -36,15 +36,15 @@ public enum CalendarStrings: Sendable {
     public static var dueTime: String { TodoshiL10n.tr("calendar.dueTime") }
     public static var selectDate: String { TodoshiL10n.tr("calendar.selectDate") }
 
-    public static func openTasks(_ count: Int, locale: Locale = .autoupdatingCurrent) -> String {
+    public static func openTasks(_ count: Int, locale: Locale = AppLanguageStore.resolvedLocale) -> String {
         TodoshiL10n.plural("calendar.openTasks", count: count, locale: locale)
     }
 
-    public static func completedTasks(_ count: Int, locale: Locale = .autoupdatingCurrent) -> String {
+    public static func completedTasks(_ count: Int, locale: Locale = AppLanguageStore.resolvedLocale) -> String {
         TodoshiL10n.format("calendar.completedTasks", locale: locale, count)
     }
 
-    public static func tasksDue(_ count: Int, locale: Locale = .autoupdatingCurrent) -> String {
+    public static func tasksDue(_ count: Int, locale: Locale = AppLanguageStore.resolvedLocale) -> String {
         TodoshiL10n.format("calendar.tasksDue", locale: locale, count)
     }
 }

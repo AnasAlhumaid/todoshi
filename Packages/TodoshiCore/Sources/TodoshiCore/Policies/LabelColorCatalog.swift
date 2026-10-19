@@ -34,7 +34,7 @@ public enum LabelColorCatalog: Sendable {
         return swatches.first(where: { $0.hex.uppercased() == upper })?.hex ?? defaultHex
     }
 
-    public static func name(for hex: String, locale: Locale = .autoupdatingCurrent) -> String {
+    public static func name(for hex: String, locale: Locale = AppLanguageStore.resolvedLocale) -> String {
         let upper = hex.uppercased()
         guard let swatch = swatches.first(where: { $0.hex.uppercased() == upper }) else {
             return TodoshiL10n.tr("label.generic", locale: locale)

@@ -30,7 +30,7 @@ public enum LabelStrings: Sendable {
     public static var deleteConfirmationFormat: String { TodoshiL10n.tr("label.deleteConfirm") }
     public static var deleteUnassignedConfirmationFormat: String { TodoshiL10n.tr("label.deleteUnassigned") }
 
-    public static func deleteConfirmation(name: String, taskCount: Int, locale: Locale = .autoupdatingCurrent) -> String {
+    public static func deleteConfirmation(name: String, taskCount: Int, locale: Locale = AppLanguageStore.resolvedLocale) -> String {
         if taskCount == 0 {
             return TodoshiL10n.format("label.deleteUnassigned", locale: locale, name)
         }
