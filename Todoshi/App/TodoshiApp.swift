@@ -30,48 +30,82 @@ struct TodoshiApp: App {
     }
 
     #if DEBUG
-    /// Arabic sample projects for design review screenshots. Debug builds only; inserted once.
+    private struct DemoStrings {
+        let work, nasaq, groceries: String
+        let login, loginNotes, store, sync, send, widget, meeting: String
+        let subtasks: [String]
+        let items: [String]
+    }
+
+    private static let demoArabic = DemoStrings(
+        work: "تودوشي", nasaq: "نسق", groceries: "مقاضي البيت",
+        login: "صفحة تسجيل الدخول",
+        loginNotes: "تصميم شاشة الدخول بأبل وقوقل، مع رسالة خطأ واضحة لما يفشل الاتصال.",
+        store: "كتابة وصف المتجر", sync: "إصلاح مزامنة الإشعارات", send: "إرسال التصميم للعميل",
+        widget: "مراجعة الودجت", meeting: "اجتماع الفريق",
+        subtasks: ["الرسم المبدئي", "ربط Firebase", "اختبار حالات الخطأ"],
+        items: ["حليب", "خبز", "بيض", "رز", "قهوة"]
+    )
+
+    private static let demoEnglish = DemoStrings(
+        work: "Todoshi App", nasaq: "Website Refresh", groceries: "Groceries",
+        login: "Sign-in screen",
+        loginNotes: "Design sign-in with Apple and Google, with a clear message when the connection fails.",
+        store: "Write App Store copy", sync: "Fix notification sync", send: "Send designs to client",
+        widget: "Review widgets", meeting: "Team meeting",
+        subtasks: ["First sketch", "Connect Firebase", "Test error states"],
+        items: ["Milk", "Bread", "Eggs", "Rice", "Coffee"]
+    )
+
+    /// Sample projects for design review and store screenshots. Debug builds only.
+    /// `-TodoshiDemoData` (Arabic) or `-TodoshiDemoData en`. Replaces earlier demo projects
+    /// (matched by name) so due dates stay relative to today.
     @MainActor
     private static func insertDemoData(into context: ModelContext) {
-        let marker = "تودوشي"
-        let existing = (try? context.fetch(FetchDescriptor<Project>())) ?? []
-        guard !existing.contains(where: { $0.name == marker }) else { return }
+        let args = ProcessInfo.processInfo.arguments
+        let flagIndex = args.firstIndex(of: "-TodoshiDemoData") ?? args.endIndex
+        let wantsEnglish = args.indices.contains(flagIndex + 1) && args[flagIndex + 1] == "en"
+        let demo = wantsEnglish ? demoEnglish : demoArabic
+
+        let demoNames = Set([demoArabic, demoEnglish].flatMap { [$0.work, $0.nasaq, $0.groceries] })
+        for project in (try? context.fetch(FetchDescriptor<Project>())) ?? [] where demoNames.contains(project.name) {
+            context.delete(project)
+        }
 
         let calendar = Calendar.current
         let today = calendar.date(bySettingHour: 16, minute: 0, second: 0, of: .now) ?? .now
-        let yesterday = calendar.date(byAdding: .day, value: -1, to: today)
-        let sunday = calendar.date(byAdding: .day, value: 4, to: today)
+        let tomorrow = calendar.date(byAdding: .day, value: 1, to: today)
+        let inFourDays = calendar.date(byAdding: .day, value: 4, to: today)
         var position = FractionalPosition.initial()
         func nextPosition() -> Double {
             position = FractionalPosition.after(position)
             return position
         }
 
-        let work = Project(name: marker, icon: "briefcase.fill", colorHex: "#E5487D", position: nextPosition())
-        let nasaq = Project(name: "نسق", icon: "laptopcomputer", colorHex: "#3E8BEB", position: nextPosition())
-        let home = Project(name: "مقاضي البيت", icon: "cart.fill", colorHex: "#30A46C", position: nextPosition())
+        let work = Project(name: demo.work, icon: "briefcase.fill", colorHex: "#E5487D", position: nextPosition())
+        let nasaq = Project(name: demo.nasaq, icon: "laptopcomputer", colorHex: "#3E8BEB", position: nextPosition())
+        let home = Project(name: demo.groceries, icon: "cart.fill", colorHex: "#30A46C", position: nextPosition())
         home.projectType = .checklist
         [work, nasaq, home].forEach(context.insert)
 
         let login = TaskItem(
-            title: "صفحة تسجيل الدخول",
-            taskDescription: "تصميم شاشة الدخول بأبل وقوقل، مع رسالة خطأ واضحة لما يفشل الاتصال.",
-            status: .inProgress, dueDate: yesterday, position: nextPosition(), project: work
+            title: demo.login, taskDescription: demo.loginNotes,
+            status: .inProgress, dueDate: tomorrow, position: nextPosition(), project: work
         )
-        let store = TaskItem(title: "كتابة وصف المتجر", dueDate: sunday, position: nextPosition(), project: work)
-        let sync = TaskItem(title: "إصلاح مزامنة الإشعارات", priority: .urgent, position: nextPosition(), project: work)
-        let send = TaskItem(title: "إرسال التصميم للعميل", dueDate: yesterday, position: nextPosition(), project: work)
-        let widget = TaskItem(title: "مراجعة الودجت", dueDate: today, position: nextPosition(), project: nasaq)
-        let meeting = TaskItem(title: "اجتماع الفريق", status: .done, dueDate: today, position: nextPosition(), project: nasaq)
+        let store = TaskItem(title: demo.store, dueDate: inFourDays, position: nextPosition(), project: work)
+        let sync = TaskItem(title: demo.sync, priority: .urgent, position: nextPosition(), project: work)
+        let send = TaskItem(title: demo.send, dueDate: today, position: nextPosition(), project: work)
+        let widget = TaskItem(title: demo.widget, dueDate: today, position: nextPosition(), project: nasaq)
+        let meeting = TaskItem(title: demo.meeting, status: .done, dueDate: today, position: nextPosition(), project: nasaq)
         meeting.applyStatus(.done)
         [login, store, sync, send, widget, meeting].forEach(context.insert)
 
-        for (index, title) in ["الرسم المبدئي", "ربط Firebase", "اختبار حالات الخطأ"].enumerated() {
+        for (index, title) in demo.subtasks.enumerated() {
             let child = TaskItem(title: title, position: nextPosition(), project: work, parentTask: login)
             if index == 0 { child.applyStatus(.done) }
             context.insert(child)
         }
-        for (index, title) in ["حليب", "خبز", "بيض", "رز", "قهوة"].enumerated() {
+        for (index, title) in demo.items.enumerated() {
             let item = TaskItem(title: title, dueDate: index == 0 ? today : nil, position: nextPosition(), project: home)
             if index >= 3 { item.applyStatus(.done) }
             context.insert(item)
