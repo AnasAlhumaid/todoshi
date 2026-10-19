@@ -91,7 +91,11 @@ public enum SharedTaskEditorInheritance: Sendable {
     }
 
     public static func editorUIDs(for task: TaskItem) -> [String] {
+        // A remote soft-delete can hard-delete the model while SwiftUI still renders its row;
+        // reading attributes of a detached model traps, so treat it as having no editors.
+        guard task.isLive else { return [] }
         let root = task.parentTask ?? task
+        guard root.isLive else { return [] }
         return root.editorUIDs ?? []
     }
 

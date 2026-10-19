@@ -191,3 +191,14 @@ public final class TaskItem {
         updatedAt = date
     }
 }
+
+extension TaskItem {
+    /// False once the model is deleted or detached from its context (e.g. a remote delete
+    /// landed while a view still holds it). Attribute reads on such models crash.
+    public var isLive: Bool {
+        if isDeleted { return false }
+        // Never-saved models (no store yet) are plain values and safe to read.
+        if persistentModelID.storeIdentifier == nil { return true }
+        return modelContext != nil
+    }
+}

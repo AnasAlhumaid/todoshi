@@ -86,6 +86,24 @@ struct Phase6TaskPermissionTests {
         )
     }
 
+    @Test("Editor lookup on a hard-deleted task returns empty instead of trapping")
+    @MainActor
+    func editorLookupAfterRemoteDelete() throws {
+        let context = ModelContext(try ModelContainerFactory.makeContainer(kind: .inMemory))
+        let project = try ProjectRepository(context: context).create(name: "Shared")
+        let task = try TaskRepository(context: context).create(in: project, title: "Milk")
+        task.editorUIDs = ["editor-a"]
+        try context.save()
+        #expect(task.isLive)
+        #expect(SharedTaskEditorInheritance.editorUIDs(for: task) == ["editor-a"])
+
+        // Mirrors SharedProjectSyncService applying a remote soft-delete.
+        context.delete(task)
+        try context.save()
+        #expect(!task.isLive)
+        #expect(SharedTaskEditorInheritance.editorUIDs(for: task).isEmpty)
+    }
+
     @Test("Root → subtask editor inheritance")
     func rootSubtaskInheritance() {
         let root = TaskItem(title: "Root", project: nil)

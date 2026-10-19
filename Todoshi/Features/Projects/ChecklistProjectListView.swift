@@ -107,6 +107,14 @@ struct ChecklistProjectListView: View {
 
     @ViewBuilder
     private func row(for item: TaskItem) -> some View {
+        // Skip items a sync pass deleted underneath the list (avoids detached-model crashes).
+        if item.isLive {
+            liveRow(for: item)
+        }
+    }
+
+    @ViewBuilder
+    private func liveRow(for item: TaskItem) -> some View {
         let editable = canEditItem(item)
         let assignee = item.assigneeUID.flatMap { assigneeNames[$0] }
         let completedBy = TaskCompletionPresentation.completedByLine(

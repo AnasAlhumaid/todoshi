@@ -351,6 +351,7 @@ struct ProjectDetailView: View {
     }
 
     private func canEditChecklistItem(_ item: TaskItem) -> Bool {
+        guard item.isLive else { return false }
         guard project?.isShared == true else { return true }
         guard let membership = viewerMembership else { return false }
         return SharedTaskEditAuthorization.canEditTaskContent(
