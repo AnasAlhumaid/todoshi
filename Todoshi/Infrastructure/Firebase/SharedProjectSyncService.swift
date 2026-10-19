@@ -4,6 +4,36 @@ import FirebaseAuth
 import FirebaseFirestore
 import TodoshiCore
 
+/// Task IDs with local edits not yet acknowledged by Firestore.
+///
+/// Marked synchronously when the repository emits a mutation (before any async hop), so a
+/// remote snapshot arriving in between cannot overwrite the unsent local edit.
+final class PendingTaskWrites: @unchecked Sendable {
+    private let lock = NSLock()
+    private var counts: [UUID: Int] = [:]
+
+    func begin(_ id: UUID) {
+        lock.lock(); defer { lock.unlock() }
+        counts[id, default: 0] += 1
+    }
+
+    func end(_ id: UUID) {
+        lock.lock(); defer { lock.unlock() }
+        guard let count = counts[id] else { return }
+        counts[id] = count > 1 ? count - 1 : nil
+    }
+
+    func contains(_ id: UUID) -> Bool {
+        lock.lock(); defer { lock.unlock() }
+        return counts[id] != nil
+    }
+
+    func removeAll() {
+        lock.lock(); defer { lock.unlock() }
+        counts.removeAll()
+    }
+}
+
 /// App-level shared-project sync: discovery, owner seed, listeners, write-through, reconcile.
 @MainActor
 final class SharedProjectSyncService {
@@ -17,6 +47,7 @@ final class SharedProjectSyncService {
     private var seedingProjects: Set<UUID> = []
     /// Desired parent links from remote snapshots (child → parent). Survives out-of-order delivery.
     private var desiredParentIDByChild: [UUID: UUID] = [:]
+    nonisolated let pendingWrites = PendingTaskWrites()
 
     init(db: Firestore = Firestore.firestore()) {
         self.db = db
@@ -26,7 +57,14 @@ final class SharedProjectSyncService {
 
     func bind(modelContext: ModelContext) {
         self.modelContext = modelContext
+        let pending = pendingWrites
         SharedProjectMutationHook.handler = { [weak self] event in
+            switch event {
+            case .taskUpsert(_, let taskID), .checklistChanged(_, let taskID), .resourceChanged(_, let taskID):
+                pending.begin(taskID)
+            default:
+                break
+            }
             Task { @MainActor in
                 self?.handleMutation(event)
             }
@@ -52,6 +90,7 @@ final class SharedProjectSyncService {
         }
         projectListeners.removeAll()
         seedingProjects.removeAll()
+        pendingWrites.removeAll()
         desiredParentIDByChild.removeAll()
         childListeners.values.forEach { $0.remove() }
         childListeners.removeAll()
@@ -333,7 +372,15 @@ final class SharedProjectSyncService {
     // MARK: - Outbound mutations
 
     private func handleMutation(_ event: SharedProjectMutationHook.Event) {
-        guard isRunning, let uid = currentUID else { return }
+        guard isRunning, let uid = currentUID else {
+            switch event {
+            case .taskUpsert(_, let taskID), .checklistChanged(_, let taskID), .resourceChanged(_, let taskID):
+                pendingWrites.end(taskID)
+            default:
+                break
+            }
+            return
+        }
         guard SharedProjectAccountIsolationPolicy.canMutateShared(
             sharingMode: .shared,
             currentUID: uid
@@ -343,15 +390,27 @@ final class SharedProjectSyncService {
         case .projectMetadata(let projectID):
             Task { await pushProjectMetadata(projectID) }
         case .taskUpsert(let projectID, let taskID):
-            Task { await pushTask(projectID: projectID, taskID: taskID, activityKind: .taskUpdated) }
+            Task {
+                await pushTask(projectID: projectID, taskID: taskID, activityKind: .taskUpdated)
+                pendingWrites.end(taskID)
+                await refreshTaskAfterPush(projectID: projectID, taskID: taskID)
+            }
         case .taskSoftDelete(let projectID, let taskID):
             Task { await pushTask(projectID: projectID, taskID: taskID, activityKind: .taskUpdated) }
         case .checklistChanged(let projectID, let taskID):
-            Task { await pushTask(projectID: projectID, taskID: taskID, activityKind: .checklistChanged) }
+            Task {
+                await pushTask(projectID: projectID, taskID: taskID, activityKind: .checklistChanged)
+                pendingWrites.end(taskID)
+                await refreshTaskAfterPush(projectID: projectID, taskID: taskID)
+            }
         case .labelsChanged(let projectID):
             Task { await pushLabels(projectID: projectID) }
         case .resourceChanged(let projectID, let taskID):
-            Task { await pushTask(projectID: projectID, taskID: taskID, activityKind: .resourceChanged) }
+            Task {
+                await pushTask(projectID: projectID, taskID: taskID, activityKind: .resourceChanged)
+                pendingWrites.end(taskID)
+                await refreshTaskAfterPush(projectID: projectID, taskID: taskID)
+            }
         case .projectDeleted:
             break
         case .boardColumns(let projectID):
@@ -556,6 +615,28 @@ final class SharedProjectSyncService {
         }
     }
 
+    /// Remote changes skipped while a local edit was in flight are picked up here, once the
+    /// server holds both. Skipped if another local edit started meanwhile (it refreshes later).
+    private func refreshTaskAfterPush(projectID: UUID, taskID: UUID) async {
+        guard !pendingWrites.contains(taskID) else { return }
+        let remoteID = SharedProjectRemoteIDPolicy.documentID(for: projectID)
+        guard let snap = try? await db.collection("projects").document(remoteID)
+            .collection("tasks").document(taskID.uuidString)
+            .getDocument(source: .server),
+              snap.exists, let data = snap.data(),
+              data["deletedAt"] as? Timestamp == nil,
+              !pendingWrites.contains(taskID),
+              let context = modelContext,
+              let existing = try? TaskRepository(context: context).fetchTask(id: taskID),
+              existing.isLive
+        else { return }
+        let dto = mapTaskDTO(projectID: projectID, taskID: taskID, data: data)
+        FirestoreTaskMapping.apply(dto, to: existing)
+        applyLabelIDs(dto.labelIds, to: existing, context: context)
+        try? context.save()
+        TodoshiDataChangeCenter.post(.taskContentChanged)
+    }
+
     private func isPermissionDenied(_ error: Error) -> Bool {
         let ns = error as NSError
         return ns.domain == FirestoreErrorDomain
@@ -744,6 +825,12 @@ final class SharedProjectSyncService {
         )
 
         if let existing = try? TaskRepository(context: context).fetchTask(id: taskID) {
+            // Our own write echo, or an older server state racing an unsent local edit:
+            // applying it would overwrite what the user just typed. The acknowledged
+            // server snapshot arrives after the push completes and is applied then.
+            if change.document.metadata.hasPendingWrites || pendingWrites.contains(taskID) {
+                return false
+            }
             let winner = SharedProjectConflictPolicy.winner(
                 localRemoteUpdatedAt: existing.remoteUpdatedAt,
                 incomingRemoteUpdatedAt: remoteUpdatedAt
