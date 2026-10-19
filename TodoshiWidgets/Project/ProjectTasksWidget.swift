@@ -383,7 +383,7 @@ struct ProjectTasksWidgetView: View {
                 emptyBody(compact: false)
                 Spacer(minLength: 0)
             } else {
-                VStack(alignment: .leading, spacing: 6) {
+                VStack(alignment: .leading, spacing: 8) {
                     ForEach(shownTasks) { task in
                         ProjectWidgetTaskRow(task: task, projectType: presentationProjectType, style: .detailed)
                     }
@@ -666,39 +666,36 @@ private struct ProjectWidgetTaskRow: View {
 
     private var isCompleted: Bool { task.status == .done }
 
+    /// Most useful single fact for the row: overdue, then due date, then status.
+    @ViewBuilder
+    private var trailingDetail: some View {
+        if projectType == .tasks, task.isOverdue {
+            Text(TodoshiL10n.tr("common.overdue"))
+                .font(.caption2.weight(.semibold))
+                .foregroundStyle(.red)
+                .lineLimit(1)
+        } else if projectType == .tasks, let due = task.dueDate {
+            Text(WidgetDateText.dayMonth(due))
+                .font(.caption2)
+                .foregroundStyle(.secondary)
+                .lineLimit(1)
+        } else if !isCompleted {
+            Text(WidgetProjectPresentation.statusLabel(task.status, projectType: projectType))
+                .font(.caption2)
+                .foregroundStyle(.secondary)
+                .lineLimit(1)
+        }
+    }
+
     var body: some View {
         Link(destination: TodoshiDeepLink.task(task.id).url) {
-            VStack(alignment: .leading, spacing: 2) {
-                ProjectWidgetTaskTitle(task: task, projectType: projectType, style: style)
-
-                // Compact rows (small/medium) stay one line each so the add button never clips.
+            // One line per row in every size: two-line rows overflowed the large widget.
+            HStack(alignment: .firstTextBaseline, spacing: 6) {
+                ProjectWidgetTaskTitle(task: task, projectType: projectType, style: .compact)
+                    .layoutPriority(1)
+                Spacer(minLength: 4)
                 if style == .detailed {
-                    HStack(spacing: 4) {
-                        Text(WidgetProjectPresentation.statusLabel(task.status, projectType: projectType))
-                            .font(.caption2)
-                            .foregroundStyle(.secondary)
-                            .lineLimit(1)
-
-                        if style == .detailed, projectType == .tasks {
-                            if task.priority == .urgent || task.priority == .high {
-                                Text(task.priority.displayName)
-                                    .font(.caption2.weight(.semibold))
-                                    .foregroundStyle(task.priority == .urgent ? .red : .orange)
-                                    .lineLimit(1)
-                            }
-                            if task.isOverdue {
-                                Text(TodoshiL10n.tr("common.overdue"))
-                                    .font(.caption2.weight(.semibold))
-                                    .foregroundStyle(.red)
-                                    .lineLimit(1)
-                            } else if let due = task.dueDate {
-                                Text(due, style: .date)
-                                    .font(.caption2)
-                                    .foregroundStyle(.secondary)
-                                    .lineLimit(1)
-                            }
-                        }
-                    }
+                    trailingDetail
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)

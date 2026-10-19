@@ -22,6 +22,26 @@ enum WidgetTheme {
     }
 }
 
+/// Date/time text in the in-app language. Formatted to a String up front because widget
+/// `Text(date, …)` follows the extension's own localization, which ignores the app override.
+enum WidgetDateText {
+    static func dayMonth(_ date: Date) -> String {
+        formatter(template: "dMMM").string(from: date)
+    }
+
+    static func time(_ date: Date) -> String {
+        formatter(template: "jmm").string(from: date)
+    }
+
+    private static func formatter(template: String) -> DateFormatter {
+        let locale = AppLanguageStore.resolvedLocale
+        let formatter = DateFormatter()
+        formatter.locale = locale
+        formatter.setLocalizedDateFormatFromTemplate(template)
+        return formatter
+    }
+}
+
 /// Count capsule used in widget headers.
 struct WidgetCountPill: View {
     let count: Int
@@ -68,7 +88,7 @@ struct WidgetTaskRowView: View {
                                     .foregroundStyle(.secondary)
                                     .lineLimit(1)
                             } else if let due = task.dueDate {
-                                Text(due, style: .time)
+                                Text(WidgetDateText.time(due))
                                     .foregroundStyle(.secondary)
                             }
                         }
