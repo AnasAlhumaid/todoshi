@@ -399,7 +399,6 @@ struct ProjectTasksWidgetView: View {
                 allowsQuickAdd: entry.projectInteraction?.allowsQuickAdd == true
             )
         }
-        .padding()
         .accessibilityLabel(
             WidgetProjectPresentation.openCountAccessibilityLabel(
                 title: entry.snapshot.title,
@@ -448,11 +447,18 @@ private struct ProjectWidgetChrome<Content: View>: View {
                 projectLink: projectLink,
                 allowsProjectSelection: allowsProjectSelection,
                 showIcon: showIcon,
-                showOpenCount: openCount != nil && family != .systemMedium
+                showOpenCount: openCount != nil && family != .systemMedium,
+                addButton: family == .systemMedium && allowsQuickAdd
+                    ? ProjectAddTaskButton(
+                        projectID: interaction?.displayedProjectID,
+                        projectName: interaction?.projectName ?? title,
+                        projectType: projectType
+                    )
+                    : nil
             )
             content()
             Spacer(minLength: 0)
-            if family == .systemMedium || family == .systemSmall {
+            if family == .systemSmall {
                 HStack {
                     if allowsQuickAdd {
                         ProjectAddTaskButton(
@@ -465,7 +471,6 @@ private struct ProjectWidgetChrome<Content: View>: View {
                 }
             }
         }
-        .padding(family == .systemSmall ? 12 : 16)
     }
 }
 
@@ -479,6 +484,8 @@ private struct ProjectWidgetHeader: View {
     let allowsProjectSelection: Bool
     let showIcon: Bool
     let showOpenCount: Bool
+    /// Medium places the add button here so the task list gets the full height.
+    var addButton: ProjectAddTaskButton? = nil
 
     var body: some View {
         HStack(spacing: 6) {
@@ -516,11 +523,15 @@ private struct ProjectWidgetHeader: View {
                 Link(destination: TodoshiDeepLink.widgetProjectPicker(baseProjectID: base).url) {
                     Image(systemName: "line.3.horizontal")
                         .font(.body.weight(.semibold))
-                        .frame(minWidth: 44, minHeight: 44)
+                        .frame(width: 32, height: 28)
                         .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
                 .accessibilityLabel(WidgetStrings.selectProject)
+            }
+
+            if let addButton {
+                addButton
             }
         }
     }

@@ -1,4 +1,5 @@
 import SwiftUI
+import WidgetKit
 import TodoshiCore
 
 /// Widget palette mirroring the app's TodoshiBrand tokens (the extension has no shared asset catalog).
@@ -39,6 +40,10 @@ struct WidgetCountPill: View {
 struct WidgetTaskRowView: View {
     let task: WidgetTaskItem
     var showProject: Bool = true
+    @Environment(\.widgetFamily) private var family
+
+    /// Medium has room for three single-line rows only; the colored dot carries the project.
+    private var isCompact: Bool { family == .systemMedium || family == .systemSmall }
 
     var body: some View {
         Link(destination: TodoshiDeepLink.task(task.id).url) {
@@ -53,20 +58,22 @@ struct WidgetTaskRowView: View {
                         .foregroundStyle(.primary)
                         .lineLimit(1)
                         .privacySensitive()
-                    HStack(spacing: 4) {
-                        if task.isOverdue {
-                            Text(TodoshiL10n.tr("common.overdue"))
-                                .foregroundStyle(.red)
-                        } else if showProject {
-                            Text(task.projectName)
-                                .foregroundStyle(.secondary)
-                                .lineLimit(1)
-                        } else if let due = task.dueDate {
-                            Text(due, style: .time)
-                                .foregroundStyle(.secondary)
+                    if !isCompact || task.isOverdue {
+                        HStack(spacing: 4) {
+                            if task.isOverdue {
+                                Text(TodoshiL10n.tr("common.overdue"))
+                                    .foregroundStyle(.red)
+                            } else if showProject {
+                                Text(task.projectName)
+                                    .foregroundStyle(.secondary)
+                                    .lineLimit(1)
+                            } else if let due = task.dueDate {
+                                Text(due, style: .time)
+                                    .foregroundStyle(.secondary)
+                            }
                         }
+                        .font(.caption2)
                     }
-                    .font(.caption2)
                 }
                 Spacer(minLength: 0)
                 if showProject {

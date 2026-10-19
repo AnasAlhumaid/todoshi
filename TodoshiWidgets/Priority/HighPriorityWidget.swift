@@ -62,18 +62,18 @@ struct HighPriorityWidgetView: View {
 
     @ViewBuilder
     private var content: some View {
-        let limit = family == .systemSmall ? 1 : (family == .systemMedium ? 3 : 6)
+        let limit = family == .systemLarge ? 6 : 3
         let shown = Array(entry.snapshot.tasks.prefix(limit))
         WidgetListChrome(
             title: WidgetStrings.highPriority,
             count: entry.snapshot.totalCount,
             headerLink: TodoshiDeepLink.dashboard.url
         ) {
-            VStack(alignment: .leading, spacing: 6) {
+            VStack(alignment: .leading, spacing: family == .systemLarge ? 8 : 6) {
                 ForEach(shown) { task in
                     WidgetTaskRowView(task: task, showProject: family != .systemSmall)
                 }
-                if entry.snapshot.totalCount > shown.count {
+                if family != .systemSmall, entry.snapshot.totalCount > shown.count {
                     Text(WidgetStrings.remaining(entry.snapshot.totalCount - shown.count))
                         .font(.caption2)
                         .foregroundStyle(.secondary)

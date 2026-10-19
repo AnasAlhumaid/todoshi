@@ -65,7 +65,7 @@ struct TodayTasksWidgetView: View {
 
     @ViewBuilder
     private var content: some View {
-        let limit = family == .systemSmall ? 1 : (family == .systemMedium ? 3 : 6)
+        let limit = family == .systemLarge ? 6 : 3
         let shown = Array(entry.snapshot.tasks.prefix(limit))
 
         WidgetListChrome(
@@ -73,20 +73,15 @@ struct TodayTasksWidgetView: View {
             count: entry.snapshot.totalCount,
             headerLink: TodoshiDeepLink.dashboard.url
         ) {
-            if family == .systemSmall {
-                if let first = shown.first {
-                    WidgetTaskRowView(task: first, showProject: false)
+            VStack(alignment: .leading, spacing: family == .systemLarge ? 8 : 6) {
+                ForEach(shown) { task in
+                    WidgetTaskRowView(task: task)
                 }
-            } else {
-                VStack(alignment: .leading, spacing: 8) {
-                    ForEach(shown) { task in
-                        WidgetTaskRowView(task: task)
-                    }
-                    if entry.snapshot.totalCount > shown.count {
-                        Text(WidgetStrings.remaining(entry.snapshot.totalCount - shown.count))
-                            .font(.caption2)
-                            .foregroundStyle(.secondary)
-                    }
+                // Small has no room for the "+N more" line under three rows.
+                if family != .systemSmall, entry.snapshot.totalCount > shown.count {
+                    Text(WidgetStrings.remaining(entry.snapshot.totalCount - shown.count))
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
                 }
             }
         }
